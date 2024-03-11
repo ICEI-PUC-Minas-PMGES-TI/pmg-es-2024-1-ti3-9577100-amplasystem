@@ -1,18 +1,19 @@
-# [Nome do projeto]
+# Ampla System
 
-[Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
+O software traz como solução o controle das ordens de compra e dos pedidos faturados (usados para fazer o cálculo da comissão), fazendo o cadastro das indústrias e das informações de pagamento das mesmas, baseado nestas informações o software produzirá um relatório referente ao valor da comissão que deve ser pago pela indústria ao vendedor, além de informar o valor total recebido em determinado período.
 
 ## Alunos integrantes da equipe
 
-* [Nome completo do aluno 1]
-* [Nome completo do aluno 2]
-* [Nome completo do aluno 3]
-* [Nome completo do aluno 4]
+* Luis Felipe Teixeira Dias Brescia
+* Pedro Henrique Pires Rodrigues
+* Pedro Henrique Vilaça Valverde
+* Victor Reis Carlota
+* Vinicius Rezende Arantes de Araujo Moreira
 
 ## Professores responsáveis
 
-* [Nome completo do professor 1]
-* [Nome completo do professor 2]
+* Joana Gabriela Ribeiro de Souza
+* Michelle Hanne Soares de Andrade
 
 ## Instruções de utilização
 
