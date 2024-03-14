@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "mail.from.name",
+  "type": "java.lang.String",
+  "description": "Nome que será exibido ao usuário que receber o email"
+}]}
