@@ -1,10 +1,16 @@
 package amplasystem.api.controller;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
-import org.apache.commons.logging.Log;
+import amplasystem.api.dtos.ChangePasswordDTO;
+import amplasystem.api.dtos.ForgetPasswordDTO;
+import amplasystem.api.dtos.ResponseDTO;
+import amplasystem.api.dtos.VendedorDTO;
+import amplasystem.api.exceptions.ChangePasswordException;
+import amplasystem.api.exceptions.InvalidInformationException;
+import amplasystem.api.mappers.VendedorMapper;
+import amplasystem.api.models.Vendedor;
+import amplasystem.api.services.EmailSenderService;
+import amplasystem.api.services.VendedorService;
+import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import org.hibernate.ObjectDeletedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,19 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import amplasystem.api.services.EmailSenderService;
-import amplasystem.api.services.VendedorService;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
-import amplasystem.api.dtos.ChangePasswordDTO;
-import amplasystem.api.dtos.ResponseDTO;
-import amplasystem.api.dtos.ForgetPasswordDTO;
-import amplasystem.api.dtos.VendedorDTO;
-import amplasystem.api.exceptions.ChangePasswordException;
-import amplasystem.api.exceptions.InvalidInformationException;
-import amplasystem.api.mappers.VendedorMapper;
-import amplasystem.api.models.Vendedor;
-import amplasystem.api.utils.Cryptography;
-import amplasystem.api.utils.Generator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/vendedor")
