@@ -1,17 +1,5 @@
 package amplasystem.api.services;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import ch.qos.logback.core.subst.Token;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.dtos.ChangePasswordDTO;
 import amplasystem.api.dtos.VendedorDTO;
 import amplasystem.api.exceptions.ChangePasswordException;
@@ -20,9 +8,16 @@ import amplasystem.api.models.PasswordResetToken;
 import amplasystem.api.models.Vendedor;
 import amplasystem.api.repositories.PasswordTokenRepository;
 import amplasystem.api.repositories.VendedorRepository;
-import amplasystem.api.utils.Cryptography;
+import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service

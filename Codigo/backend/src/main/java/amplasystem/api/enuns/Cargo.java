@@ -4,6 +4,4 @@ public enum Cargo {
     ADIMINISTRADOR,
     VENDEDOR
 
-
-
 }
