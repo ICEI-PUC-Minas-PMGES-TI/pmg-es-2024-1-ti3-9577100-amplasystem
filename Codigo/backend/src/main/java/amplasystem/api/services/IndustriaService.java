@@ -1,5 +1,7 @@
 package amplasystem.api.services;
 
+import amplasystem.api.models.Contato;
+import amplasystem.api.repositories.ContatoRepository;
 import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.mappers.IndustriaMapper;
@@ -12,10 +14,7 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -23,7 +22,8 @@ import java.util.stream.Collectors;
 public class IndustriaService {
     @Autowired
     private IndustriaRepository industriaRepository;
-
+    @Autowired
+    private ContatoService contatoService;
     @Autowired
     private Validator validator;
 
@@ -51,9 +51,16 @@ public class IndustriaService {
         if (industriaRepository.existsByNome(industria.getNome())) {
             throw new IllegalStateException("Já existe uma indústria cadastrada com o mesmo nome.");
         }
-
+        if (industria.getContatos() == null) {
+            {
+                industria.setContatos(new ArrayList<Contato>());
+            }
+        }
         Industria industriaSalva = industriaRepository.save(industria);
-
+        industriaSalva.getContatos().forEach(contato -> {
+            contato.setIndustria(industriaSalva);
+            contatoService.save(contato);
+        });
         return IndustriaMapper.toDTO(industriaSalva);
     }
 
@@ -63,7 +70,11 @@ public class IndustriaService {
 
     public void update(Industria industria) {
         if (industriaRepository.existsById(industria.getId())) {
-            industriaRepository.save(industria);
+            Industria industriaSalva = industriaRepository.save(industria);
+            industria.getContatos().forEach(contato -> {
+                contato.setIndustria(industriaSalva);
+                contatoService.save(contato);
+            });
         } else {
             throw new ObjectNotFoundException("Indústria não encontrada na base de dados");
         }
