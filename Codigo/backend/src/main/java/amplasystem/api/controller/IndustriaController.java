@@ -1,6 +1,7 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.IndustriaService;
+import jakarta.mail.Multipart;
 import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.models.Industria;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -79,4 +81,10 @@ public class IndustriaController {
         return ResponseEntity.ok().build();
     }
 
+    
+    @PostMapping(value = "/tabela")
+    @ResponseBody
+    public ResponseEntity<?> saveTable(@RequestParam MultipartFile  file) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(industriaService.saveTable(file));
+    }
 }
