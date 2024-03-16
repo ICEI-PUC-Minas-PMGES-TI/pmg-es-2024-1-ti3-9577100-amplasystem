@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 
 @Transactional
 @Service
-@Log4j2
 public class IndustriaService {
     @Autowired
     private IndustriaRepository industriaRepository;
@@ -110,8 +109,6 @@ public class IndustriaService {
                 while (celIterator.hasNext()) {
                     Cell cell = celIterator.next();
                     int columnIndex = cell.getColumnIndex();
-                    
-                    log.warn("Celula  " + columnIndex + ": " + cell.getStringCellValue());
 
                     switch (columnIndex) {
                         case 0:
@@ -120,12 +117,10 @@ public class IndustriaService {
                             }
 
                             nome = cell.getStringCellValue();
-                            log.warn("Nome Fantasia recebeu seu valor");
 
                             break;
 
                         case 1:
-                            log.warn("Primeiro contato sendo criado...");
                             createContato(TipoContato.Financeiro, celIterator, cell, contatos);
                             break;
 
@@ -180,23 +175,12 @@ public class IndustriaService {
         String email = "";
         Telefone telefone = new Telefone();
 
-        log.warn("CONTATO: ");
-
-        log.warn("nome: ");
-        log.warn("tipo: " + cell.getCellType());
-        log.warn("conteudo: " + cell.getStringCellValue() + "\n");
         nomeContato = cell.getStringCellValue();
         
         cell = celIterator.next();
-        log.warn("telefone: ");
-        log.warn("tipo: " + cell.getCellType());
-        log.warn("conteudo: " + cell.getNumericCellValue() + "\n");
         telefone.setNumero(String.valueOf(cell.getNumericCellValue()));
 
         cell = celIterator.next();
-        log.warn("email: ");
-        log.warn("tipo: " + cell.getCellType());
-        log.warn("conteudo: " + cell.getStringCellValue() + "\n");
         email = cell.getStringCellValue();
         
 
