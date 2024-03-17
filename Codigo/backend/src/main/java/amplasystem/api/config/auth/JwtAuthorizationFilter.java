@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         try {
             String path = request.getRequestURI();
-            List<String> ignorePaths = List.of("/auth/", "/public/");
+            List<String> ignorePaths = List.of("/auth/", "/public/", "/v3/api-docs", "/configuration/ui", "/swagger-resources/", "/configuration/security", "/swagger-ui/");
 
             if (ignorePaths.stream().anyMatch(path::startsWith)) {
                 chain.doFilter(request, response);
