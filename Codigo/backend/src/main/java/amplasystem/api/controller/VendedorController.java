@@ -51,7 +51,7 @@ public class VendedorController {
         }
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/admin/save")
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody VendedorDTO vendedorDTO) {
         try {
@@ -149,7 +149,7 @@ public class VendedorController {
         }
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("admin/update/{id}")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody VendedorDTO vendedor) {
         try {
