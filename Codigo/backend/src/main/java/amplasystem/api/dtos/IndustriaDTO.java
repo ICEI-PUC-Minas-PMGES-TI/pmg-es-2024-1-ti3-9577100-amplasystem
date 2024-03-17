@@ -19,5 +19,5 @@ public class IndustriaDTO {
     private String nome;
     private Financeiro financeiro;
     private List<OrdemDeCompra> ordemDeCompras;
-    private List<Contato> contatos;
+    private List<ContatoDto> contatos;
 }
