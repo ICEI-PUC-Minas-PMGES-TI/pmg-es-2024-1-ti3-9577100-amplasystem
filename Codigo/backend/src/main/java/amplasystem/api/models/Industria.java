@@ -21,12 +21,12 @@ public class Industria {
     @NotBlank(message = "Nome da indústria é obrigatório.")
     private String nome;
 
+    @OneToMany(mappedBy = "industria")
+    private List<Contato> contatos;
+
     @OneToOne(mappedBy = "industria")
     private Financeiro financeiro;
 
     @OneToMany(mappedBy = "industria")
     private List<OrdemDeCompra> ordemDeCompras;
-
-    @OneToMany(mappedBy = "industria")
-    private List<Contato> contatos;
 }

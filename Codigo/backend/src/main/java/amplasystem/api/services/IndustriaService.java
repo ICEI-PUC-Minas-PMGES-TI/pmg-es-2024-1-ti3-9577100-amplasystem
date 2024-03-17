@@ -1,19 +1,32 @@
 package amplasystem.api.services;
 
 import amplasystem.api.models.Contato;
-import amplasystem.api.repositories.ContatoRepository;
 import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.dtos.IndustriaDTO;
+import amplasystem.api.enuns.TipoContato;
 import amplasystem.api.mappers.IndustriaMapper;
 import amplasystem.api.models.Industria;
+import amplasystem.api.models.Telefone;
 import amplasystem.api.repositories.IndustriaRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,6 +91,108 @@ public class IndustriaService {
         } else {
             throw new ObjectNotFoundException("Indústria não encontrada na base de dados");
         }
+    }
+
+    public List<Industria> saveTable(MultipartFile file) {
+
+        List<Industria> industrias = new ArrayList<>();
+
+        try (InputStream inputStream = file.getInputStream()) {
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = sheet.iterator();
+
+            iterator.next();
+
+            while (iterator.hasNext()) {
+                Row row = iterator.next();
+                Iterator<Cell> celIterator = row.cellIterator();
+
+                String nome = "";
+                List<Contato> contatos = new ArrayList<>();
+
+                while (celIterator.hasNext()) {
+                    Cell cell = celIterator.next();
+                    int columnIndex = cell.getColumnIndex();
+
+                    switch (columnIndex) {
+                        case 0:
+                            if (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null) {
+                                throw new NullPointerException("Celula obrigatoria vazia");
+                            }
+
+                            nome = cell.getStringCellValue();
+
+                            break;
+
+                        case 1:
+                            createContato(TipoContato.Financeiro, celIterator, cell, contatos);
+                            break;
+
+                        case 4:
+                            createContato(TipoContato.Comercial, celIterator, cell, contatos);
+                            break;
+
+                        case 7:
+                            createContato(TipoContato.Logistica, celIterator, cell, contatos);
+                            break;
+                        
+                        case 10:
+                            createContato(TipoContato.Pagamento, celIterator, cell, contatos);
+                            break;
+
+                        default:
+                            throw new RuntimeException("Index: " + columnIndex + " não é um dos valores tratados");
+                    }
+
+                }
+
+                Industria newIndustria = new Industria(null, nome, contatos, null, null);
+
+                for (Contato contato : contatos) {
+                    contato.setIndustria(newIndustria);
+                }
+
+                industrias.add(newIndustria);
+            }
+
+            industriaRepository.saveAll(industrias);
+
+            return industrias;
+
+        } catch (EncryptedDocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private void createContato(TipoContato tipo, Iterator<Cell> celIterator, Cell cell, List<Contato> contatos) {
+        if (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null) {
+            celIterator.next();
+            celIterator.next();
+            return;
+        }
+
+        String nomeContato = "";
+        String email = "";
+        Telefone telefone = new Telefone();
+
+        nomeContato = cell.getStringCellValue();
+        
+        cell = celIterator.next();
+        telefone.setNumero(String.valueOf(cell.getNumericCellValue()));
+
+        cell = celIterator.next();
+        email = cell.getStringCellValue();
+        
+
+        Contato newContato = new Contato(null, nomeContato, email, TipoContato.Financeiro, null, telefone);
+
+        contatos.add(newContato);
     }
 
 }
