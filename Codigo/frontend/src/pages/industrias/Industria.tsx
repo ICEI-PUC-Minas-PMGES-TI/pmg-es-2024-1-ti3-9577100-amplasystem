@@ -13,6 +13,7 @@ import { Box } from '@mui/system';
 import { Autocomplete, Button, Fab, Modal, TextField, Typography } from '@mui/material';
 import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
 import { useRef } from 'react';
+import styled from 'styled-components';
 
 
 const IndustriaPage = () => {
@@ -71,9 +72,18 @@ const IndustriaPage = () => {
 
 
     }
-
-
-
+    const tipos = ["Financeiro", "Comercial", "Logistica", "Pagamento"]
+    const VisuallyHiddenInput = styled('input')({
+        clip: 'rect(0 0 0 0)',
+        clipPath: 'inset(50%)',
+        height: 1,
+        overflow: 'hidden',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        whiteSpace: 'nowrap',
+        width: 1,
+    });
     return (
         <Box display={'flex'}>
             <TableContainer component={Paper} sx={{ marginTop: '70px' }}>
@@ -81,8 +91,14 @@ const IndustriaPage = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell align="center">Nome</TableCell>
-                            <TableCell align="center">Contato</TableCell>
-                            <TableCell align="center">Cargo</TableCell>
+                            {tipos.map((tipo) => {
+                                return <>
+                                    <TableCell align="center">Nome {tipo}</TableCell>
+                                    <TableCell align="center">Telefone  {tipo} </TableCell>
+                                    <TableCell align="center">Email  {tipo} </TableCell>
+                                </>
+                            })}
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -93,7 +109,14 @@ const IndustriaPage = () => {
                                     {console.log(vendedor)}
                                 </TableCell>
                                 {vendedor?.contatos?.map((contato: any) => {
-                                    <TableCell align="center">{contato}</TableCell>
+                                    return (
+                                        <>
+                                            <TableCell align="center">{contato.nome}</TableCell>
+                                            <TableCell align="center">{contato.telefone}</TableCell>
+                                            <TableCell align="center">{contato.email}</TableCell>
+                                        </>
+                                    )
+
                                 })}
                             </TableRow>
                         ))}
@@ -110,78 +133,18 @@ const IndustriaPage = () => {
                 aria-describedby="parent-modal-description"
             >
                 <Box sx={{ ...MODAL_STYLE }}>
-                    <h2 id="parent-modal-title">Cadastrar vendedor</h2>
-
-                    <TextField
-                        id="nome"
-                        label="Nome"
-                        variant="outlined"
-                        placeholder="Nome"
-                        fullWidth
-                        margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
-                        inputRef={refNome}
-                    />
-
-                    <TextField
-                        id="email"
-                        label="Email"
-                        variant="outlined"
-                        placeholder="Email"
-                        fullWidth
-                        margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
-                        inputRef={refEmail}
-                    />
-
-                    <Autocomplete
-                        disablePortal
-                        id="cargo"
-                        options={optionCargo}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Cargo" />}
-                        onSelect={(event) => {
-                            setRefCargo(event.target.value)
-                        }}
-                    />
-
                     <Button
-                        onClick={onSubmit}
+                        component="label"
+                        role={undefined}
                         variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
+                        tabIndex={-1}
                     >
-                        Confirmar
+                        Upload file
+                        <VisuallyHiddenInput type="file" onChange={(e) => console.log(e)} />
                     </Button>
 
-                    <Button
-                        onClick={ChangeModalState}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
-                        Cancelar
-                    </Button>
 
-                    <button onClick={ChangeModalState}>Fechar</button>
+
                 </Box>
             </Modal>
 

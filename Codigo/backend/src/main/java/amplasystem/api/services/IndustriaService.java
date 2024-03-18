@@ -196,7 +196,7 @@ public class IndustriaService {
         cell = celIterator.next();
         email = cell.getStringCellValue();
 
-        Contato newContato = new Contato(null, nomeContato, email, TipoContato.Financeiro, null, telefone);
+        Contato newContato = new Contato(null, nomeContato, email, tipo, null, telefone);
 
         contatos.add(newContato);
     }

@@ -60,7 +60,22 @@ const LoginPage = () => {
             <S.LoginWrapper>
                 <S.LoginTitle>Login</S.LoginTitle>
                 <S.LoginForm onSubmit={onSubmit}>
-                   
+                    <TextField
+                        id="email"
+                        label="Email"
+                        variant="outlined"
+                        placeholder="Email"
+                        error={emailError}
+                        helperText={emailHelperText}
+                        fullWidth
+                        margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
+                        inputRef={refEmail}
+                    />
                     <TextField
                         id="password"
                         label="Password"
