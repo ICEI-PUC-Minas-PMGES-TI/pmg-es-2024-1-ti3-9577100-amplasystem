@@ -1,24 +1,19 @@
-import { useAuth } from '../hooks/useAuth.ts';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import Grid from '@mui/material/Grid';
+import Aside from '../components/Aside';
 
-const DashboardLayout = () => {
-    const navigate = useNavigate();
-    const params = useParams();
-    const location = useLocation();
-    console.log(params);
-    console.log(location);
-    const { user, isAuthenticated, logout } = useAuth();
-    console.log(user, isAuthenticated);
+interface DashboardLayoutProps {
+    children: React.ReactNode;
+}
+
+export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     return (
-        <div>
-            <h1>Dashboard Page</h1>
-            <p>Autenticado: {isAuthenticated ? 'Sim' : 'Não'}</p>
-            <p>Usuário: {user?.email}</p>
-            <button onClick={() => logout()}>Logout</button>
-            <button onClick={() => navigate('/dashboard')}>Dashboard</button>
-            <button onClick={() => navigate('/vendedores')}>Vendedores</button>
-        </div>
+        <Grid container spacing={4}>
+            <Grid item>
+                <Aside />
+            </Grid>
+            <Grid item>
+                <main>{children}</main>
+            </Grid>
+        </Grid>
     );
 };
-
-export default DashboardLayout;
