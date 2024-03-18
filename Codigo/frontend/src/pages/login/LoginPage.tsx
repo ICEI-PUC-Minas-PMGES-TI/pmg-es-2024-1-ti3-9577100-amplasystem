@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 
 import * as S from './LoginPage.styles.ts';
-import { Box, Button, FormControlLabel, IconButton, InputAdornment, Link, TextField, colors } from '@mui/material';
-import { Label, VisibilityOff } from '@mui/icons-material';
+import { Box, Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
+import { VisibilityOff } from '@mui/icons-material';
 
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';

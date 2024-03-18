@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Aside from '../components/Aside';
+import { Box, width } from '@mui/system';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -7,13 +8,14 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     return (
-        <Grid container spacing={4}>
-            <Grid item>
-                <Aside />
-            </Grid>
-            <Grid item>
-                <main>{children}</main>
-            </Grid>
-        </Grid>
+        <Box
+            sx={{
+                display: 'flex',
+            }}
+        >
+            <Aside />
+
+            <main style={{ width: '100%', padding: '20px' }}>{children}</main>
+        </Box>
     );
 };

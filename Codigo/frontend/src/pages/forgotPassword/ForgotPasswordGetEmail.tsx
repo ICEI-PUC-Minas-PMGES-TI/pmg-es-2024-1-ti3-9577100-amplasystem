@@ -1,11 +1,9 @@
 import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Visibility from '@mui/icons-material/Visibility';
 
 import * as S from '../login/LoginPage.styles.ts';
-import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
-import { VisibilityOff } from '@mui/icons-material';
+import { Button, TextField } from '@mui/material';
 
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
