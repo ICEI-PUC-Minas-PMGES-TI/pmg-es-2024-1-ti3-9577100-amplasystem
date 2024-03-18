@@ -76,6 +76,11 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
                         inputRef={refEmail}
                     />
                     <TextField
@@ -87,10 +92,25 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
                         inputRef={refConfirmEmail}
                     />
 
-                    <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+                    <Button
+                        variant="contained"
+                        type="submit"
+                        sx={{
+                            mt: 2,
+                            maxWidth: 720,
+                            backgroundColor: '#45BCEF',
+                            width: '100%',
+                            height: 55,
+                        }}
+                    >
                         Enviar token
                     </Button>
                 </S.LoginForm>
