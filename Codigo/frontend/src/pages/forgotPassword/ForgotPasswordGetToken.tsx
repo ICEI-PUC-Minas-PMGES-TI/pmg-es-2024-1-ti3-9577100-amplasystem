@@ -65,13 +65,13 @@ const ForgotPasswordGetEmail = () => {
         <S.Container>
             <S.Logo src={Logo} alt="logo" />
             <S.LoginWrapper>
-                <S.LoginTitle>Resetar sua senha</S.LoginTitle>
+                <S.LoginTitle>Alterar sua senha</S.LoginTitle>
                 <S.LoginForm onSubmit={onSubmit}>
                     <TextField
-                        id="email"
-                        label="Email"
+                        id="token"
+                        label="Token"
                         variant="outlined"
-                        placeholder="Email"
+                        placeholder="Token"
                         error={emailError}
                         helperText={emailHelperText}
                         fullWidth
@@ -79,10 +79,21 @@ const ForgotPasswordGetEmail = () => {
                         inputRef={refEmail}
                     />
                     <TextField
-                        id="confirmEmail"
-                        label="Confirme seu email"
+                        id="senha"
+                        label="Informe sua senha"
                         variant="outlined"
-                        placeholder="Email"
+                        placeholder="Senha"
+                        error={emailError}
+                        helperText={emailHelperText}
+                        fullWidth
+                        margin="normal"
+                        inputRef={refConfirmEmail}
+                    />
+                        <TextField
+                        id="confirmSenha"
+                        label="Confirme sua senha"
+                        variant="outlined"
+                        placeholder="Senha"
                         error={emailError}
                         helperText={emailHelperText}
                         fullWidth

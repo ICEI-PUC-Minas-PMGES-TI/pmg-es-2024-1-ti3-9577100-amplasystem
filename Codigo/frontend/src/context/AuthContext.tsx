@@ -1,13 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { VendedorModel } from '../models/VendedorModel.ts';
 import api from '../services/api.tsx';
-import { useNavigate } from 'react-router';
+import { useNotification } from '../hooks/useNotificaion.ts';
 
 interface AuthState {
     isAuthenticated: boolean;
     user: { email?: string; name?: string; token?: string };
-    login: (email: string, senha: string) => void;
-    sendForgotToken: (email: string) => void;
+    login: (email: string, senha: string) => Promise<void>;
+    sendForgotToken: (email: string) => Promise<void>;
     tokenWasSend: boolean;
     logout: () => void;
 }
@@ -30,15 +30,16 @@ interface Props {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [user, setUser] = useState<Partial<VendedorModel>>({});
     const [tokenWasSend, setTokenWasSend] = useState(false);
-    const login = async (email: string, senha: string) => {
+    const login = async (email: string, password: string) => {
         try {
-            const response = await api.post('/auth/login', { email, senha });
+            const response = await api.post('/auth/login', { email, senha: password });
             const { accessToken: token } = response.data;
 
             setUser({ email, token });
             localStorage.setItem('user', JSON.stringify({ email, token }));
         } catch (error) {
-            console.error('Error on login', error); // TODO: Add a toast message
+            console.error(error);
+            throw error;
         }
     };
 
@@ -50,6 +51,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             localStorage.setItem('userEmailForgotPassowrd', JSON.stringify({ email }));
         } catch (error) {
             console.error('Error on Send Token', error); // TODO: Add a toast message
+            throw error;
         }
     };
     const logout = () => {
