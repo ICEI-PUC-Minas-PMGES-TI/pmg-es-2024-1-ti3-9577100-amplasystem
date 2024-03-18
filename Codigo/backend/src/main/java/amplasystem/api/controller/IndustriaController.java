@@ -85,6 +85,6 @@ public class IndustriaController {
     @PostMapping(value = "/tabela")
     @ResponseBody
     public ResponseEntity<?> saveTable(@RequestParam MultipartFile  file) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(industriaService.saveTable(file));
+        return ResponseEntity.status(HttpStatus.CREATED).body("CREATED");
     }
 }

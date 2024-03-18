@@ -93,7 +93,7 @@ public class IndustriaService {
         }
     }
 
-    public List<Industria> saveTable(MultipartFile file) {
+    public List<IndustriaDTO> saveTable(MultipartFile file) {
 
         List<Industria> industrias = new ArrayList<>();
 
@@ -159,7 +159,13 @@ public class IndustriaService {
 
             industriaRepository.saveAll(industrias);
 
-            return industrias;
+            List<IndustriaDTO> industriaDTOs = new ArrayList<>();
+
+            for (Industria industria : industrias) {
+                industriaDTOs.add(IndustriaMapper.toDTO(industria));
+            }
+
+            return industriaDTOs;
 
         } catch (EncryptedDocumentException e) {
             e.printStackTrace();
