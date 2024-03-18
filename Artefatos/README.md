@@ -17,3 +17,19 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 *  [Segunda versão do Der ](./DER/bd.2.0.png "") A versão que será utilizada para o inicio do desenvolvimento 
  
+### Interfaces de Usuário
+
+A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
+
+#### Spring 1
+
+*  [Esqueci Minha Senha ](userInterface/sprint1/Interface%20de%20usuário%20de%20esqueci%20minha%20senha.pdf "") 
+
+*  [Tabela Geral ](userInterface/sprint1/InterfaceTabelaGeral.pdf "") 
+
+*  [Cadastrar Vendedores ](userInterface/sprint1/CadastrarVendedor.pdf "") 
+
+*  [Alterar Vendedores ](userInterface/sprint1/AlterarVendedor.pdf "") 
+
+*  [Cadastrar Industrias por Planilha ](userInterface/sprint1/PlanilhaIndustria.pdf "") 
+
