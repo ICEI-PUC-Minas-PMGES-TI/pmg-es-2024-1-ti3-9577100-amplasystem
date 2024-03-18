@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from '../routes/ProtectedRoutes';
+import { DashboardLayout } from '../layouts/DashboardLayout.tsx';
 
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
@@ -13,7 +14,14 @@ const RouterRoutes = () => {
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route
+                            path="/dashboard"
+                            element={
+                                <DashboardLayout>
+                                    <DashboardPage />
+                                </DashboardLayout>
+                            }
+                        />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                     <Route>
