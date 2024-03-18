@@ -3,30 +3,35 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 
-import * as S from './LoginPage.styles.ts';
-import { Box, Button, FormControlLabel, IconButton, InputAdornment, Link, TextField, colors } from '@mui/material';
-import { Label, VisibilityOff } from '@mui/icons-material';
+import * as S from '../login/LoginPage.styles.ts';
+import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
+import { VisibilityOff } from '@mui/icons-material';
 
+// import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
 
-const LoginPage = () => {
-    const { login, isAuthenticated } = useAuth();
+const ForgotPasswordGetEmail = () => {
+    const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
     const navigate = useNavigate();
     const { showNotification } = useNotification();
-
     const refEmail = useRef<HTMLInputElement>(null);
-    const refPassword = useRef<HTMLInputElement>(null);
+    const refConfirmEmail = useRef<HTMLInputElement>(null);
 
     const [emailError, setEmailError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
         }
     }, [isAuthenticated, navigate]);
+
+    useEffect(() => {
+        if (tokenWasSend) {
+            navigate('/forgotPassword/token');
+        }
+    });
 
     const validateEmail = (email: string) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -36,29 +41,31 @@ const LoginPage = () => {
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const email = refEmail.current?.value || '';
-        const password = refPassword.current?.value || '';
-        const isEmailValid = validateEmail(email);
+        const emailConfirm = refConfirmEmail.current?.value || '';
+        const isEmailValid = validateEmail(email) && validateEmail(emailConfirm);
 
         setEmailError(!isEmailValid);
 
         if (!isEmailValid) {
-            setEmailHelperText('Please enter a valid email.');
+            setEmailHelperText('Informe um email valido.');
+        } else if (email != emailConfirm) {
+            setEmailError(true);
+            setEmailHelperText('Os emails não coincidem.');
         } else {
             setEmailHelperText('');
         }
-
-        if (!isEmailValid) return;
-
-        login(email, password).catch(() => {
-            return showNotification({ message: 'Email e/ou senha inválidos', type: 'error' });
-        });
+        if (isEmailValid) {
+            sendForgotToken(email).catch(() => {
+                return showNotification({ message: 'Email invalido', type: 'error' });
+            });
+        }
     };
 
     return (
         <S.Container>
             <S.Logo src={Logo} alt="logo" />
             <S.LoginWrapper>
-                <S.LoginTitle>Login</S.LoginTitle>
+                <S.LoginTitle>Resetar sua senha</S.LoginTitle>
                 <S.LoginForm onSubmit={onSubmit}>
                     <TextField
                         id="email"
@@ -77,11 +84,12 @@ const LoginPage = () => {
                         inputRef={refEmail}
                     />
                     <TextField
-                        id="password"
-                        label="Password"
+                        id="confirmEmail"
+                        label="Confirme seu email"
                         variant="outlined"
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Password"
+                        placeholder="Email"
+                        error={emailError}
+                        helperText={emailHelperText}
                         fullWidth
                         margin="normal"
                         sx={{
@@ -89,44 +97,8 @@ const LoginPage = () => {
                             maxWidth: 720,
                             height: 65,
                         }}
-                        inputRef={refPassword}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
+                        inputRef={refConfirmEmail}
                     />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'right',
-                            width: '100%',
-                            mt: '-15px',
-                            maxWidth: 720,
-                        }}
-                    >
-                        <Link
-                            underline="hover"
-                            component="button"
-                            variant="body2"
-                            sx={{
-                                color: 'black',
-                            }}
-                            onClick={() => {
-                                navigate('/forgotPassword/email');
-                            }}
-                        >
-                            esqueceu sua senha?
-                        </Link>
-                    </Box>
 
                     <Button
                         variant="contained"
@@ -139,7 +111,7 @@ const LoginPage = () => {
                             height: 55,
                         }}
                     >
-                        Entrar
+                        Enviar token
                     </Button>
                 </S.LoginForm>
             </S.LoginWrapper>
@@ -147,4 +119,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default ForgotPasswordGetEmail;
