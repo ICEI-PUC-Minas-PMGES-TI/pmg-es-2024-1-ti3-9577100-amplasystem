@@ -89,7 +89,7 @@ const ForgotPasswordGetEmail = () => {
                         margin="normal"
                         inputRef={refConfirmEmail}
                     />
-                        <TextField
+                    <TextField
                         id="confirmSenha"
                         label="Confirme sua senha"
                         variant="outlined"
