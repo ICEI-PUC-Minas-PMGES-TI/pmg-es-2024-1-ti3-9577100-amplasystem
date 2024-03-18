@@ -4,7 +4,7 @@ import ProtectedRoute from '../routes/ProtectedRoutes';
 
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
-
+const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPassowrdGetEmail'));
 const RouterRoutes = () => {
     return (
         <Router>
@@ -16,6 +16,11 @@ const RouterRoutes = () => {
                         <Route path="/dashboard" element={<DashboardPage />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
+                    <Route>
+                        <Route path="/forgotPassowrd/email" element={<ForgotPasswordGetEmail />} />
+                        <Route path="/forgotPassowrd/token" element={<ForgotPasswordGetEmail />} />
+                        <Route path="/forgotPassowrd/newPassword" element={<ForgotPasswordGetEmail />} />
+                    </Route>
                 </Routes>
             </Suspense>
         </Router>

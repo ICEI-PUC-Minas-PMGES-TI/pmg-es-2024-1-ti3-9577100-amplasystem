@@ -100,55 +100,7 @@ public class VendedorController {
         }
     }
 
-    @PostMapping(value = "/changePassword")
-    @ResponseBody
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        try {
-            vendedorService.changePassword(changePasswordDTO);
-            return ResponseEntity.status(200).body("Password changed");
-        } catch (ChangePasswordException e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("Confira os dados informados",
-                    e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errResponseDTO);
-        } catch (ObjectNotFoundException e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("Confira os dados informados",
-                    e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
-        } catch (Exception e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("System Error",
-                    "Infelizmente estamos com dificuldade no sistema, tente novamente, se persistir entre em contato com o suporte");
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errResponseDTO);
-        }
-
-    }
-
-    @PostMapping("/forgotPassword")
-    public ResponseEntity<?> sendToken(@RequestBody ForgetPasswordDTO forgetPasswordDTO) {
- 
-        try {
-            VendedorDTO vendedor = vendedorService.getVendedoresByEmail(forgetPasswordDTO.getEmail());
-            String token = UUID.randomUUID().toString().substring(0, 5);
-            vendedorService.createPasswordResetTokenForUser(vendedor.getId(), token);
-            emailSenderService.sendRecoveryPasswordMail(vendedor.getEmail(),token);
-            return ResponseEntity.status(200).body("Email enviado para o usuário " + vendedor.getEmail());
-
-        } catch (InvalidInformationException e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("Dados inválido",
-                    e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errResponseDTO);
-        } catch (ObjectNotFoundException e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("Vendedor não encontrado",
-                    e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
-        } catch (Exception e) {
-            ResponseDTO errResponseDTO = new ResponseDTO("System Error",
-                    "Infelizmente estamos com dificuldade no sistema, tente novamente, se persistir entre em contato com o suporte");
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(errResponseDTO);
-        }
-    }
-
+    
     @PutMapping("admin/update/{id}")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody VendedorDTO vendedor) {
