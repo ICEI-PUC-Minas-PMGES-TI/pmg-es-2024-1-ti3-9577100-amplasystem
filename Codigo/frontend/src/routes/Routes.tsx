@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-d
 import ProtectedRoute from '../routes/ProtectedRoutes';
 
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
+const VendedoresPage = React.lazy(() => import('../pages/dashboard/Vendedores'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
 
 const RouterRoutes = () => {
@@ -14,6 +15,7 @@ const RouterRoutes = () => {
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<ProtectedRoute />}>
                         <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/vendedores" element={<VendedoresPage />} />
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                 </Routes>

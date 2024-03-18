@@ -1,7 +1,7 @@
 import { useAuth } from '../../hooks/useAuth.ts';
 import { useNavigate } from 'react-router-dom';
 
-const DashboardPage = () => {
+const VendedoresPage = () => {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useAuth();
     // console.log(user, isAuthenticated);
@@ -9,7 +9,7 @@ const DashboardPage = () => {
     const { logout } = useAuth();
     return (
         <div>
-            <h1>Dashboard Page</h1>
+            <h1>Vendedores Page</h1>
             <p>Autenticado: {isAuthenticated ? 'Sim' : 'Não'}</p>
             <p>Usuário: {user?.email}</p>
             <button onClick={() => logout()}>Logout</button>
@@ -19,4 +19,4 @@ const DashboardPage = () => {
     );
 };
 
-export default DashboardPage;
+export default VendedoresPage;

@@ -9,6 +9,10 @@ const LoginPage = () => {
     const refEmail = useRef<HTMLInputElement>(null);
     const refSenha = useRef<HTMLInputElement>(null);
 
+    const signIn = () => {
+        login(refEmail.current?.value || '', refSenha.current?.value || '');
+    };
+
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
@@ -21,8 +25,8 @@ const LoginPage = () => {
             <p>Email: vendedor1@gmail.com</p>
             <p>Senha: senha</p>
             <input id="email" ref={refEmail} type="text" placeholder="Email" />
-            <input id="senha" ref={refSenha} type="password" placeholder="Senha" />
-            <button onClick={() => login(refEmail.current?.value || '', refSenha.current?.value || '')}>Entrar</button>
+            <input id="senha" ref={refSenha} onKeyDown={signIn} type="password" placeholder="Senha" />
+            <button onClick={signIn}>Entrar</button>
         </div>
     );
 };
