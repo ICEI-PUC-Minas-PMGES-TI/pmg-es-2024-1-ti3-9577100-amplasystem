@@ -5,8 +5,8 @@ import { DashboardLayout } from '../layouts/DashboardLayout.tsx';
 
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
-const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/forgotPasswordGetEmail'));
-const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/forgotPasswordGetNewPassword'));
+const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetEmail'));
+const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetNewPassword'));
 const RouterRoutes = () => {
     return (
         <Router>

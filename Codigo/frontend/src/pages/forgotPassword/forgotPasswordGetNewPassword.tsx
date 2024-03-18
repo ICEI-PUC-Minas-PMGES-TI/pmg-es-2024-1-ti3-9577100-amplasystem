@@ -12,51 +12,48 @@ import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
 
 const ForgotPasswordGetEmail = () => {
-    const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
+    const { passwordWasReset, changePassword } = useAuth();
     const navigate = useNavigate();
     const { showNotification } = useNotification();
-    const refEmail = useRef<HTMLInputElement>(null);
-    const refConfirmEmail = useRef<HTMLInputElement>(null);
+    const refSenha = useRef<HTMLInputElement>(null);
+    const refToken = useRef<HTMLInputElement>(null);
+    const refConfirmSenha = useRef<HTMLInputElement>(null);
 
-    const [emailError, setEmailError] = useState(false);
-    const [emailHelperText, setEmailHelperText] = useState('');
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate('/dashboard');
-        }
-    }, [isAuthenticated, navigate]);
+    const [senhalError, setSenhaError] = useState(false);
+    const [senhaHelperText, setSenhaHelperText] = useState('');
 
     useEffect(() => {
-        if (tokenWasSend) {
-            navigate('/forgotPassword/token');
+        if (passwordWasReset) {
+            navigate('/login');
         }
     });
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email);
+    const validatePassword = (password: string) => {
+        // Rule: password must be at least 6 characters at least 1 number, 1 uppercase and 1 lowercase
+        const passwordRegex = /^(?=.\d)(?=.[a-z])(?=.*[A-Z]).{6,}$/;
+        return true;
     };
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const email = refEmail.current?.value || '';
-        const emailConfirm = refConfirmEmail.current?.value || '';
-        const isEmailValid = validateEmail(email) && validateEmail(emailConfirm);
+        const senha = refSenha.current?.value || '';
+        const senhaConfirm = refConfirmSenha.current?.value || '';
+        const token = refToken.current?.value || '';
+        const isSenhaValid = validatePassword(senha) && validatePassword(senhaConfirm);
 
-        setEmailError(!isEmailValid);
+        setSenhaError(!isSenhaValid);
 
-        if (!isEmailValid) {
-            setEmailHelperText('Informe um email valido.');
-        } else if (email != emailConfirm) {
-            setEmailError(true);
-            setEmailHelperText('Os emails não coincidem.');
+        if (!isSenhaValid) {
+            setSenhaHelperText('Informe uma senha valida.');
+        } else if (senha != senhaConfirm) {
+            setSenhaError(true);
+            setSenhaHelperText('As senhas são não coincidem.');
         } else {
-            setEmailHelperText('');
+            setSenhaHelperText('');
         }
-        if (isEmailValid) {
-            sendForgotToken(email).catch(() => {
-                return showNotification({ message: 'Email invalido', type: 'error' });
+        if (isSenhaValid) {
+            changePassword(token, senha, senhaConfirm).catch(() => {
+                return showNotification({ message: 'Senhas ou token invalido', type: 'error' });
             });
         }
     };
@@ -72,33 +69,31 @@ const ForgotPasswordGetEmail = () => {
                         label="Token"
                         variant="outlined"
                         placeholder="Token"
-                        error={emailError}
-                        helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        inputRef={refEmail}
+                        inputRef={refToken}
                     />
                     <TextField
                         id="senha"
                         label="Informe sua senha"
                         variant="outlined"
                         placeholder="Senha"
-                        error={emailError}
-                        helperText={emailHelperText}
+                        error={senhalError}
+                        helperText={senhaHelperText}
                         fullWidth
                         margin="normal"
-                        inputRef={refConfirmEmail}
+                        inputRef={refSenha}
                     />
                     <TextField
                         id="confirmSenha"
                         label="Confirme sua senha"
                         variant="outlined"
                         placeholder="Senha"
-                        error={emailError}
-                        helperText={emailHelperText}
+                        error={senhalError}
+                        helperText={senhaHelperText}
                         fullWidth
                         margin="normal"
-                        inputRef={refConfirmEmail}
+                        inputRef={refConfirmSenha}
                     />
 
                     <Button variant="contained" type="submit" sx={{ mt: 2 }}>
