@@ -1,11 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { VendedorModel } from '../models/VendedorModel.ts';
 import api from '../services/api.tsx';
+import { useNotification } from '../hooks/useNotificaion.ts';
 
 interface AuthState {
     isAuthenticated: boolean;
     user: { email?: string; name?: string; token?: string };
-    login: (email: string, senha: string) => void;
+    login: (email: string, senha: string) => Promise<void>;
     logout: () => void;
 }
 
@@ -25,15 +26,16 @@ interface Props {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [user, setUser] = useState<Partial<VendedorModel>>({});
 
-    const login = async (email: string, senha: string) => {
+    const login = async (email: string, password: string) => {
         try {
-            const response = await api.post('/auth/login', { email, senha });
+            const response = await api.post('/auth/login', { email, senha: password });
             const { accessToken: token } = response.data;
 
             setUser({ email, token });
             localStorage.setItem('user', JSON.stringify({ email, token }));
         } catch (error) {
-            console.error('Error on login', error); // TODO: Add a toast message
+            console.error(error);
+            throw error;
         }
     };
 

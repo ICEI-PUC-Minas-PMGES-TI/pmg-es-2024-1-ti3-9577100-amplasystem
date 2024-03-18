@@ -7,12 +7,13 @@ import * as S from './LoginPage.styles.ts';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { VisibilityOff } from '@mui/icons-material';
 
-// import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
+import { useNotification } from '../../hooks/useNotificaion.ts';
 
 const LoginPage = () => {
     const { login, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+    const { showNotification } = useNotification();
 
     const refEmail = useRef<HTMLInputElement>(null);
     const refPassword = useRef<HTMLInputElement>(null);
@@ -46,9 +47,11 @@ const LoginPage = () => {
             setEmailHelperText('');
         }
 
-        if (isEmailValid) {
-            login(email, password);
-        }
+        if (!isEmailValid) return;
+
+        login(email, password).catch(() => {
+            return showNotification({ message: 'Email e/ou senha inválidos', type: 'error' });
+        });
     };
 
     return (

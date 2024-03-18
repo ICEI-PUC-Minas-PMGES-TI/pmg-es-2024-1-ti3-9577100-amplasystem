@@ -1,11 +1,14 @@
 import { AuthProvider } from './context/AuthContext.tsx';
 import RouterRoutes from './routes/Routes.tsx';
+import { NotificationProvider } from './context/NotificationContext.tsx';
 
 function App() {
     return (
-        <AuthProvider>
-            <RouterRoutes />
-        </AuthProvider>
+        <NotificationProvider>
+            <AuthProvider>
+                <RouterRoutes />
+            </AuthProvider>
+        </NotificationProvider>
     );
 }
 
