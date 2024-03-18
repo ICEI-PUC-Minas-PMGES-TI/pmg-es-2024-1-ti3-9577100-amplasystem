@@ -29,7 +29,7 @@ const ForgotPasswordGetEmail = () => {
 
     useEffect(() => {
         if (tokenWasSend) {
-            navigate('/forgotPassowrd/token');
+            navigate('/forgotPassword/token');
         }
     });
 
@@ -65,13 +65,13 @@ const ForgotPasswordGetEmail = () => {
         <S.Container>
             <S.Logo src={Logo} alt="logo" />
             <S.LoginWrapper>
-                <S.LoginTitle>Alterar sua senha</S.LoginTitle>
+                <S.LoginTitle>Resetar sua senha</S.LoginTitle>
                 <S.LoginForm onSubmit={onSubmit}>
                     <TextField
-                        id="token"
-                        label="Token"
+                        id="email"
+                        label="Email"
                         variant="outlined"
-                        placeholder="Token"
+                        placeholder="Email"
                         error={emailError}
                         helperText={emailHelperText}
                         fullWidth
@@ -79,21 +79,10 @@ const ForgotPasswordGetEmail = () => {
                         inputRef={refEmail}
                     />
                     <TextField
-                        id="senha"
-                        label="Informe sua senha"
+                        id="confirmEmail"
+                        label="Confirme seu email"
                         variant="outlined"
-                        placeholder="Senha"
-                        error={emailError}
-                        helperText={emailHelperText}
-                        fullWidth
-                        margin="normal"
-                        inputRef={refConfirmEmail}
-                    />
-                    <TextField
-                        id="confirmSenha"
-                        label="Confirme sua senha"
-                        variant="outlined"
-                        placeholder="Senha"
+                        placeholder="Email"
                         error={emailError}
                         helperText={emailHelperText}
                         fullWidth

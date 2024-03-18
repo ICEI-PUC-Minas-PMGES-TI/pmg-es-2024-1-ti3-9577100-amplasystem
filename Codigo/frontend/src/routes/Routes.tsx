@@ -5,7 +5,8 @@ import { DashboardLayout } from '../layouts/DashboardLayout.tsx';
 
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
-const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPassowrdGetEmail'));
+const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/forgotPasswordGetEmail'));
+const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/forgotPasswordGetNewPassword'));
 const RouterRoutes = () => {
     return (
         <Router>
@@ -25,9 +26,8 @@ const RouterRoutes = () => {
                     </Route>
                     <Route path="*" element={<Navigate to="/login" replace />} />
                     <Route>
-                        <Route path="/forgotPassowrd/email" element={<ForgotPasswordGetEmail />} />
-                        <Route path="/forgotPassowrd/token" element={<ForgotPasswordGetEmail />} />
-                        <Route path="/forgotPassowrd/newPassword" element={<ForgotPasswordGetEmail />} />
+                        <Route path="/forgotPassword/email" element={<ForgotPasswordGetEmail />} />
+                        <Route path="/forgotPassword/token" element={<ForgotPasswordGetNewPassword />} />
                     </Route>
                 </Routes>
             </Suspense>
