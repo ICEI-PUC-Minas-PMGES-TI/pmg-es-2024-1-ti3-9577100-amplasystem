@@ -19,8 +19,9 @@ const ForgotPasswordGetEmail = () => {
     const refToken = useRef<HTMLInputElement>(null);
     const refConfirmSenha = useRef<HTMLInputElement>(null);
 
-    const [senhalError, setSenhaError] = useState(false);
+    const [senhaError, setSenhaError] = useState(false);
     const [senhaHelperText, setSenhaHelperText] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (passwordWasReset) {
@@ -71,32 +72,85 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Token"
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
                         inputRef={refToken}
                     />
                     <TextField
                         id="senha"
-                        label="Informe sua senha"
+                        label="Senha"
                         variant="outlined"
+                        type={showPassword ? 'text' : 'password'}
                         placeholder="Senha"
-                        error={senhalError}
-                        helperText={senhaHelperText}
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
+                        error={senhaError}
+                        helperText={senhaHelperText}
                         inputRef={refSenha}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <TextField
-                        id="confirmSenha"
-                        label="Confirme sua senha"
+                        id="senha"
+                        label="Confirmar Senha"
                         variant="outlined"
-                        placeholder="Senha"
-                        error={senhalError}
-                        helperText={senhaHelperText}
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Confirmar Senha"
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
+                        error={senhaError}
+                        helperText={senhaHelperText}
                         inputRef={refConfirmSenha}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
 
-                    <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+                    <Button
+                        variant="contained"
+                        type="submit"
+                        sx={{
+                            mt: 2,
+                            maxWidth: 720,
+                            backgroundColor: '#45BCEF',
+                            width: '100%',
+                            height: 55,
+                        }}
+                    >
                         Mudar senha
                     </Button>
                 </S.LoginForm>

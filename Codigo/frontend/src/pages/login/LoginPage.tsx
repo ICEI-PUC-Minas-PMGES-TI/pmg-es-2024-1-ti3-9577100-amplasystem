@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
 
 import * as S from './LoginPage.styles.ts';
-import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
-import { VisibilityOff } from '@mui/icons-material';
+import { Box, Button, FormControlLabel, IconButton, InputAdornment, Link, TextField, colors } from '@mui/material';
+import { Label, VisibilityOff } from '@mui/icons-material';
 
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
@@ -69,6 +69,11 @@ const LoginPage = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
                         inputRef={refEmail}
                     />
                     <TextField
@@ -79,6 +84,11 @@ const LoginPage = () => {
                         placeholder="Password"
                         fullWidth
                         margin="normal"
+                        sx={{
+                            borderRadius: '8px',
+                            maxWidth: 720,
+                            height: 65,
+                        }}
                         inputRef={refPassword}
                         InputProps={{
                             endAdornment: (
@@ -94,8 +104,41 @@ const LoginPage = () => {
                             ),
                         }}
                     />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'right',
+                            width: '100%',
+                            mt: '-15px',
+                            maxWidth: 720,
+                        }}
+                    >
+                        <Link
+                            underline="hover"
+                            component="button"
+                            variant="body2"
+                            sx={{
+                                color: 'black',
+                            }}
+                            onClick={() => {
+                                navigate('/forgotPassword/email');
+                            }}
+                        >
+                            esqueceu sua senha?
+                        </Link>
+                    </Box>
 
-                    <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+                    <Button
+                        variant="contained"
+                        type="submit"
+                        sx={{
+                            mt: 2,
+                            maxWidth: 720,
+                            backgroundColor: '#45BCEF',
+                            width: '100%',
+                            height: 55,
+                        }}
+                    >
                         Entrar
                     </Button>
                 </S.LoginForm>
