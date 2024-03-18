@@ -1,12 +1,12 @@
+// import { Dashboard } from '@mui/icons-material';
+
 import { useAuth } from '../../hooks/useAuth.ts';
 import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useAuth();
-    // console.log(user, isAuthenticated);
+    const { user, isAuthenticated, logout } = useAuth();
     console.log(user, isAuthenticated);
-    const { logout } = useAuth();
     return (
         <div>
             <h1>Dashboard Page</h1>

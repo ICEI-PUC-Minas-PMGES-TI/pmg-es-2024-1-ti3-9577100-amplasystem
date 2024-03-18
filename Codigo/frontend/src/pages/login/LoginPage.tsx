@@ -17,10 +17,6 @@ const LoginPage = () => {
     const refEmail = useRef<HTMLInputElement>(null);
     const refPassword = useRef<HTMLInputElement>(null);
 
-    const signIn = () => {
-        login(refEmail.current?.value || '', refSenha.current?.value || '');
-    };
-
     const [emailError, setEmailError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState('');
     const [showPassword, setShowPassword] = useState(false);
