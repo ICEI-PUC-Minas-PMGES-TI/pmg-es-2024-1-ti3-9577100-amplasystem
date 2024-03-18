@@ -99,7 +99,7 @@ public class IndustriaService {
 
         try (InputStream inputStream = file.getInputStream()) {
             Workbook workbook = new XSSFWorkbook(inputStream);
-            
+
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = sheet.iterator();
 
@@ -137,7 +137,7 @@ public class IndustriaService {
                         case 7:
                             createContato(TipoContato.Logistica, celIterator, cell, contatos);
                             break;
-                        
+
                         case 10:
                             createContato(TipoContato.Pagamento, celIterator, cell, contatos);
                             break;
@@ -152,6 +152,7 @@ public class IndustriaService {
 
                 for (Contato contato : contatos) {
                     contato.setIndustria(newIndustria);
+                    contatoService.save(contato);
                 }
 
                 industrias.add(newIndustria);
@@ -188,15 +189,14 @@ public class IndustriaService {
         Telefone telefone = new Telefone();
 
         nomeContato = cell.getStringCellValue();
-        
+
         cell = celIterator.next();
         telefone.setNumero(String.valueOf(cell.getNumericCellValue()));
 
         cell = celIterator.next();
         email = cell.getStringCellValue();
-        
 
-        Contato newContato = new Contato(null, nomeContato, email, TipoContato.Financeiro, null, telefone);
+        Contato newContato = new Contato(null, nomeContato, email, tipo, null, telefone);
 
         contatos.add(newContato);
     }
