@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"), "Pedro Henrique", Cargo.ADIMINISTRADOR, new ArrayList<>());
+        Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"), "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());
         vendedorRepository.save(v1);
 //        Cliente c1 = new Cliente(null, "60270975000161", "31988888888", "Belo Horizonte", "Rua dos bobos n0", "Empresa 1", v1, new ArrayList<>());
     }

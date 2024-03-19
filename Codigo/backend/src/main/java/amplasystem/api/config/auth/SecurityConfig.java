@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**", "/public/**", "/v3/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority(Cargo.ADIMINISTRADOR.name())
-                        .requestMatchers("/**").hasAnyAuthority(Cargo.ADIMINISTRADOR.name(), Cargo.VENDEDOR.name())
+                        .requestMatchers("/admin/**").hasAuthority(Cargo.ADMINISTRADOR.name())
+                        .requestMatchers("/**").hasAnyAuthority(Cargo.ADMINISTRADOR.name(), Cargo.VENDEDOR.name())
                 )
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());

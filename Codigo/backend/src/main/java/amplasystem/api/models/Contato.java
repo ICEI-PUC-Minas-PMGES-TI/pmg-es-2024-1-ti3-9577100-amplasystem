@@ -30,6 +30,10 @@ public class Contato {
     @Column(name = "email", nullable = true, length = 100)
     String email;
 
+    @Column(name = "telefone", nullable = true, columnDefinition = "CHAR(15)")
+    @NotBlank(message = "telefone de telefone é obrigatório.")
+    private String telefone; 
+
     @Column(name = "tipo_contato", nullable = false)
     TipoContato tipoContato;
 
@@ -37,7 +41,6 @@ public class Contato {
     @JoinColumn(name = "industria_id")
     private Industria industria;
 
-    @OneToOne
-    @JoinColumn(name = "telefone_id")
-    private Telefone telefone;
+    
+    
 }

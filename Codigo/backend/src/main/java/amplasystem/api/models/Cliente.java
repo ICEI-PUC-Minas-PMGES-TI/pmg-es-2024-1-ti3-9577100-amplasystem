@@ -40,10 +40,9 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente")
     private List<OrdemDeCompra> ordemDeCompras;
-
-    @OneToOne
-    @JoinColumn(name = "telefone")
-    private Telefone telefone;
+    @Column(name = "telefone", nullable = true, columnDefinition = "CHAR(15)")
+    @NotBlank(message = "telefone de telefone é obrigatório.")
+    private String telefone; 
 
     @OneToOne
     @JoinColumn(name = "endereco")

@@ -6,7 +6,6 @@ import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.enuns.TipoContato;
 import amplasystem.api.mappers.IndustriaMapper;
 import amplasystem.api.models.Industria;
-import amplasystem.api.models.Telefone;
 import amplasystem.api.repositories.IndustriaRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -186,17 +185,16 @@ public class IndustriaService {
 
         String nomeContato = "";
         String email = "";
-        Telefone telefone = new Telefone();
+        String telefone = String.valueOf(cell.getNumericCellValue());
 
         nomeContato = cell.getStringCellValue();
 
         cell = celIterator.next();
-        telefone.setNumero(String.valueOf(cell.getNumericCellValue()));
 
         cell = celIterator.next();
         email = cell.getStringCellValue();
 
-        Contato newContato = new Contato(null, nomeContato, email, tipo, null, telefone);
+        Contato newContato = new Contato(null, nomeContato, email, telefone, tipo, null);
 
         contatos.add(newContato);
     }

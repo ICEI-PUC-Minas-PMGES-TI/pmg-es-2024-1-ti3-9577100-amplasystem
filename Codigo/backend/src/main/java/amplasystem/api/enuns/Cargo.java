@@ -1,7 +1,7 @@
 package amplasystem.api.enuns;
 
 public enum Cargo {
-    ADIMINISTRADOR,
+    ADMINISTRADOR,
     VENDEDOR
 
 }

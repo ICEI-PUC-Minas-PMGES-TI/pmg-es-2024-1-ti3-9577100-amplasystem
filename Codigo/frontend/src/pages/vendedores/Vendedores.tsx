@@ -1,188 +1,144 @@
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
-import { Autocomplete, Button, Fab, Modal, TextField, Typography } from '@mui/material';
-import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
-import { useRef } from 'react';
-
-
+import { IconButton } from '@mui/material';
+import RegisterModal from './ModalCadastro';
+import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { Delete, Edit, Email } from '@mui/icons-material';
+import { useAuth } from '../../hooks/useAuth';
+import { useNotification } from '../../hooks/useNotificaion';
 const VendedoresPage = () => {
-    const [data, setData] = React.useState<[VendedorModel]>([{}]);
-    const [open, setOpen] = React.useState(false)
-
+    const [vendedor, setVendedor] = React.useState<VendedorModel | undefined>(undefined);
+    const [data, setData] = React.useState<VendedorModel[]>([]);
+    const [open, setOpen] = React.useState(false);
+    const [reload, setReload] = React.useState(true);
     React.useEffect(() => {
-        getVendedores()
-    }, []);
-
-
+        getVendedores();
+    }, [reload]);
+    const { user } = useAuth();
     function ChangeModalState() {
         setOpen(!open);
     }
-
+    const { showNotification } = useNotification();
     function getVendedores() {
         apiFetch
             .get('/vendedor')
             .then((data) => {
                 setData(data.data);
+                setReload(false);
             })
             .catch((e) => {
                 console.log(e);
             });
     }
-
-    const MODAL_STYLE = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        padding: '150px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        color: 'black'
-    }
-
-    const optionCargo = ["ADIMINISTRADOR", "VENDEDOR"]
-
-    const refNome = useRef<HTMLInputElement>(null);
-    const refEmail = useRef<HTMLInputElement>(null);
-    const [refCargo, setRefCargo] = React.useState("")
-
-    function onSubmit() {
-        const obj = {
-            "nome": refNome.current?.value || '',
-            "email": refEmail.current?.value || '',
-            "cargo": refCargo
-        }
-
-        apiFetch.post("/vendedor/admin/save", obj)
-            .then(data => {
-                console.log(data)
-                getVendedores();
+    const deleteVendedor = (id: number) => {
+        apiFetch
+            .delete(`/vendedor/${id}`)
+            .then((data) => {
+                setReload(true);
             })
-
-
-    }
-
-
+            .catch((e) => {
+                console.log(e);
+            });
+    };
+    const columns = React.useMemo<MRT_ColumnDef<VendedorModel>[]>(
+        () => [
+            {
+                accessorKey: 'nome', //access nested data with dot notation
+                header: 'Nome',
+            },
+            {
+                accessorKey: 'email',
+                header: 'Email',
+            },
+            {
+                accessorKey: 'cargo', //normal accessorKey
+                header: 'Cargo',
+                grow: true,
+            },
+        ],
+        [],
+    );
 
     return (
-        <Box display={'flex'}>
-            <TableContainer component={Paper} sx={{ marginTop: '70px' }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">Nome</TableCell>
-                            <TableCell align="center">email</TableCell>
-                            <TableCell align="center">Cargo</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((vendedor) => (
-                            <TableRow key={vendedor.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component="th" scope="row">
-                                    {vendedor.nome}
-                                </TableCell>
-                                <TableCell align="center">{vendedor.email}</TableCell>
-                                <TableCell align="center">{vendedor.cargo}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Fab onClick={ChangeModalState} color="primary" aria-label="add">
-                <AddIcon />
-            </Fab>
-
-            <Modal
-                open={open}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
+        <Box display={'grid'}>
+            <IconButton
+                onClick={ChangeModalState}
+                sx={{
+                    top: 20,
+                    right: 20,
+                    position: 'absolute',
+                    marginRight: '10px',
+                    backgroundColor: '#788DAA',
+                }}
+                aria-label="add"
             >
-                <Box sx={{ ...MODAL_STYLE }}>
-                    <h2 id="parent-modal-title">Cadastrar vendedor</h2>
+                <AddIcon />
+            </IconButton>
+            <Box
+                sx={{
+                    marginTop: '50px',
+                }}
+            >
+                <MaterialReactTable
+                    columns={columns}
+                    data={data}
+                    layoutMode="semantic"
+                    enableRowActions
+                    displayColumnDefOptions={{
+                        'mrt-row-actions': {
+                            grow: false,
+                        },
+                    }}
+                    positionActionsColumn="last"
+                    renderRowActions={({ row, table }) => (
+                        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+                            <IconButton
+                                color="primary"
+                                onClick={() => window.open(`mailto:${row.original.email}?subject=Ampla System!`)}
+                            >
+                                <Email />
+                            </IconButton>
+                            <IconButton
+                                color="secondary"
+                                onClick={() => {
+                                    setVendedor(row.original);
+                                    ChangeModalState();
+                                }}
+                            >
+                                <Edit />
+                            </IconButton>
+                            <IconButton
+                                color="error"
+                                onClick={() => {
+                                    if (row.original.email != user.email) {
+                                        deleteVendedor(row.original.id);
+                                        <>
+                                            {showNotification({
+                                                message: 'vendedor deletado',
+                                                type: 'success',
+                                            })}
+                                        </>;
+                                    } else {
+                                        <>
+                                            {showNotification({
+                                                message: 'Nao e possível deletar o vendedor logado',
+                                                type: 'error',
+                                            })}
+                                        </>;
+                                    }
+                                }}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </Box>
+                    )}
+                />
+            </Box>
 
-                    <TextField
-                        id="nome"
-                        label="Nome"
-                        variant="outlined"
-                        placeholder="Nome"
-                        fullWidth
-                        margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
-                        inputRef={refNome}
-                    />
-
-                    <TextField
-                        id="email"
-                        label="Email"
-                        variant="outlined"
-                        placeholder="Email"
-                        fullWidth
-                        margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
-                        inputRef={refEmail}
-                    />
-
-                    <Autocomplete
-                        disablePortal
-                        id="cargo"
-                        options={optionCargo}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Cargo" />}
-                        onSelect={(event) => {
-                            setRefCargo(event.target.value)
-                        }}
-                    />
-
-                    <Button
-                        onClick={onSubmit}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
-                        Confirmar
-                    </Button>
-
-                    <Button
-                        onClick={ChangeModalState}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
-                        Cancelar
-                    </Button>
-
-                    <button onClick={ChangeModalState}>Fechar</button>
-                </Box>
-            </Modal>
-
+            <RegisterModal setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={vendedor} />
         </Box>
     );
 };

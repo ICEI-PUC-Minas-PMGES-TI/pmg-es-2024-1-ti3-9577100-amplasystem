@@ -1,7 +1,6 @@
 package amplasystem.api.dtos;
 
 import amplasystem.api.enuns.TipoContato;
-import amplasystem.api.models.Telefone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

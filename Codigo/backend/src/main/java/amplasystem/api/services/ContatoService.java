@@ -23,9 +23,6 @@ public class ContatoService {
     private ContatoRepository contatoRepository;
 
     @Autowired
-    private TelefoneService telefoneService;
-
-    @Autowired
     private Validator validator;
 
     public Contato save(Contato contato) {
@@ -36,7 +33,6 @@ public class ContatoService {
                     .collect(Collectors.joining(", ")));
         }
 
-        telefoneService.save(contato.getTelefone());
         return contatoRepository.save(contato);
     }
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { Snackbar, Alert, AlertColor } from '@mui/material';
 
 interface INotification {
@@ -26,6 +26,9 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     const showNotification = useCallback(({ message, type, autoHideDuration }: ShowNotificationProps) => {
         setNotification({ message, type, autoHideDuration: autoHideDuration ?? 6000 });
         setOpen(true);
+        setTimeout(() => {
+            setOpen(false);
+        }, 2000);
     }, []);
 
     const handleClose = useCallback((event?: React.SyntheticEvent | Event, reason?: string) => {

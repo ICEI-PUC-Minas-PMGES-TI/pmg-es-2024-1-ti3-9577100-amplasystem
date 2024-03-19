@@ -6,7 +6,6 @@ import amplasystem.api.models.Industria;
 
 import java.util.ArrayList;
 
-
 public class IndustriaMapper {
     public static IndustriaDTO toDTO(Industria industria) {
         ArrayList<ContatoDto> contactsDTO = new ArrayList<>();
@@ -17,9 +16,6 @@ public class IndustriaMapper {
         return new IndustriaDTO(
                 industria.getId(),
                 industria.getNome(),
-                industria.getFinanceiro(),
-                industria.getOrdemDeCompras(),
-                contactsDTO
-        );
+                contactsDTO);
     }
 }

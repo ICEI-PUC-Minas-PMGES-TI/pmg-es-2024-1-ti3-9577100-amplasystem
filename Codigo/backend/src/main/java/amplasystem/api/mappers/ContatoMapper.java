@@ -11,7 +11,7 @@ public class ContatoMapper {
                 contato.getNome(),
                 contato.getEmail(),
                 contato.getTipoContato(),
-                contato.getTelefone().getNumero()
+                contato.getTelefone()
         );
     }
 }

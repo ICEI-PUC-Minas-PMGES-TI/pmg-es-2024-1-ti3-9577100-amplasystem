@@ -31,7 +31,7 @@ public class AuthService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         if (user.getCargo().name().equals("ADMINISTRADOR")) {
-            authorities.add(new SimpleGrantedAuthority(Cargo.ADIMINISTRADOR.name()));
+            authorities.add(new SimpleGrantedAuthority(Cargo.ADMINISTRADOR.name()));
         } else {
             authorities.add(new SimpleGrantedAuthority(Cargo.VENDEDOR.name()));
         }

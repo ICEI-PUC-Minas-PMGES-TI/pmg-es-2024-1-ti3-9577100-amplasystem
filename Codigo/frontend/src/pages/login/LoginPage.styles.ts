@@ -8,7 +8,7 @@ export const Container = styled.div`
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-image: linear-gradient(180deg, #285b71, #6feafb);
+    background-color: rgb(5, 30, 52);
 `;
 
 export const Logo = styled.img`
