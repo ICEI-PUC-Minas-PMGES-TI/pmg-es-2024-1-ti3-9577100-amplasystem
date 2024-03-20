@@ -15,15 +15,13 @@ import constructWithOptions from 'styled-components/dist/constructors/constructW
 import { useRef } from 'react';
 import styled from 'styled-components';
 
-
 const IndustriaPage = () => {
     const [data, setData] = React.useState<[any]>([{}]);
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = React.useState(false);
 
     React.useEffect(() => {
-        getVendedores()
+        getVendedores();
     }, []);
-
 
     function ChangeModalState() {
         setOpen(!open);
@@ -48,31 +46,28 @@ const IndustriaPage = () => {
         padding: '150px',
         backgroundColor: '#fff',
         borderRadius: '10px',
-        color: 'black'
-    }
+        color: 'black',
+    };
 
-    const optionCargo = ["ADIMINISTRADOR", "VENDEDOR"]
+    const optionCargo = ['ADIMINISTRADOR', 'VENDEDOR'];
 
     const refNome = useRef<HTMLInputElement>(null);
     const refEmail = useRef<HTMLInputElement>(null);
-    const [refCargo, setRefCargo] = React.useState("")
+    const [refCargo, setRefCargo] = React.useState('');
 
     function onSubmit() {
         const obj = {
-            "nome": refNome.current?.value || '',
-            "email": refEmail.current?.value || '',
-            "cargo": refCargo
-        }
+            nome: refNome.current?.value || '',
+            email: refEmail.current?.value || '',
+            cargo: refCargo,
+        };
 
-        apiFetch.post("/vendedor/admin/save", obj)
-            .then(data => {
-                console.log(data)
-                getVendedores();
-            })
-
-
+        apiFetch.post('/vendedor/admin/save', obj).then((data) => {
+            console.log(data);
+            getVendedores();
+        });
     }
-    const tipos = ["Financeiro", "Comercial", "Logistica", "Pagamento"]
+    const tipos = ['Financeiro', 'Comercial', 'Logistica', 'Pagamento'];
     const VisuallyHiddenInput = styled('input')({
         clip: 'rect(0 0 0 0)',
         clipPath: 'inset(50%)',
@@ -92,13 +87,14 @@ const IndustriaPage = () => {
                         <TableRow>
                             <TableCell align="center">Nome</TableCell>
                             {tipos.map((tipo) => {
-                                return <>
-                                    <TableCell align="center">Nome {tipo}</TableCell>
-                                    <TableCell align="center">Telefone  {tipo} </TableCell>
-                                    <TableCell align="center">Email  {tipo} </TableCell>
-                                </>
+                                return (
+                                    <>
+                                        <TableCell align="center">Nome {tipo}</TableCell>
+                                        <TableCell align="center">Telefone {tipo} </TableCell>
+                                        <TableCell align="center">Email {tipo} </TableCell>
+                                    </>
+                                );
                             })}
-
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -115,8 +111,7 @@ const IndustriaPage = () => {
                                             <TableCell align="center">{contato.telefone}</TableCell>
                                             <TableCell align="center">{contato.email}</TableCell>
                                         </>
-                                    )
-
+                                    );
                                 })}
                             </TableRow>
                         ))}
@@ -127,27 +122,14 @@ const IndustriaPage = () => {
                 <AddIcon />
             </Fab>
 
-            <Modal
-                open={open}
-                aria-labelledby="parent-modal-title"
-                aria-describedby="parent-modal-description"
-            >
+            <Modal open={open} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
                 <Box sx={{ ...MODAL_STYLE }}>
-                    <Button
-                        component="label"
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                    >
+                    <Button component="label" role={undefined} variant="contained" tabIndex={-1}>
                         Upload file
                         <VisuallyHiddenInput type="file" onChange={(e) => console.log(e)} />
                     </Button>
-
-
-
                 </Box>
             </Modal>
-
         </Box>
     );
 };

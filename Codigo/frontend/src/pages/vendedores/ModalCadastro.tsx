@@ -1,11 +1,21 @@
 import * as React from 'react';
 import { Box } from '@mui/system';
-import { Autocomplete, Button, Dialog, IconButton, Modal, TextField, Typography } from '@mui/material';
+import {
+    Autocomplete,
+    Button,
+    CircularProgress,
+    Dialog,
+    IconButton,
+    Modal,
+    TextField,
+    Typography,
+} from '@mui/material';
 import apiFetch from '../../services/api';
-import { useRef } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { VendedorModel } from 'models/VendedorModel';
-
+import { useNotification } from '../../hooks/useNotificaion';
+import { Email } from '@mui/icons-material';
+import Validade from '../../utils/Validate';
 interface IRegisterModalProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
     openModal: boolean;
@@ -17,10 +27,12 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [refNome, setRefNome] = React.useState('');
     const [refEmail, setRefEmail] = React.useState('');
     const [refCargo, setRefCargo] = React.useState('');
-
+    const [loading, setLoading] = React.useState(false);
+    const { showNotification } = useNotification();
     const handleClose = () => {
         props.setOpenModal(false);
     };
+    const validate = new Validade();
     function onSubmit() {
         const obj = {
             id: props.updateVendedor?.id || null,
@@ -29,16 +41,51 @@ const RegisterModal = (props: IRegisterModalProps) => {
             cargo: refCargo,
         };
 
-        if (props.updateVendedor == undefined) {
-            apiFetch.post('/vendedor/admin/save', obj).then((data) => {
-                console.log(data);
-                props.setReload(true);
-            });
+        if (validate.validateEmail(refEmail) && refNome != '' && refCargo != '') {
+            if (props.updateVendedor == undefined) {
+                setLoading(true);
+                apiFetch
+                    .post('/vendedor/admin/save', obj)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({
+                            message: data.data.message,
+                            type: 'success',
+                            title: data.data.titulo,
+                        });
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            } else {
+                setLoading(true);
+                apiFetch
+                    .put(`/vendedor/admin/update/${obj.id}`, obj)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                        props.setOpenModal(false);
+                    });
+            }
         } else {
-            apiFetch.put(`/vendedor/admin/update/${obj.id}`, obj).then((data) => {
-                console.log(data);
-                props.setReload(true);
-            });
+            showNotification({ message: 'preencha todos os campos', type: 'error' });
         }
         setRefCargo('');
         setRefEmail('');
@@ -64,8 +111,24 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     return (
         <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
-            <Dialog fullWidth={true} maxWidth="md" open={props.openModal} onClose={handleClose}>
+            <Dialog
+                fullWidth={true}
+                maxWidth="md"
+                open={props.openModal}
+                onClose={handleClose}
+                sx={{
+                    pointerEvents: loading ? 'none' : 'auto',
+                }}
+            >
                 <Box sx={{ ...MODAL_STYLE }}>
+                    <CircularProgress
+                        sx={{
+                            visibility: loading ? 'visible' : 'hidden',
+                            position: 'absolute',
+                            top: '40%',
+                            left: '45%',
+                        }}
+                    />
                     <IconButton
                         edge="start"
                         color="inherit"

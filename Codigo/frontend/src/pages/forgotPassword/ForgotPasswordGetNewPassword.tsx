@@ -2,7 +2,7 @@ import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
-
+import * as Sx from './ForgotPasswordStyle';
 import * as S from '../login/LoginPage.styles.ts';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { VisibilityOff } from '@mui/icons-material';
@@ -10,6 +10,7 @@ import { VisibilityOff } from '@mui/icons-material';
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
+import Validade from '../../utils/Validate';
 
 const ForgotPasswordGetEmail = () => {
     const { passwordWasReset, changePassword } = useAuth();
@@ -18,7 +19,7 @@ const ForgotPasswordGetEmail = () => {
     const refSenha = useRef<HTMLInputElement>(null);
     const refToken = useRef<HTMLInputElement>(null);
     const refConfirmSenha = useRef<HTMLInputElement>(null);
-
+    const validate = new Validade();
     const [senhaError, setSenhaError] = useState(false);
     const [senhaHelperText, setSenhaHelperText] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -29,18 +30,12 @@ const ForgotPasswordGetEmail = () => {
         }
     });
 
-    const validatePassword = (password: string) => {
-        // Rule: password must be at least 6 characters at least 1 number, 1 uppercase and 1 lowercase
-        const passwordRegex = /^(?=.\d)(?=.[a-z])(?=.*[A-Z]).{6,}$/;
-        return true;
-    };
-
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const senha = refSenha.current?.value || '';
         const senhaConfirm = refConfirmSenha.current?.value || '';
         const token = refToken.current?.value || '';
-        const isSenhaValid = validatePassword(senha) && validatePassword(senhaConfirm);
+        const isSenhaValid = validate.validatePassword(senha) && validate.validatePassword(senhaConfirm);
 
         setSenhaError(!isSenhaValid);
 
@@ -72,11 +67,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Token"
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Sx.materialUiTextFild}
                         inputRef={refToken}
                     />
                     <TextField
@@ -87,11 +78,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Senha"
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Sx.materialUiTextFild}
                         error={senhaError}
                         helperText={senhaHelperText}
                         inputRef={refSenha}
@@ -117,11 +104,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Confirmar Senha"
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Sx.materialUiTextFild}
                         error={senhaError}
                         helperText={senhaHelperText}
                         inputRef={refConfirmSenha}
@@ -140,17 +123,7 @@ const ForgotPasswordGetEmail = () => {
                         }}
                     />
 
-                    <Button
-                        variant="contained"
-                        type="submit"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
+                    <Button variant="contained" type="submit" sx={Sx.materialUiButton}>
                         Mudar senha
                     </Button>
                 </S.LoginForm>

@@ -3,11 +3,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as S from '../login/LoginPage.styles.ts';
+import * as Sx from './ForgotPasswordStyle';
 import { Button, TextField } from '@mui/material';
 
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
+import Validade from '../../utils/Validate';
 
 const ForgotPasswordGetEmail = () => {
     const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
@@ -16,6 +18,7 @@ const ForgotPasswordGetEmail = () => {
     const refEmail = useRef<HTMLInputElement>(null);
     const refConfirmEmail = useRef<HTMLInputElement>(null);
 
+    const validate = new Validade();
     const [emailError, setEmailError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState('');
 
@@ -31,16 +34,11 @@ const ForgotPasswordGetEmail = () => {
         }
     });
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email);
-    };
-
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const email = refEmail.current?.value || '';
         const emailConfirm = refConfirmEmail.current?.value || '';
-        const isEmailValid = validateEmail(email) && validateEmail(emailConfirm);
+        const isEmailValid = validate.validateEmail(email) && validate.validateEmail(emailConfirm);
 
         setEmailError(!isEmailValid);
 
@@ -74,11 +72,7 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Sx.materialUiTextFild}
                         inputRef={refEmail}
                     />
                     <TextField
@@ -90,25 +84,11 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Sx.materialUiTextFild}
                         inputRef={refConfirmEmail}
                     />
 
-                    <Button
-                        variant="contained"
-                        type="submit"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
+                    <Button variant="contained" type="submit" sx={Sx.materialUiButton}>
                         Enviar token
                     </Button>
                 </S.LoginForm>

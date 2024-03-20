@@ -9,6 +9,7 @@ import { VisibilityOff } from '@mui/icons-material';
 
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotificaion.ts';
+import Validade from '../../utils/Validate';
 
 const LoginPage = () => {
     const { login, isAuthenticated } = useAuth();
@@ -22,22 +23,18 @@ const LoginPage = () => {
     const [emailHelperText, setEmailHelperText] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    const validade = new Validade();
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
         }
     }, [isAuthenticated, navigate]);
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email);
-    };
-
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const email = refEmail.current?.value || '';
         const password = refPassword.current?.value || '';
-        const isEmailValid = validateEmail(email);
+        const isEmailValid = validade.validateEmail(email);
 
         setEmailError(!isEmailValid);
 
