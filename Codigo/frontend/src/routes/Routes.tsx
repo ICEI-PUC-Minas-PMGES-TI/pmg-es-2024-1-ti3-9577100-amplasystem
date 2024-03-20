@@ -8,7 +8,9 @@ const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const VendedoresPage = React.lazy(() => import('../pages/vendedores/Vendedores'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
 const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetEmail'));
-const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetNewPassword.tsx'));
+const ForgotPasswordGetNewPassword = React.lazy(
+    () => import('../pages/forgotPassword/ForgotPasswordGetNewPassword.tsx'),
+);
 const RouterRoutes = () => {
     return (
         <Router>

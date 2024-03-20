@@ -1,15 +1,17 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
-import { Snackbar, Alert, AlertColor } from '@mui/material';
+import { Snackbar, Alert, AlertColor, AlertTitle } from '@mui/material';
 
 interface INotification {
     message: string;
     type: AlertColor;
+    title?: string | undefined | null;
     autoHideDuration?: number | null | undefined;
 }
 
 interface ShowNotificationProps {
     message: string;
     type: AlertColor;
+    title?: string | undefined | null;
     autoHideDuration?: number | null | undefined;
 }
 
@@ -23,12 +25,9 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     const [notification, setNotification] = useState<INotification | null>(null);
     const [open, setOpen] = useState(false);
 
-    const showNotification = useCallback(({ message, type, autoHideDuration }: ShowNotificationProps) => {
-        setNotification({ message, type, autoHideDuration: autoHideDuration ?? 6000 });
+    const showNotification = useCallback(({ message, type, autoHideDuration, title }: ShowNotificationProps) => {
+        setNotification({ message, type, autoHideDuration: autoHideDuration ?? 6000, title });
         setOpen(true);
-        setTimeout(() => {
-            setOpen(false);
-        }, 2000);
     }, []);
 
     const handleClose = useCallback((event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -43,7 +42,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
             {children}
             <Snackbar
                 open={open}
-                autoHideDuration={notification && notification.autoHideDuration}
+                autoHideDuration={2000}
                 onClose={handleClose}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 style={{ right: '60px' }}
@@ -51,6 +50,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
                 <div>
                     {notification && (
                         <Alert onClose={handleClose} severity={notification.type} sx={{ width: '100%' }}>
+                            <AlertTitle> {notification?.title}</AlertTitle>
                             {notification.message}
                         </Alert>
                     )}

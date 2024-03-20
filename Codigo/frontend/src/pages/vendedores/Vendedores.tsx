@@ -18,11 +18,12 @@ const VendedoresPage = () => {
         getVendedores();
     }, [reload]);
     const { user } = useAuth();
-    function ChangeModalState() {
-        setOpen(!open);
-    }
     const { showNotification } = useNotification();
-    function getVendedores() {
+    const ChangeModalState = () => {
+        setOpen(!open);
+    };
+
+    const getVendedores = () => {
         apiFetch
             .get('/vendedor')
             .then((data) => {
@@ -32,12 +33,16 @@ const VendedoresPage = () => {
             .catch((e) => {
                 console.log(e);
             });
-    }
+    };
     const deleteVendedor = (id: number) => {
         apiFetch
             .delete(`/vendedor/${id}`)
             .then((data) => {
                 setReload(true);
+                showNotification({
+                    message: 'vendedor deletado',
+                    type: 'success',
+                });
             })
             .catch((e) => {
                 console.log(e);
@@ -115,12 +120,6 @@ const VendedoresPage = () => {
                                 onClick={() => {
                                     if (row.original.email != user.email) {
                                         deleteVendedor(row.original.id);
-                                        <>
-                                            {showNotification({
-                                                message: 'vendedor deletado',
-                                                type: 'success',
-                                            })}
-                                        </>;
                                     } else {
                                         <>
                                             {showNotification({
