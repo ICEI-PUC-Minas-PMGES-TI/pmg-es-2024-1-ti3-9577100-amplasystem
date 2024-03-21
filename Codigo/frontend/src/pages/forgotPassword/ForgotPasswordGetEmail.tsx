@@ -8,7 +8,7 @@ import { Button, TextField } from '@mui/material';
 
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotificaion.ts';
+import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
 
 const ForgotPasswordGetEmail = () => {

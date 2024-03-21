@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
@@ -71,7 +72,12 @@ public class IndustriaService {
         Industria industriaSalva = industriaRepository.save(industria);
         industriaSalva.getContatos().forEach(contato -> {
             contato.setIndustria(industriaSalva);
-            contatoService.save(contato);
+            try {
+                contatoService.save(contato);
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         });
         return IndustriaMapper.toDTO(industriaSalva);
     }
@@ -85,7 +91,12 @@ public class IndustriaService {
             Industria industriaSalva = industriaRepository.save(industria);
             industria.getContatos().forEach(contato -> {
                 contato.setIndustria(industriaSalva);
-                contatoService.save(contato);
+                try {
+                    contatoService.save(contato);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             });
         } else {
             throw new ObjectNotFoundException("Indústria não encontrada na base de dados");
@@ -151,7 +162,12 @@ public class IndustriaService {
 
                 for (Contato contato : contatos) {
                     contato.setIndustria(newIndustria);
-                    contatoService.save(contato);
+                    try {
+                        contatoService.save(contato);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 }
 
                 industrias.add(newIndustria);

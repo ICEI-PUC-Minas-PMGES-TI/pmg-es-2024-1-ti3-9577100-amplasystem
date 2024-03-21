@@ -2,14 +2,14 @@ import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
-import * as Sx from './ForgotPasswordStyle';
+import * as Sx from './ForgotPasswordStyle.ts';
 import * as S from '../login/LoginPage.styles.ts';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { VisibilityOff } from '@mui/icons-material';
 
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotificaion.ts';
+import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
 
 const ForgotPasswordGetEmail = () => {

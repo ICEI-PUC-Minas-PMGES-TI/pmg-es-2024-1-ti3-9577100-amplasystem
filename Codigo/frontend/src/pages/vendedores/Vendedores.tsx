@@ -1,20 +1,21 @@
-import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCadastro';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
-import { useNotification } from '../../hooks/useNotificaion';
+import { useNotification } from '../../hooks/useNotification';
 const VendedoresPage = () => {
-    const [vendedor, setVendedor] = React.useState<VendedorModel | undefined>(undefined);
-    const [data, setData] = React.useState<VendedorModel[]>([]);
-    const [open, setOpen] = React.useState(false);
-    const [reload, setReload] = React.useState(true);
-    React.useEffect(() => {
+    const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
+    const [data, setData] = useState<VendedorModel[]>([]);
+    const [open, setOpen] = useState(false);
+    const [reload, setReload] = useState(true);
+    useEffect(() => {
         getVendedores();
     }, [reload]);
     const { user } = useAuth();
@@ -40,7 +41,8 @@ const VendedoresPage = () => {
             .then((data) => {
                 setReload(true);
                 showNotification({
-                    message: 'vendedor deletado',
+                    message: data.data.message,
+                    title: data.data.titulo,
                     type: 'success',
                 });
             })
@@ -48,7 +50,7 @@ const VendedoresPage = () => {
                 console.log(e);
             });
     };
-    const columns = React.useMemo<MRT_ColumnDef<VendedorModel>[]>(
+    const columns = useMemo<MRT_ColumnDef<VendedorModel>[]>(
         () => [
             {
                 accessorKey: 'nome', //access nested data with dot notation
@@ -69,22 +71,28 @@ const VendedoresPage = () => {
 
     return (
         <Box display={'grid'}>
-            <IconButton
-                onClick={ChangeModalState}
+            <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
+                Vendedores
+            </Typography>{' '}
+            <Box
+                display={'flex'}
                 sx={{
-                    top: 20,
-                    right: 20,
-                    position: 'absolute',
-                    marginRight: '10px',
-                    backgroundColor: '#788DAA',
+                    justifyContent: 'flex-end',
                 }}
-                aria-label="add"
             >
-                <AddIcon />
-            </IconButton>
+                <IconButton
+                    onClick={ChangeModalState}
+                    sx={{
+                        backgroundColor: '#788DAA',
+                    }}
+                    aria-label="add"
+                >
+                    <AddIcon />
+                </IconButton>
+            </Box>
             <Box
                 sx={{
-                    marginTop: '50px',
+                    marginTop: '20px',
                 }}
             >
                 <MaterialReactTable
@@ -98,16 +106,20 @@ const VendedoresPage = () => {
                         },
                     }}
                     positionActionsColumn="last"
-                    renderRowActions={({ row, table }) => (
+                    renderRowActions={({ row }) => (
                         <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
                             <IconButton
-                                color="primary"
+                                sx={{
+                                    color: '#097C9C',
+                                }}
                                 onClick={() => window.open(`mailto:${row.original.email}?subject=Ampla System!`)}
                             >
                                 <Email />
                             </IconButton>
                             <IconButton
-                                color="secondary"
+                                sx={{
+                                    color: '#01437C',
+                                }}
                                 onClick={() => {
                                     setVendedor(row.original);
                                     ChangeModalState();
@@ -136,7 +148,6 @@ const VendedoresPage = () => {
                     )}
                 />
             </Box>
-
             <RegisterModal setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={vendedor} />
         </Box>
     );
