@@ -17,6 +17,7 @@ import Settings from '@mui/icons-material/Settings';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Handshake from '@mui/icons-material/Handshake';
 import Factory from '@mui/icons-material/Factory';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import { useNavigate } from 'react-router-dom';
 import { PaletteMode } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -30,6 +31,7 @@ const data = [
     { icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
     { icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
     { icon: <Factory />, label: 'Indústria', location: '/industrias' },
+    { icon: <LocalAtmIcon />, label: 'Financeiro', location: '/financeiro' },
 ];
 
 const FireNav = styled(List)<{ component?: React.ElementType }>({
