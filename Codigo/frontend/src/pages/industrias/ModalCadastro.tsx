@@ -16,12 +16,15 @@ import Validade from '../../utils/Validate';
 import { Cargo } from '../../enums/Cargo';
 import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 import { IndustriaModel } from 'models/IndustriaModel';
+import { TipoContato } from '../../enums/TipoContato';
+import * as Sx from './IndustriasStyle';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
     setReload: Dispatch<SetStateAction<boolean>>;
     updateIndustria: IndustriaModel | undefined;
 }
+
 const RegisterModal = (props: IRegisterModalProps) => {
     const optionCargo = [Cargo.ADMINISTRADOR, Cargo.VENDEDOR];
     const [refNome, setRefNome] = useState('');
@@ -30,6 +33,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
     const { showNotification } = useNotification();
     const validate = new Validade();
+    const tiposContatos = Object.values(TipoContato);
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -104,11 +108,13 @@ const RegisterModal = (props: IRegisterModalProps) => {
         position: 'fixed',
         top: '50%',
         left: '50%',
+        maxHeight: '80%',
         transform: 'translate(-50%,-50%)',
         padding: '50px',
         backgroundColor: '#fff',
         borderRadius: '10px',
         color: 'black',
+        overflow: 'scroll',
     };
     return (
         <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
@@ -154,59 +160,101 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     >
                         {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '} Industria
                     </Typography>
-                    <Box>
-                        <Typography
-                            variant="subtitle1"
-                            sx={{
-                                color: '#344054',
-                            }}
-                            display="block"
-                        >
-                            Nome *
-                        </Typography>
-                        <TextField
-                            id="nome"
-                            variant="outlined"
-                            placeholder="Nome"
-                            fullWidth
-                            value={refNome}
-                            sx={{
-                                marginBottom: '20px',
-                                borderRadius: '8px',
-                                maxWidth: 720,
-                                height: 65,
-                            }}
-                            onChange={(event) => {
-                                setRefNome(event.target.value);
-                            }}
-                        />
-                        <Typography
-                            variant="subtitle1"
-                            sx={{
-                                color: '#344054',
-                            }}
-                            display="block"
-                        >
-                            Email *
-                        </Typography>
-                        <TextField
-                            id="email"
-                            variant="outlined"
-                            placeholder="Email"
-                            fullWidth
-                            value={refEmail}
-                            sx={{
-                                marginBottom: '20px',
-                                borderRadius: '8px',
-                                maxWidth: 720,
-                                height: 65,
-                            }}
-                            onChange={(event) => {
-                                setRefEmail(event.target.value);
-                            }}
-                        />
-                    </Box>
-
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            color: '#344054',
+                        }}
+                        display="block"
+                    >
+                        Nome da industria
+                    </Typography>
+                    <TextField
+                        id="nome"
+                        variant="outlined"
+                        placeholder="Nome"
+                        fullWidth
+                        value={refNome}
+                        sx={Sx.input}
+                        onChange={(event) => {
+                            setRefNome(event.target.value);
+                        }}
+                    />{' '}
+                    {tiposContatos?.map((element) => {
+                        return (
+                            <Box>
+                                <Typography
+                                    variant="h6"
+                                    gutterBottom
+                                    sx={{
+                                        color: '#344054',
+                                    }}
+                                >
+                                    Contato {element}
+                                </Typography>
+                                <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                        color: '#344054',
+                                    }}
+                                    display="block"
+                                >
+                                    Nome
+                                </Typography>
+                                <TextField
+                                    id="nome"
+                                    variant="outlined"
+                                    placeholder="Nome"
+                                    fullWidth
+                                    value={refNome}
+                                    sx={Sx.input}
+                                    onChange={(event) => {
+                                        setRefNome(event.target.value);
+                                    }}
+                                />{' '}
+                                <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                        color: '#344054',
+                                    }}
+                                    display="block"
+                                >
+                                    Telefone
+                                </Typography>
+                                <TextField
+                                    id="email"
+                                    variant="outlined"
+                                    placeholder="Email"
+                                    fullWidth
+                                    value={refEmail}
+                                    sx={Sx.input}
+                                    onChange={(event) => {
+                                        setRefEmail(event.target.value);
+                                    }}
+                                />
+                                <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                        color: '#344054',
+                                    }}
+                                    display="block"
+                                >
+                                    Email
+                                </Typography>
+                                <TextField
+                                    id="email"
+                                    variant="outlined"
+                                    placeholder="Email"
+                                    fullWidth
+                                    value={refEmail}
+                                    sx={Sx.input}
+                                    onChange={(event) => {
+                                        setRefEmail(event.target.value);
+                                    }}
+                                />
+                            </Box>
+                        );
+                    })}
                     <Button
                         onClick={onSubmit}
                         variant="contained"
@@ -220,7 +268,6 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     >
                         {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
                     </Button>
-
                     <Button
                         onClick={ChangeModalState}
                         variant="contained"

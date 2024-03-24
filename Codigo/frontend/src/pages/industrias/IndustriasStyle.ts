@@ -21,3 +21,10 @@ export const styles = styled('modal')({
         display: 'block',
     },
 });
+
+export const input ={
+    marginBottom: '20px',
+    borderRadius: '8px',
+    maxWidth: 720,
+    height: 65,
+}
