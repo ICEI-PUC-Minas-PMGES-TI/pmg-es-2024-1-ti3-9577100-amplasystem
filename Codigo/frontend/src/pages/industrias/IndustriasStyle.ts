@@ -11,3 +11,13 @@ export const VisuallyHiddenInput = styled('input')({
     whiteSpace: 'nowrap',
     width: 1,
 });
+export const styles = styled('modal')({
+    modalStyle1: {
+        position: 'absolute',
+        top: '10%',
+        left: '10%',
+        overflow: 'scroll',
+        height: '100%',
+        display: 'block',
+    },
+});

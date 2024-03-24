@@ -8,14 +8,10 @@ interface DashboardLayoutProps {
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     return (
-        <Box
-            sx={{
-                display: 'flex',
-            }}
-        >
+        <Box display={'flex'}>
             <Aside />
 
-            <main style={{ width: '100%', padding: '20px' }}>{children}</main>
+            <main style={{ width: '90%', margin: '20px' }}>{children}</main>
         </Box>
     );
 };

@@ -12,11 +12,14 @@ import { Delete, Edit, Email } from '@mui/icons-material';
 import * as Sx from './IndustriasStyle';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Link } from 'react-router-dom';
+import RegisterModal from './ModalCadastro';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setRelaod] = useState(true);
     const [file, setFile] = useState<File | null>();
+    const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
+
     useEffect(() => {
         getIndustrias();
         setRelaod(false);
@@ -169,16 +172,9 @@ const IndustriaPage = () => {
                         },
                     }}
                     positionActionsColumn="last"
-                    renderRowActions={({ row }) => (
+                    renderRowActions={({ row, table }) => (
                         <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                            <IconButton
-                                sx={{
-                                    color: '#01437C',
-                                }}
-                                onClick={() => {
-                                    ChangeModalState();
-                                }}
-                            >
+                            <IconButton onClick={() => table.setEditingRow(row)}>
                                 <Edit />
                             </IconButton>
                             <IconButton color="error">
@@ -251,6 +247,7 @@ const IndustriaPage = () => {
                     </IconButton>
                 </Link>
             </Box>
+            <RegisterModal openModal={open} setOpenModal={setOpen} updateIndustria={industria} setReload={setRelaod} />
         </Box>
     );
 };
