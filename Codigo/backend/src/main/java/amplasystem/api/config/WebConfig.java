@@ -47,7 +47,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
 
         Financeiro f1 = new Financeiro(null, 10.0, Faturamento.Liquidez, TipoFiscal.REPRESENTACAO, i1);
 
-        i1.setFinanceiro(f1);
+        //i1.setFinanceiro(f1);
 
         vendedorRepository.save(v1);
         industriaRepository.save(i1);

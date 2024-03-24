@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import amplasystem.api.dtos.FinanceiroDTO;
 import amplasystem.api.models.Financeiro;
 import amplasystem.api.services.FinanceiroService;
 
@@ -19,7 +20,7 @@ public class FinanceiroController {
     public FinanceiroService financeiroService;
 
     @GetMapping
-    public ResponseEntity<List<Financeiro>> findAll() {
+    public ResponseEntity<List<FinanceiroDTO>> findAll() {
         return ResponseEntity.ok().body(financeiroService.findAll());
     }
 }
