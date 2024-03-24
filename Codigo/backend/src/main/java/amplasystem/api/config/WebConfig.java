@@ -43,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
         Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"),
                 "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());
 
-        Industria i1 = new Industria(null, "Industria teste", new ArrayList(), null, new ArrayList<>());
+        Industria i1 = new Industria(null, "Industria teste", new ArrayList<>(), null, new ArrayList<>());
 
         Financeiro f1 = new Financeiro(null, 10.0, Faturamento.Liquidez, TipoFiscal.REPRESENTACAO, i1);
 

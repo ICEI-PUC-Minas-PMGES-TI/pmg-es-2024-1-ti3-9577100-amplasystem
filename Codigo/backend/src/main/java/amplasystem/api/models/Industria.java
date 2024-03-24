@@ -17,7 +17,7 @@ public class Industria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "nome", nullable = false, length = 100, unique = true)
     @NotBlank(message = "Nome da indústria é obrigatório.")
     private String nome;
 
