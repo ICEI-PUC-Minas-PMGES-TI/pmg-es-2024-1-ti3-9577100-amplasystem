@@ -8,6 +8,7 @@ import * as Sx from './IndustriasStyle';
 import { TipoContato } from '../../enums/TipoContato';
 import IndustriaContato from './IndustriaContato';
 import { ContatoModel } from 'models/ContatoModels';
+import { JSX } from 'react/jsx-runtime';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -19,7 +20,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
     const validate = new Validade();
     const tiposContatos = Object.values(TipoContato);
-
+    const [contatoList, setContatoList] = useState<any[]>([]);
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -44,6 +45,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     console.log;
 
     useEffect(() => {
+        console.log(props.updateIndustria);
         if (industria == undefined) {
             setIndustria({
                 id: null,
@@ -79,7 +81,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     },
                 ],
             });
-        } else if (industria.contatos.length < 4) {
+        } else if (industria?.contatos.length < 4) {
             const tiposCadastrados: Array<TipoContato> = new Array<TipoContato>();
             const aux = industria;
             aux.contatos.map((element) => {
@@ -95,10 +97,22 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         tipoContato: tipo,
                         telefone: '',
                     });
-                    setIndustria(aux);
                 }
             });
+            setIndustria(aux);
         }
+        const aux2: JSX.Element[] = [];
+        industria?.contatos.map((element, index) => {
+            aux2.push(
+                <IndustriaContato
+                    key={element.tipoContato}
+                    contatoModel={element}
+                    index={index}
+                    handleChange={handleChangeContato}
+                />,
+            );
+        });
+        setContatoList(aux2);
     }, [props.updateIndustria]);
 
     return (
@@ -189,15 +203,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             onChange={handleChange}
                         />
 
-                        {industria?.contatos.map((element, index) => {
-                            return (
-                                <IndustriaContato
-                                    key={element.tipoContato}
-                                    contatoModel={element}
-                                    index={index}
-                                    handleChange={handleChangeContato}
-                                />
-                            );
+                        {contatoList.map((element) => {
+                            return element;
                         })}
                     </Container>
                     <Container>

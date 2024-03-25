@@ -26,6 +26,7 @@ const IndustriaPage = () => {
     }, [reload]);
     useEffect(() => {
         if (!open) {
+            console.log(industria);
             setIndustria(undefined);
         }
     }, [open]);
@@ -183,7 +184,7 @@ const IndustriaPage = () => {
                             <IconButton
                                 onClick={() => {
                                     setOpen(true);
-                                    setIndustria(row.original);
+                                    setIndustria(JSON.parse(JSON.stringify(row.original)));
                                 }}
                             >
                                 <Edit />
