@@ -24,7 +24,7 @@ const currentMode: PaletteMode = 'dark';
 const primaryColor = 'rgb(102, 157, 246)';
 import logo from '../assets/favicon.png';
 // const secondaryColor = 'rgb(71, 98, 130)';
-const backgroundColor = '#01437C';
+const backgroundColor = '#ffffff';
 
 const data = [
     { icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },

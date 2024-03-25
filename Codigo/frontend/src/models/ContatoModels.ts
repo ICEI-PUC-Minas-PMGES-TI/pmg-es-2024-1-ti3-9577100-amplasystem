@@ -1,7 +1,7 @@
 import { TipoContato } from '../enums/TipoContato';
 
 export interface ContatoModel {
-    id: number;
+    id: number | null;
     nome: string;
     email: string;
     tipoContato: TipoContato;

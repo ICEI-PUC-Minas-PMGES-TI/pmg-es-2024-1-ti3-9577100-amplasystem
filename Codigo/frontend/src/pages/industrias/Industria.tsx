@@ -24,6 +24,11 @@ const IndustriaPage = () => {
         getIndustrias();
         setRelaod(false);
     }, [reload]);
+    useEffect(() => {
+        if (!open) {
+            setIndustria(undefined);
+        }
+    }, [open]);
 
     function ChangeModalState() {
         setOpen(!open);
@@ -164,6 +169,7 @@ const IndustriaPage = () => {
                 <MaterialReactTable
                     columns={columns}
                     data={data}
+                    columnResizeMode="onChange"
                     layoutMode="semantic"
                     enableRowActions
                     displayColumnDefOptions={{
@@ -174,7 +180,12 @@ const IndustriaPage = () => {
                     positionActionsColumn="last"
                     renderRowActions={({ row, table }) => (
                         <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                            <IconButton onClick={() => table.setEditingRow(row)}>
+                            <IconButton
+                                onClick={() => {
+                                    setOpen(true);
+                                    setIndustria(row.original);
+                                }}
+                            >
                                 <Edit />
                             </IconButton>
                             <IconButton color="error">
@@ -239,6 +250,8 @@ const IndustriaPage = () => {
                             right: '30px',
                             bottom: '30px',
                             position: 'absolute',
+                            height: '45px',
+                            width: '45px',
                             backgroundColor: '#788DAA',
                         }}
                         aria-label="add"
@@ -247,7 +260,16 @@ const IndustriaPage = () => {
                     </IconButton>
                 </Link>
             </Box>
-            <RegisterModal openModal={open} setOpenModal={setOpen} updateIndustria={industria} setReload={setRelaod} />
+            {open ? (
+                <RegisterModal
+                    openModal={open}
+                    setOpenModal={setOpen}
+                    updateIndustria={industria}
+                    setReload={setRelaod}
+                />
+            ) : (
+                ''
+            )}
         </Box>
     );
 };

@@ -22,9 +22,21 @@ export const styles = styled('modal')({
     },
 });
 
-export const input ={
+export const input = {
     marginBottom: '20px',
     borderRadius: '8px',
     maxWidth: 720,
     height: 65,
-}
+};
+
+export const MODAL_STYLE = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    maxHeight: '80%',
+    transform: 'translate(-50%,-50%)',
+    padding: '50px',
+    backgroundColor: '#fff',
+    borderRadius: '10px',
+    color: 'black',
+};

@@ -1,23 +1,13 @@
-import { Box } from '@mui/system';
-import {
-    Autocomplete,
-    Button,
-    CircularProgress,
-    Dialog,
-    IconButton,
-    Modal,
-    TextField,
-    Typography,
-} from '@mui/material';
-import apiFetch from '../../services/api';
+import { Container } from '@mui/system';
+import { Button, CircularProgress, Dialog, IconButton, Modal, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNotification } from '../../hooks/useNotification';
 import Validade from '../../utils/Validate';
-import { Cargo } from '../../enums/Cargo';
-import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IndustriaModel } from 'models/IndustriaModel';
-import { TipoContato } from '../../enums/TipoContato';
 import * as Sx from './IndustriasStyle';
+import { TipoContato } from '../../enums/TipoContato';
+import IndustriaContato from './IndustriaContato';
+import { ContatoModel } from 'models/ContatoModels';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -26,96 +16,91 @@ interface IRegisterModalProps {
 }
 
 const RegisterModal = (props: IRegisterModalProps) => {
-    const optionCargo = [Cargo.ADMINISTRADOR, Cargo.VENDEDOR];
-    const [refNome, setRefNome] = useState('');
-    const [refEmail, setRefEmail] = useState('');
-    const [refCargo, setRefCargo] = useState('');
     const [loading, setLoading] = useState(false);
-    const { showNotification } = useNotification();
     const validate = new Validade();
     const tiposContatos = Object.values(TipoContato);
+
     const handleClose = () => {
         props.setOpenModal(false);
     };
 
-    function onSubmit() {
-        const obj = {
-            id: props.updateIndustria?.id || null,
-            nome: refNome,
-            email: refEmail,
-            cargo: refCargo,
-        };
-
-        if (validate.validateEmail(refEmail) && refNome != '' && refCargo != '') {
-            if (props.updateIndustria == undefined) {
-                setLoading(true);
-                apiFetch
-                    .post('/vendedor/admin/save', obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({
-                            message: data.data.message,
-                            type: 'success',
-                            title: data.data.titulo,
-                        });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            } else {
-                setLoading(true);
-                apiFetch
-                    .put(`/vendedor/admin/update/${obj.id}`, obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                        props.setOpenModal(false);
-                    });
-            }
-        } else {
-            showNotification({ message: 'preencha todos os campos', type: 'error' });
-        }
-        setRefCargo('');
-        setRefEmail('');
-        setRefNome('');
-    }
     function ChangeModalState() {
         props.setOpenModal(!open);
     }
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        setIndustria({ ...industria, [e.target.name]: e.target.value });
+        console.log(industria);
+    }
+    function handleChangeContato(contato: ContatoModel, index: number) {
+        const aux: IndustriaModel = industria;
+        aux.contatos[index] = contato;
+        setIndustria(aux);
+    }
     useEffect(() => {
-        setRefCargo(props.updateIndustria?.cargo || '');
-        setRefEmail(props.updateIndustria?.email || '');
-        setRefNome(props.updateIndustria?.nome || '');
+        setIndustria(props.updateIndustria);
+        console.log(props.updateIndustria);
     }, [props.updateIndustria]);
-    const MODAL_STYLE = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        maxHeight: '80%',
-        transform: 'translate(-50%,-50%)',
-        padding: '50px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        color: 'black',
-        overflow: 'scroll',
-    };
+    const [industria, setIndustria] = useState<IndustriaModel | undefined>(props.updateIndustria);
+    console.log;
+
+    useEffect(() => {
+        if (industria == undefined) {
+            setIndustria({
+                id: null,
+                nome: '',
+                contatos: [
+                    {
+                        id: null,
+                        nome: '',
+                        tipoContato: TipoContato.Comercial,
+                        telefone: '',
+                        email: '',
+                    },
+                    {
+                        id: null,
+                        nome: '',
+                        tipoContato: TipoContato.Financeiro,
+                        telefone: '',
+                        email: '',
+                    },
+                    {
+                        id: null,
+                        nome: '',
+                        tipoContato: TipoContato.Pagamento,
+                        telefone: '',
+                        email: '',
+                    },
+                    {
+                        id: null,
+                        nome: '',
+                        tipoContato: TipoContato.Logistica,
+                        telefone: '',
+                        email: '',
+                    },
+                ],
+            });
+        } else if (industria.contatos.length < 4) {
+            const tiposCadastrados: Array<TipoContato> = new Array<TipoContato>();
+            const aux = industria;
+            aux.contatos.map((element) => {
+                tiposCadastrados.push(element.tipoContato);
+            });
+            tiposContatos.map((tipo) => {
+                if (tiposCadastrados.indexOf(tipo) == -1) {
+                    console.log(tipo);
+                    aux.contatos.push({
+                        nome: '',
+                        email: '',
+                        id: null,
+                        tipoContato: tipo,
+                        telefone: '',
+                    });
+                    setIndustria(aux);
+                }
+            });
+        }
+    }, [props.updateIndustria]);
+
     return (
         <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
             <Dialog
@@ -127,7 +112,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     pointerEvents: loading ? 'none' : 'auto',
                 }}
             >
-                <Box sx={{ ...MODAL_STYLE }}>
+                <Box sx={{ ...Sx.MODAL_STYLE }}>
                     <CircularProgress
                         sx={{
                             visibility: loading ? 'visible' : 'hidden',
@@ -136,152 +121,116 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             left: '45%',
                         }}
                     />
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
+                    <Container>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleClose}
+                            aria-label="close"
+                            sx={{
+                                padding: 0,
+                                height: '10px',
+                                position: 'fixed',
+                                top: 20,
+                                left: 20,
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography
+                            variant="h3"
+                            gutterBottom
+                            sx={{
+                                color: '#344054',
+                            }}
+                        >
+                            {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '} Industria
+                        </Typography>
+                    </Container>
+                    <Container
                         sx={{
-                            padding: 0,
-                            height: '10px',
-                            position: 'absolute',
-                            top: 20,
-                            left: 20,
+                            maxHeight: '400px',
+                            overflowY: 'scroll',
+                            overflowX: 'hidden',
+                            paddingRight: 3,
+
+                            listStyle: 'none',
+
+                            '&::-webkit-scrollbar': {
+                                width: '0.4em',
+                            },
+                            '&::-webkit-scrollbar-track': {
+                                boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                            },
+                            '&::-webkit-scrollbar-thumb': {
+                                backgroundColor: 'rgba(0,0,0,.1)',
+                                outline: '1px solid slategrey',
+                            },
                         }}
                     >
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h3"
-                        gutterBottom
-                        sx={{
-                            color: '#344054',
-                        }}
-                    >
-                        {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '} Industria
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Nome da industria
-                    </Typography>
-                    <TextField
-                        id="nome"
-                        variant="outlined"
-                        placeholder="Nome"
-                        fullWidth
-                        value={refNome}
-                        sx={Sx.input}
-                        onChange={(event) => {
-                            setRefNome(event.target.value);
-                        }}
-                    />{' '}
-                    {tiposContatos?.map((element) => {
-                        return (
-                            <Box>
-                                <Typography
-                                    variant="h6"
-                                    gutterBottom
-                                    sx={{
-                                        color: '#344054',
-                                    }}
-                                >
-                                    Contato {element}
-                                </Typography>
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{
-                                        color: '#344054',
-                                    }}
-                                    display="block"
-                                >
-                                    Nome
-                                </Typography>
-                                <TextField
-                                    id="nome"
-                                    variant="outlined"
-                                    placeholder="Nome"
-                                    fullWidth
-                                    value={refNome}
-                                    sx={Sx.input}
-                                    onChange={(event) => {
-                                        setRefNome(event.target.value);
-                                    }}
-                                />{' '}
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{
-                                        color: '#344054',
-                                    }}
-                                    display="block"
-                                >
-                                    Telefone
-                                </Typography>
-                                <TextField
-                                    id="email"
-                                    variant="outlined"
-                                    placeholder="Email"
-                                    fullWidth
-                                    value={refEmail}
-                                    sx={Sx.input}
-                                    onChange={(event) => {
-                                        setRefEmail(event.target.value);
-                                    }}
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Nome da industria
+                        </Typography>
+                        <TextField
+                            id="nome"
+                            name="nome"
+                            variant="outlined"
+                            placeholder="Nome"
+                            fullWidth
+                            value={industria?.nome}
+                            sx={Sx.input}
+                            onChange={handleChange}
+                        />
+
+                        {industria?.contatos.map((element, index) => {
+                            return (
+                                <IndustriaContato
+                                    key={element.tipoContato}
+                                    contatoModel={element}
+                                    index={index}
+                                    handleChange={handleChangeContato}
                                 />
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{
-                                        color: '#344054',
-                                    }}
-                                    display="block"
-                                >
-                                    Email
-                                </Typography>
-                                <TextField
-                                    id="email"
-                                    variant="outlined"
-                                    placeholder="Email"
-                                    fullWidth
-                                    value={refEmail}
-                                    sx={Sx.input}
-                                    onChange={(event) => {
-                                        setRefEmail(event.target.value);
-                                    }}
-                                />
-                            </Box>
-                        );
-                    })}
-                    <Button
-                        onClick={onSubmit}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#788DAA',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
-                        {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
-                    </Button>
-                    <Button
-                        onClick={ChangeModalState}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#FFFFFF',
-                            color: 'black',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
-                        Cancelar
-                    </Button>
+                            );
+                        })}
+                    </Container>
+                    <Container>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                mt: 2,
+                                maxWidth: 720,
+                                backgroundColor: '#788DAA',
+                                width: '100%',
+                                height: 55,
+                            }}
+                            onClick={() => {
+                                console.log(industria);
+                            }}
+                        >
+                            {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
+                        </Button>
+                        <Button
+                            onClick={ChangeModalState}
+                            variant="contained"
+                            sx={{
+                                mt: 2,
+                                maxWidth: 720,
+                                backgroundColor: '#FFFFFF',
+                                color: 'black',
+                                width: '100%',
+                                height: 55,
+                            }}
+                        >
+                            Cancelar
+                        </Button>
+                    </Container>
                 </Box>
             </Dialog>
         </Modal>
