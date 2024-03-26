@@ -13,13 +13,14 @@ import * as Sx from './IndustriasStyle';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Link } from 'react-router-dom';
 import RegisterModal from './ModalCadastro';
+import { useNotification } from '../../hooks/useNotification';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setRelaod] = useState(true);
     const [file, setFile] = useState<File | null>();
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
-
+    const { showNotification } = useNotification();
     useEffect(() => {
         getIndustrias();
         setRelaod(false);
@@ -45,7 +46,21 @@ const IndustriaPage = () => {
                 console.log(e);
             });
     };
-
+    const deleteIndustria = (id: number) => {
+        apiFetch
+            .delete(`/industria/${id}`)
+            .then((data) => {
+                setRelaod(true);
+                showNotification({
+                    message: data.data.message,
+                    title: data.data.titulo,
+                    type: 'success',
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
     const sendIndustriasFile = () => {
         apiFetch
             .post(
@@ -189,7 +204,12 @@ const IndustriaPage = () => {
                             >
                                 <Edit />
                             </IconButton>
-                            <IconButton color="error">
+                            <IconButton
+                                color="error"
+                                onClick={() => {
+                                    deleteIndustria(row.original.id);
+                                }}
+                            >
                                 <Delete />
                             </IconButton>
                         </Box>

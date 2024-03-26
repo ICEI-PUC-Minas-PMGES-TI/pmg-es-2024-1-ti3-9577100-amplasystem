@@ -1,4 +1,4 @@
-import { Box, Container, TextField, Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import * as Sx from './IndustriasStyle';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { ContatoModel } from 'models/ContatoModels';

@@ -1,7 +1,7 @@
 import { Container } from '@mui/system';
 import { Box, Button, CircularProgress, Dialog, IconButton, Modal, TextField, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Validade from '../../utils/Validate';
+
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IndustriaModel } from 'models/IndustriaModel';
 import * as Sx from './IndustriasStyle';
@@ -9,6 +9,8 @@ import { TipoContato } from '../../enums/TipoContato';
 import IndustriaContato from './IndustriaContato';
 import { ContatoModel } from 'models/ContatoModels';
 import { JSX } from 'react/jsx-runtime';
+import { useNotification } from '../../hooks/useNotification';
+import apiFetch from '../../services/api';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -18,9 +20,10 @@ interface IRegisterModalProps {
 
 const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
-    const validate = new Validade();
     const tiposContatos = Object.values(TipoContato);
-    const [contatoList, setContatoList] = useState<any[]>([]);
+    const { showNotification } = useNotification();
+    const [contatoList, setContatoList] = useState<JSX.Element[]>([]);
+
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -29,23 +32,24 @@ const RegisterModal = (props: IRegisterModalProps) => {
         props.setOpenModal(!open);
     }
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        setIndustria({ ...industria, [e.target.name]: e.target.value });
-        console.log(industria);
+        if (industria != undefined) {
+            setIndustria({ ...industria, [e.target.name]: e.target.value });
+        }
     }
     function handleChangeContato(contato: ContatoModel, index: number) {
-        const aux: IndustriaModel = industria;
-        aux.contatos[index] = contato;
-        setIndustria(aux);
+        const aux: IndustriaModel | undefined = industria;
+        if (aux != undefined) {
+            aux.contatos[index] = contato;
+            setIndustria(aux);
+        }
     }
     useEffect(() => {
         setIndustria(props.updateIndustria);
-        console.log(props.updateIndustria);
     }, [props.updateIndustria]);
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(props.updateIndustria);
     console.log;
 
     useEffect(() => {
-        console.log(props.updateIndustria);
         if (industria == undefined) {
             setIndustria({
                 id: null,
@@ -114,6 +118,56 @@ const RegisterModal = (props: IRegisterModalProps) => {
         });
         setContatoList(aux2);
     }, [props.updateIndustria]);
+
+    function onSubmit() {
+        const obj: IndustriaModel = JSON.parse(JSON.stringify(industria));
+        obj.contatos = obj.contatos.filter((contato) => contato.nome != '');
+
+        if (props.updateIndustria == undefined) {
+            setLoading(true);
+            apiFetch
+                .post('industria/', obj)
+                .then((data) => {
+                    props.setReload(true);
+                    showNotification({
+                        message: data.data.message,
+                        type: 'success',
+                        title: data.data.titulo,
+                    });
+                })
+                .catch((error) => {
+                    showNotification({
+                        message: error.response.data.message,
+                        type: 'error',
+                        title: error.response.data.titulo,
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+            props.updateIndustria = undefined;
+        } else {
+            setLoading(true);
+            console.log(obj);
+            apiFetch
+                .put(`industria/`, obj)
+                .then((data) => {
+                    props.setReload(true);
+                    showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                })
+                .catch((error) => {
+                    showNotification({
+                        message: error.response.data.message,
+                        type: 'error',
+                        title: error.response.data.titulo,
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                    props.setOpenModal(false);
+                });
+        }
+    }
 
     return (
         <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
@@ -203,9 +257,20 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             onChange={handleChange}
                         />
 
-                        {contatoList.map((element) => {
-                            return element;
-                        })}
+                        {props.updateIndustria == undefined
+                            ? industria?.contatos.map((element, index) => {
+                                  return (
+                                      <IndustriaContato
+                                          key={element.tipoContato}
+                                          contatoModel={element}
+                                          index={index}
+                                          handleChange={handleChangeContato}
+                                      />
+                                  );
+                              })
+                            : contatoList.map((element) => {
+                                  return element;
+                              })}
                     </Container>
                     <Container>
                         <Button
@@ -217,9 +282,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 width: '100%',
                                 height: 55,
                             }}
-                            onClick={() => {
-                                console.log(industria);
-                            }}
+                            onClick={onSubmit}
                         >
                             {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
                         </Button>
