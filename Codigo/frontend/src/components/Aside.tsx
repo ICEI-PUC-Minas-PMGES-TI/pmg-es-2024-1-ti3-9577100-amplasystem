@@ -19,11 +19,12 @@ import Handshake from '@mui/icons-material/Handshake';
 import Factory from '@mui/icons-material/Factory';
 import { useNavigate } from 'react-router-dom';
 import { PaletteMode } from '@mui/material';
-
+import Avatar from '@mui/material/Avatar';
 const currentMode: PaletteMode = 'dark';
 const primaryColor = 'rgb(102, 157, 246)';
+import logo from '../assets/favicon.png';
 // const secondaryColor = 'rgb(71, 98, 130)';
-const backgroundColor = 'rgb(5, 30, 52)';
+const backgroundColor = '#ffffff';
 
 const data = [
     { icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
@@ -69,10 +70,12 @@ export const Aside = () => {
                 <Paper elevation={0} sx={{ maxWidth: 256, borderRadiusTopEnd: '50px', borderRadius: 0 }}>
                     <FireNav component="nav" disablePadding>
                         <ListItemButton component="a" href="#customized-list">
-                            <ListItemIcon sx={{ fontSize: 20 }}>🐙</ListItemIcon>
+                            <ListItemIcon sx={{ fontSize: 20 }}>
+                                <Avatar alt="logo" src={logo} />
+                            </ListItemIcon>
                             <ListItemText
                                 sx={{ my: 0 }}
-                                primary="Amplasystem"
+                                primary="Ampla System"
                                 primaryTypographyProps={{
                                     fontSize: 20,
                                     fontWeight: 'medium',
@@ -149,14 +152,16 @@ export const Aside = () => {
                                 }}
                             >
                                 <ListItemText
-                                    primary="Build"
+                                    primary="Opções "
                                     primaryTypographyProps={{
                                         fontSize: 15,
                                         fontWeight: 'medium',
                                         lineHeight: '20px',
                                         mb: '2px',
                                     }}
-                                    secondary="Authentication, Firestore Database, Realtime Database, Storage, Hosting, Functions, and Machine Learning"
+                                    secondary={data.map((item) => {
+                                        return item.label + ', ';
+                                    })}
                                     secondaryTypographyProps={{
                                         noWrap: true,
                                         fontSize: 12,

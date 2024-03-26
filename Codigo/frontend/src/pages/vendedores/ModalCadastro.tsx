@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Box } from '@mui/system';
 import {
     Autocomplete,
@@ -13,26 +12,28 @@ import {
 import apiFetch from '../../services/api';
 import CloseIcon from '@mui/icons-material/Close';
 import { VendedorModel } from 'models/VendedorModel';
-import { useNotification } from '../../hooks/useNotificaion';
-import { Email } from '@mui/icons-material';
+import { useNotification } from '../../hooks/useNotification';
 import Validade from '../../utils/Validate';
+import { Cargo } from '../../enums/Cargo';
+import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 interface IRegisterModalProps {
-    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
-    setReload: React.Dispatch<React.SetStateAction<boolean>>;
+    setReload: Dispatch<SetStateAction<boolean>>;
     updateVendedor: VendedorModel | undefined;
 }
 const RegisterModal = (props: IRegisterModalProps) => {
-    const optionCargo = ['ADMINISTRADOR', 'VENDEDOR'];
-    const [refNome, setRefNome] = React.useState('');
-    const [refEmail, setRefEmail] = React.useState('');
-    const [refCargo, setRefCargo] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
+    const optionCargo = [Cargo.ADMINISTRADOR, Cargo.VENDEDOR];
+    const [refNome, setRefNome] = useState('');
+    const [refEmail, setRefEmail] = useState('');
+    const [refCargo, setRefCargo] = useState('');
+    const [loading, setLoading] = useState(false);
     const { showNotification } = useNotification();
+    const validate = new Validade();
     const handleClose = () => {
         props.setOpenModal(false);
     };
-    const validate = new Validade();
+
     function onSubmit() {
         const obj = {
             id: props.updateVendedor?.id || null,
@@ -94,7 +95,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     function ChangeModalState() {
         props.setOpenModal(!open);
     }
-    React.useEffect(() => {
+    useEffect(() => {
         setRefCargo(props.updateVendedor?.cargo || '');
         setRefEmail(props.updateVendedor?.email || '');
         setRefNome(props.updateVendedor?.nome || '');
@@ -219,7 +220,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         fullWidth
                         value={refCargo}
                         renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
-                        onSelect={(event: React.SyntheticEvent<HTMLDivElement, Event>) => {
+                        onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
                             setRefCargo((event.target as HTMLInputElement).value || '');
                         }}
                     />

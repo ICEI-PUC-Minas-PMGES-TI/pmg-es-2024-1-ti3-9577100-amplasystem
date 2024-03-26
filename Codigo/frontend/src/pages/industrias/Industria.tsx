@@ -1,33 +1,42 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
-import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
-import { Autocomplete, Button, Fab, Modal, TextField, Typography } from '@mui/material';
-import constructWithOptions from 'styled-components/dist/constructors/constructWithOptions';
-import { useRef } from 'react';
-import styled from 'styled-components';
-
+import { Button, Divider, IconButton, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { IndustriaModel } from 'models/IndustriaModel';
+import { MRT_ColumnDef, MaterialReactTable } from 'material-react-table';
+import { TipoContato } from '../../enums/TipoContato';
+import { Delete, Edit, Email } from '@mui/icons-material';
+import * as Sx from './IndustriasStyle';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Link } from 'react-router-dom';
+import RegisterModal from './ModalCadastro';
+import { useNotification } from '../../hooks/useNotification';
 const IndustriaPage = () => {
-    const [data, setData] = React.useState<[any]>([{}]);
-    const [open, setOpen] = React.useState(false);
-
-    React.useEffect(() => {
-        getVendedores();
-    }, []);
+    const [data, setData] = useState<IndustriaModel[]>([]);
+    const [open, setOpen] = useState(false);
+    const [reload, setRelaod] = useState(true);
+    const [file, setFile] = useState<File | null>();
+    const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
+    const { showNotification } = useNotification();
+    useEffect(() => {
+        getIndustrias();
+        setRelaod(false);
+    }, [reload]);
+    useEffect(() => {
+        if (!open) {
+            console.log(industria);
+            setIndustria(undefined);
+        }
+    }, [open]);
 
     function ChangeModalState() {
         setOpen(!open);
     }
 
-    function getVendedores() {
+    const getIndustrias = () => {
         apiFetch
             .get('/industria/')
             .then((data) => {
@@ -36,102 +45,253 @@ const IndustriaPage = () => {
             .catch((e) => {
                 console.log(e);
             });
-    }
-
-    const MODAL_STYLE = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        padding: '150px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        color: 'black',
+    };
+    const deleteIndustria = (id: number) => {
+        apiFetch
+            .delete(`/industria/${id}`)
+            .then((data) => {
+                setRelaod(true);
+                showNotification({
+                    message: data.data.message,
+                    title: data.data.titulo,
+                    type: 'success',
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
+    const sendIndustriasFile = () => {
+        apiFetch
+            .post(
+                '/industria/tabela',
+                {
+                    data: {
+                        file: file,
+                    },
+                },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            )
+            .then((data) => {
+                setData(data.data);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     };
 
-    const optionCargo = ['ADIMINISTRADOR', 'VENDEDOR'];
+    const columns = useMemo<MRT_ColumnDef<IndustriaModel>[]>(
+        () => [
+            {
+                accessorKey: 'nome',
+                header: 'Nome',
+            },
 
-    const refNome = useRef<HTMLInputElement>(null);
-    const refEmail = useRef<HTMLInputElement>(null);
-    const [refCargo, setRefCargo] = React.useState('');
-
-    function onSubmit() {
-        const obj = {
-            nome: refNome.current?.value || '',
-            email: refEmail.current?.value || '',
-            cargo: refCargo,
-        };
-
-        apiFetch.post('/vendedor/admin/save', obj).then((data) => {
-            console.log(data);
-            getVendedores();
-        });
-    }
-    const tipos = ['Financeiro', 'Comercial', 'Logistica', 'Pagamento'];
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    });
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Financeiro) {
+                            return contato.nome;
+                        }
+                    });
+                },
+                header: 'Contato Financeiro',
+            },
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Financeiro) {
+                            return contato.telefone;
+                        }
+                    });
+                },
+                header: 'Telefone Financeiro',
+            },
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Comercial) {
+                            return contato.nome;
+                        }
+                    });
+                },
+                header: 'Contato Comercial',
+            },
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Comercial) {
+                            return contato.telefone;
+                        }
+                    });
+                },
+                header: 'Telefone Comercial',
+            },
+        ],
+        [],
+    );
     return (
-        <Box display={'flex'}>
-            <TableContainer component={Paper} sx={{ marginTop: '70px' }}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">Nome</TableCell>
-                            {tipos.map((tipo) => {
-                                return (
-                                    <>
-                                        <TableCell align="center">Nome {tipo}</TableCell>
-                                        <TableCell align="center">Telefone {tipo} </TableCell>
-                                        <TableCell align="center">Email {tipo} </TableCell>
-                                    </>
-                                );
-                            })}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map((vendedor) => (
-                            <TableRow key={vendedor.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell component="th" scope="row">
-                                    {vendedor.nome}
-                                    {console.log(vendedor)}
-                                </TableCell>
-                                {vendedor?.contatos?.map((contato: any) => {
-                                    return (
-                                        <>
-                                            <TableCell align="center">{contato.nome}</TableCell>
-                                            <TableCell align="center">{contato.telefone}</TableCell>
-                                            <TableCell align="center">{contato.email}</TableCell>
-                                        </>
-                                    );
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Fab onClick={ChangeModalState} color="primary" aria-label="add">
-                <AddIcon />
-            </Fab>
-
-            <Modal open={open} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
-                <Box sx={{ ...MODAL_STYLE }}>
-                    <Button component="label" role={undefined} variant="contained" tabIndex={-1}>
-                        Upload file
-                        <VisuallyHiddenInput type="file" onChange={(e) => console.log(e)} />
+        <Box display={'grid'}>
+            <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
+                Industrias
+            </Typography>
+            <Box
+                display={'flex'}
+                sx={{
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Box>
+                    {' '}
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        sx={{
+                            backgroundColor: '#788DAA',
+                        }}
+                        startIcon={<CloudUploadIcon />}
+                    >
+                        Cadastro automático
+                        <Sx.VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => {
+                                setFile(event?.target?.files[0]);
+                                sendIndustriasFile();
+                            }}
+                        />
                     </Button>
                 </Box>
-            </Modal>
+                <IconButton
+                    onClick={ChangeModalState}
+                    sx={{
+                        backgroundColor: '#788DAA',
+                    }}
+                    aria-label="add"
+                >
+                    <AddIcon />
+                </IconButton>
+            </Box>
+            <Box
+                sx={{
+                    marginTop: '20px',
+                }}
+            >
+                <MaterialReactTable
+                    columns={columns}
+                    data={data}
+                    columnResizeMode="onChange"
+                    layoutMode="semantic"
+                    enableRowActions
+                    displayColumnDefOptions={{
+                        'mrt-row-actions': {
+                            grow: false,
+                        },
+                    }}
+                    positionActionsColumn="last"
+                    renderRowActions={({ row, table }) => (
+                        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+                            <IconButton
+                                onClick={() => {
+                                    setOpen(true);
+                                    setIndustria(JSON.parse(JSON.stringify(row.original)));
+                                }}
+                            >
+                                <Edit />
+                            </IconButton>
+                            <IconButton
+                                color="error"
+                                onClick={() => {
+                                    deleteIndustria(row.original.id);
+                                }}
+                            >
+                                <Delete />
+                            </IconButton>
+                        </Box>
+                    )}
+                    renderDetailPanel={({ row }) => {
+                        return (
+                            <Box
+                                sx={{
+                                    alignItems: 'left',
+                                    width: '100%',
+                                }}
+                            >
+                                <List sx={{ width: '100%' }}>
+                                    {row.original.contatos.map((contato) => {
+                                        return (
+                                            <>
+                                                <ListItem alignItems="flex-start">
+                                                    <ListItemText
+                                                        primary={contato.tipoContato}
+                                                        secondary={
+                                                            <Fragment>
+                                                                <Typography variant="body2" color="text.primary">
+                                                                    Nome: {contato.nome}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="text.primary">
+                                                                    telefone: {contato.telefone}
+                                                                </Typography>
+                                                                <Typography variant="body2" color="text.primary">
+                                                                    Email: {contato.email}{' '}
+                                                                    <IconButton
+                                                                        color="primary"
+                                                                        onClick={() =>
+                                                                            window.open(
+                                                                                `mailto:${contato.email}?subject=Ampla System!`,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Email />
+                                                                    </IconButton>{' '}
+                                                                </Typography>
+                                                            </Fragment>
+                                                        }
+                                                    />
+                                                </ListItem>
+                                                <Divider component="li" />
+                                            </>
+                                        );
+                                    })}
+                                </List>
+                            </Box>
+                        );
+                    }}
+                />
+            </Box>{' '}
+            <Box>
+                <Link to="../../files/modelo.xlsx" target="_blank" download>
+                    <IconButton
+                        sx={{
+                            right: '30px',
+                            bottom: '30px',
+                            position: 'absolute',
+                            height: '45px',
+                            width: '45px',
+                            backgroundColor: '#788DAA',
+                        }}
+                        aria-label="add"
+                    >
+                        <HelpOutlineIcon />
+                    </IconButton>
+                </Link>
+            </Box>
+            {open ? (
+                <RegisterModal
+                    openModal={open}
+                    setOpenModal={setOpen}
+                    updateIndustria={industria}
+                    setReload={setRelaod}
+                />
+            ) : (
+                ''
+            )}
         </Box>
     );
 };
-
 export default IndustriaPage;

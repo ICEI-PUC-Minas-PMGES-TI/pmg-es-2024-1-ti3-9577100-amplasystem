@@ -8,7 +8,7 @@ import { Box, Button, IconButton, InputAdornment, Link, TextField } from '@mui/m
 import { VisibilityOff } from '@mui/icons-material';
 
 import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotificaion.ts';
+import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
 
 const LoginPage = () => {
