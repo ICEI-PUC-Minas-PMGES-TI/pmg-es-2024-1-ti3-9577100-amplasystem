@@ -11,6 +11,7 @@ import { ContatoModel } from 'models/ContatoModels';
 import { JSX } from 'react/jsx-runtime';
 import { useNotification } from '../../hooks/useNotification';
 import apiFetch from '../../services/api';
+import Validade from '../../utils/Validate';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -22,8 +23,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
     const tiposContatos = Object.values(TipoContato);
     const { showNotification } = useNotification();
+    const [reset, setRest] = useState<boolean>(false);
     const [contatoList, setContatoList] = useState<JSX.Element[]>([]);
-
+    const validade = new Validade();
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -50,7 +52,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     console.log;
 
     useEffect(() => {
-        if (industria == undefined) {
+        if (industria == undefined || reset) {
             setIndustria({
                 id: null,
                 nome: '',
@@ -85,6 +87,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     },
                 ],
             });
+            setRest(!reset);
         } else if (industria?.contatos.length < 4) {
             const tiposCadastrados: Array<TipoContato> = new Array<TipoContato>();
             const aux = industria;
@@ -117,55 +120,74 @@ const RegisterModal = (props: IRegisterModalProps) => {
             );
         });
         setContatoList(aux2);
-    }, [props.updateIndustria]);
+    }, [props.updateIndustria, reset]);
 
     function onSubmit() {
         const obj: IndustriaModel = JSON.parse(JSON.stringify(industria));
         obj.contatos = obj.contatos.filter((contato) => contato.nome != '');
-
-        if (props.updateIndustria == undefined) {
-            setLoading(true);
-            apiFetch
-                .post('industria/', obj)
-                .then((data) => {
-                    props.setReload(true);
-                    showNotification({
-                        message: data.data.message,
-                        type: 'success',
-                        title: data.data.titulo,
-                    });
-                })
-                .catch((error) => {
-                    showNotification({
-                        message: error.response.data.message,
-                        type: 'error',
-                        title: error.response.data.titulo,
-                    });
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-            props.updateIndustria = undefined;
+        let wasInvalidEmail = false;
+        let wasInvalidCellphoneNumber = false;
+        obj.contatos.map((contato) => {
+            wasInvalidEmail = !validade.validateEmail(contato.email);
+            wasInvalidCellphoneNumber = !validade.validateCellphone(contato.telefone);
+        });
+        if (wasInvalidEmail) {
+            showNotification({
+                message: 'confira os emails informados ',
+                type: 'error',
+                title: 'Emails inválidos',
+            });
+        } else if (wasInvalidCellphoneNumber) {
+            showNotification({
+                message: 'confira os telefones informados ',
+                type: 'error',
+                title: 'Telefones inválidos',
+            });
         } else {
-            setLoading(true);
-            console.log(obj);
-            apiFetch
-                .put(`industria/`, obj)
-                .then((data) => {
-                    props.setReload(true);
-                    showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                })
-                .catch((error) => {
-                    showNotification({
-                        message: error.response.data.message,
-                        type: 'error',
-                        title: error.response.data.titulo,
+            if (props.updateIndustria == undefined) {
+                setLoading(true);
+                apiFetch
+                    .post('industria/', obj)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({
+                            message: data.data.message,
+                            type: 'success',
+                            title: data.data.titulo,
+                        });
+                        setRest(true);
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
                     });
-                })
-                .finally(() => {
-                    setLoading(false);
-                    props.setOpenModal(false);
-                });
+            } else {
+                setLoading(true);
+                console.log(obj);
+                apiFetch
+                    .put(`industria/`, obj)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                        props.setOpenModal(false);
+                    });
+            }
         }
     }
 
@@ -215,9 +237,10 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '} Industria
                         </Typography>
                     </Container>
-                    <Container
+                    <Box
                         sx={{
-                            maxHeight: '400px',
+                            maxHeight: '40vh',
+
                             overflowY: 'scroll',
                             overflowX: 'hidden',
                             paddingRight: 3,
@@ -264,6 +287,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                           key={element.tipoContato}
                                           contatoModel={element}
                                           index={index}
+                                          reset={reset}
                                           handleChange={handleChangeContato}
                                       />
                                   );
@@ -271,7 +295,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             : contatoList.map((element) => {
                                   return element;
                               })}
-                    </Container>
+                    </Box>
                     <Container>
                         <Button
                             variant="contained"

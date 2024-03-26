@@ -11,7 +11,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <Box display={'flex'}>
             <Aside />
 
-            <main style={{ width: '90%', margin: '20px' }}>{children}</main>
+            <main style={{ width: '90%', margin: '20px', maxHeight: '100vh' }}>{children}</main>
         </Box>
     );
 };

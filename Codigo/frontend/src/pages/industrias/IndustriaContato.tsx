@@ -2,21 +2,51 @@ import { TextField, Typography } from '@mui/material';
 import * as Sx from './IndustriasStyle';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { ContatoModel } from 'models/ContatoModels';
+import { IMaskInput } from 'react-imask';
+import Validade from '../../utils/Validate';
 interface IRegisterModalProps {
     contatoModel: ContatoModel;
     index: number;
+    reset: boolean;
     handleChange: (contato: ContatoModel, index: number) => void;
 }
+
 const IndustriaContato = (props: IRegisterModalProps) => {
+    const [wrong, setWrong] = useState<boolean>(false);
+    const [helperText, setHelperText] = useState<string>('');
     const [contato, setContato] = useState<ContatoModel>(props.contatoModel);
+    const validade = new Validade();
     useEffect(() => {
         props.handleChange(contato, props.index);
     }, [contato]);
+
+    useEffect(() => {
+        const emptyContact: ContatoModel = {
+            email: '',
+            id: null,
+            nome: '',
+            tipoContato: contato.tipoContato,
+            telefone: '',
+        };
+        setContato(emptyContact);
+    }, [props.reset]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target as HTMLInputElement;
         setContato({ ...contato, [name]: value });
     }
+
+    function handleNumberChange(value: string) {
+        setContato({ ...contato, ['telefone']: value });
+    }
+
+    useEffect(() => {
+        if (wrong) {
+            setHelperText('email invaido');
+        } else {
+            setHelperText('');
+        }
+    }, [wrong]);
     return (
         <>
             <Typography
@@ -56,16 +86,33 @@ const IndustriaContato = (props: IRegisterModalProps) => {
             >
                 Telefone
             </Typography>
-            <TextField
-                id="telefone"
-                variant="outlined"
-                name="telefone"
-                placeholder="Telefone"
-                fullWidth
-                sx={Sx.input}
-                value={contato.telefone}
-                onChange={handleChange}
-            />
+
+            <div
+                style={{ marginBottom: '20px' }}
+                className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+                <IMaskInput
+                    style={{ width: '100%' }}
+                    className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                    id="telefone"
+                    name="telefone"
+                    placeholder="Telefone"
+                    mask="(00) 00000-0000"
+                    value={contato.telefone}
+                    onAccept={(value) => {
+                        handleNumberChange(value);
+                    }}
+                    onChange={handleChange}
+                />
+                <fieldset
+                    aria-hidden="true"
+                    className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                >
+                    <legend className="css-ihdtdm">
+                        <span className="notranslate" />
+                    </legend>
+                </fieldset>
+            </div>
             <Typography
                 variant="subtitle1"
                 sx={{
@@ -76,6 +123,7 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                 Email
             </Typography>
             <TextField
+                error={wrong}
                 id="email"
                 name="email"
                 variant="outlined"
@@ -84,6 +132,12 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                 value={contato.email}
                 sx={Sx.input}
                 onChange={handleChange}
+                onBlur={() => {
+                    if (contato.email != '') {
+                        setWrong(!validade.validateEmail(contato.email));
+                    }
+                }}
+                helperText={helperText}
             />
         </>
     );

@@ -8,5 +8,9 @@ class Validade {
         const passwordRegex = /^(?=.\d)(?=.[a-z])(?=.*[A-Z]).{6,}$/;
         return true;
     };
+    validateCellphone = (cellphone: string) => {
+        const cellphoneRegex = /^\((?:0?[1-9]{2})\)\s9\d{4}-\d{4}$/;
+        return cellphoneRegex.test(cellphone);
+    };
 }
 export default Validade;

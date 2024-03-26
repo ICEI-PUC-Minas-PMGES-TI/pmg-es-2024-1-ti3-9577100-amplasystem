@@ -135,7 +135,7 @@ const IndustriaPage = () => {
         [],
     );
     return (
-        <Box display={'grid'}>
+        <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
             <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
                 Industrias
             </Typography>

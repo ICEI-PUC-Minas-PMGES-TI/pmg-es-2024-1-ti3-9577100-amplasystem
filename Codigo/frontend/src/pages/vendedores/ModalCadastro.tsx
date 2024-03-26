@@ -42,55 +42,59 @@ const RegisterModal = (props: IRegisterModalProps) => {
             cargo: refCargo,
         };
 
-        if (validate.validateEmail(refEmail) && refNome != '' && refCargo != '') {
-            if (props.updateVendedor == undefined) {
-                setLoading(true);
-                apiFetch
-                    .post('/vendedor/admin/save', obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({
-                            message: data.data.message,
-                            type: 'success',
-                            title: data.data.titulo,
+        if (refEmail != '' && refNome != '' && refCargo != '') {
+            if (validate.validateEmail(refEmail)) {
+                if (props.updateVendedor == undefined) {
+                    setLoading(true);
+                    apiFetch
+                        .post('/vendedor/admin/save', obj)
+                        .then((data) => {
+                            props.setReload(true);
+                            showNotification({
+                                message: data.data.message,
+                                type: 'success',
+                                title: data.data.titulo,
+                            });
+                        })
+                        .catch((error) => {
+                            showNotification({
+                                message: error.response.data.message,
+                                type: 'error',
+                                title: error.response.data.titulo,
+                            });
+                        })
+                        .finally(() => {
+                            setLoading(false);
                         });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
+                } else {
+                    setLoading(true);
+                    apiFetch
+                        .put(`/vendedor/admin/update/${obj.id}`, obj)
+                        .then((data) => {
+                            props.setReload(true);
+                            showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                        })
+                        .catch((error) => {
+                            showNotification({
+                                message: error.response.data.message,
+                                type: 'error',
+                                title: error.response.data.titulo,
+                            });
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                            props.setOpenModal(false);
                         });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                }
+                setRefCargo('');
+                setRefEmail('');
+                setRefNome('');
             } else {
-                setLoading(true);
-                apiFetch
-                    .put(`/vendedor/admin/update/${obj.id}`, obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                        props.setOpenModal(false);
-                    });
+                showNotification({ message: 'informe um email valido', type: 'error', title: 'Email invalido' });
             }
         } else {
             showNotification({ message: 'preencha todos os campos', type: 'error' });
         }
-        setRefCargo('');
-        setRefEmail('');
-        setRefNome('');
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
