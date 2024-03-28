@@ -21,14 +21,16 @@ const IndustriaContato = (props: IRegisterModalProps) => {
     }, [contato]);
 
     useEffect(() => {
-        const emptyContact: ContatoModel = {
-            email: '',
-            id: null,
-            nome: '',
-            tipoContato: contato.tipoContato,
-            telefone: '',
-        };
-        setContato(emptyContact);
+        if (props.reset) {
+            const emptyContact: ContatoModel = {
+                email: '',
+                id: null,
+                nome: '',
+                tipoContato: contato.tipoContato,
+                telefone: '',
+            };
+            setContato(emptyContact);
+        }
     }, [props.reset]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {

@@ -110,12 +110,14 @@ const RegisterModal = (props: IRegisterModalProps) => {
         }
         const aux2: JSX.Element[] = [];
         industria?.contatos.map((element, index) => {
+            console.log(element);
             aux2.push(
                 <IndustriaContato
                     key={element.tipoContato}
                     contatoModel={element}
                     index={index}
                     handleChange={handleChangeContato}
+                    reset={reset}
                 />,
             );
         });
@@ -280,21 +282,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             onChange={handleChange}
                         />
 
-                        {props.updateIndustria == undefined
-                            ? industria?.contatos.map((element, index) => {
-                                  return (
-                                      <IndustriaContato
-                                          key={element.tipoContato}
-                                          contatoModel={element}
-                                          index={index}
-                                          reset={reset}
-                                          handleChange={handleChangeContato}
-                                      />
-                                  );
-                              })
-                            : contatoList.map((element) => {
-                                  return element;
-                              })}
+                        {contatoList.map((element) => {
+                            return element;
+                        })}
                     </Box>
                     <Container>
                         <Button
