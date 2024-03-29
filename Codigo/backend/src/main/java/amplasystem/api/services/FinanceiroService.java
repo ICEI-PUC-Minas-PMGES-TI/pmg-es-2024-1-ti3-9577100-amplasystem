@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import amplasystem.api.dtos.FinanceiroDTO;
 import amplasystem.api.mappers.FinanceiroMapper;
 import amplasystem.api.models.Financeiro;
+import amplasystem.api.models.Industria;
 import amplasystem.api.repositories.FinanceiroRepository;
 import jakarta.transaction.Transactional;
 
@@ -17,7 +18,10 @@ import jakarta.transaction.Transactional;
 public class FinanceiroService {
 
     @Autowired
-    public FinanceiroRepository financeiroRepository;
+    private FinanceiroRepository financeiroRepository;
+
+    @Autowired
+    private IndustriaService industriaService;
 
     public List<FinanceiroDTO> findAll() {
         List<FinanceiroDTO> result = new ArrayList<>();
@@ -28,5 +32,14 @@ public class FinanceiroService {
 
         return result;
 
+    }
+
+    public Financeiro create(FinanceiroDTO financeiroDTO) {
+        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.industria());
+
+        Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.comissao(),
+                financeiroDTO.faturamento(), financeiroDTO.tipoFiscal(), industriaDoFinanceiro);
+
+        return financeiroRepository.save(newFinanceiro);
     }
 }

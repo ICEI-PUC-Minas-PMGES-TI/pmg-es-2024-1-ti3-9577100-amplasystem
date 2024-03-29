@@ -12,4 +12,5 @@ public class FinanceiroMapper {
                 financeiro.getTipoFiscal(),
                 financeiro.getIndustria().getNome());
     }
+
 }
