@@ -42,4 +42,10 @@ public class FinanceiroService {
 
         return financeiroRepository.save(newFinanceiro);
     }
+
+    public void delete(Integer id) {
+        financeiroRepository.deleteById(id);
+    }
+
+    
 }
