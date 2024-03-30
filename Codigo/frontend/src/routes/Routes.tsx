@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from '../routes/ProtectedRoutes';
 import { DashboardLayout } from '../layouts/DashboardLayout.tsx';
+import FinanceiroPage from '../pages/financeiro/Financeiro.tsx';
 
 const IndustriaPage = React.lazy(() => import('../pages/industrias/IndustriaPage.tsx'));
 const DashboardPage = React.lazy(() => import('../pages/dashboard/DashboardPage.tsx'));
@@ -38,6 +39,14 @@ const RouterRoutes = () => {
                             element={
                                 <DashboardLayout>
                                     <IndustriaPage />
+                                </DashboardLayout>
+                            }
+                        />
+                        <Route
+                            path="/financeiro"
+                            element={
+                                <DashboardLayout>
+                                    <FinanceiroPage />
                                 </DashboardLayout>
                             }
                         />

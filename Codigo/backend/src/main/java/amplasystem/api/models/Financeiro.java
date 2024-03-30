@@ -1,5 +1,7 @@
 package amplasystem.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import amplasystem.api.enuns.Faturamento;
 import amplasystem.api.enuns.TipoFiscal;
 import jakarta.persistence.Column;
@@ -31,9 +33,10 @@ public class Financeiro {
 
     @Column(name = "tipo_fiscal", nullable = false)
     private TipoFiscal tipoFiscal;
-    
+
     @OneToOne
     @JoinColumn(name = "industria_id")
+    @JsonIgnore
     private Industria industria;
 
 }
