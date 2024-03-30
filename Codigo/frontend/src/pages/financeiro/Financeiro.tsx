@@ -129,7 +129,12 @@ const FinanceiroPage = () => {
                     )}
                 />
             </Box>
-            <ModalCadastroFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={} />
+            <ModalCadastroFinanceiro
+                setOpenModal={setOpen}
+                openModal={open}
+                setReload={setReload}
+                updateVendedor={financeiro}
+            />
         </Box>
     );
 };
