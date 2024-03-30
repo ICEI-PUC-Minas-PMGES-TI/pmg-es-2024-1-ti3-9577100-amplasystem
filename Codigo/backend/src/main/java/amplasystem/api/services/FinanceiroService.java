@@ -35,10 +35,10 @@ public class FinanceiroService {
     }
 
     public Financeiro create(FinanceiroDTO financeiroDTO) {
-        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.industria());
+        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
 
-        Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.comissao(),
-                financeiroDTO.faturamento(), financeiroDTO.tipoFiscal(), industriaDoFinanceiro);
+        Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.getComissao(),
+                financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
 
         return financeiroRepository.save(newFinanceiro);
     }
