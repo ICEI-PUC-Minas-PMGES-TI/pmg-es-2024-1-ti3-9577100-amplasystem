@@ -2,6 +2,7 @@ package amplasystem.api.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class FinanceiroService {
     public List<FinanceiroDTO> findAll() {
         List<FinanceiroDTO> result = new ArrayList<>();
 
-        for (Financeiro f : financeiroRepository.findAll()) {
-            result.add(FinanceiroMapper.toDTO(f));
+        for (Financeiro finances : financeiroRepository.findAll()) {
+            result.add(FinanceiroMapper.toDTO(finances));
         }
 
         return result;
@@ -44,8 +45,7 @@ public class FinanceiroService {
     }
 
     public void delete(Integer id) {
-        financeiroRepository.deleteById(id);
+        Optional<Financeiro> financeiroOptional = financeiroRepository.findById(id);
+        financeiroOptional.ifPresent(financeiro -> financeiroRepository.delete(financeiro));
     }
-
-    
 }
