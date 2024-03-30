@@ -200,4 +200,8 @@ public class IndustriaService {
         contatos.add(newContato);
     }
 
+    public Industria findByNome(String nome) {
+        return industriaRepository.findByNome(nome);
+    }
+
 }
