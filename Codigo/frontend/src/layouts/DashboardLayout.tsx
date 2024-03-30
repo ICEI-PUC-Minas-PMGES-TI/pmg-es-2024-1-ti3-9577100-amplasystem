@@ -1,6 +1,4 @@
-import Grid from '@mui/material/Grid';
-import Aside from '../components/Aside';
-import { Box, width } from '@mui/system';
+import { Box } from '@mui/system';
 import Sidebar, { SidebarItem } from '../components/Sidebar';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Handshake from '@mui/icons-material/Handshake';
@@ -24,7 +22,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 ))}
             </Sidebar>
 
-            <main style={{ width: '90%', margin: '20px', maxHeight: '100vh' }}>{children}</main>
+            <main style={{ width: '100%', margin: '20px', maxHeight: '100vh' }}>{children}</main>
         </Box>
     );
 };

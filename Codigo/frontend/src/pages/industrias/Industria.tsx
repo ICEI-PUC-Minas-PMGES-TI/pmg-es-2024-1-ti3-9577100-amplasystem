@@ -1,39 +1,37 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import apiFetch from '../../services/api';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import CallIcon from '@mui/icons-material/Call';
+import PersonIcon from '@mui/icons-material/Person';
 import { Box } from '@mui/system';
-import {
-    Button,
-    Divider,
-    IconButton,
-    List,
-    ListItem,
-    ListItemText,
-    Stack,
-    ThemeProvider,
-    Typography,
-    createTheme,
-} from '@mui/material';
-import { IndustriaModel } from 'models/IndustriaModel';
+import { Button, IconButton, Stack, Typography, Menu, MenuItem } from '@mui/material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { TipoContato } from '../../enums/TipoContato';
 import { Delete, Edit, Email } from '@mui/icons-material';
-import * as Sx from './IndustriasStyle';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Link } from 'react-router-dom';
-import RegisterModal from './ModalCadastro';
+
 import { useNotification } from '../../hooks/useNotification';
+import apiFetch from '../../services/api';
+
+import { IndustriaModel } from 'models/IndustriaModel';
+import { TipoContato } from '../../enums/TipoContato';
+
+import RegisterModal from './ModalCadastro';
+
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
-    const [reload, setRelaod] = useState(true);
+    const [reload, setReload] = useState(true);
     const [file, setFile] = useState<File | null>();
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
+
     const { showNotification } = useNotification();
     useEffect(() => {
         getIndustrias();
-        setRelaod(false);
+        setReload(false);
     }, [reload]);
     useEffect(() => {
         if (!open) {
@@ -45,7 +43,14 @@ const IndustriaPage = () => {
     function ChangeModalState() {
         setOpen(!open);
     }
-
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const openMenuOption = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const getIndustrias = () => {
         apiFetch
             .get('/industria/')
@@ -60,7 +65,7 @@ const IndustriaPage = () => {
         apiFetch
             .delete(`/industria/${id}`)
             .then((data) => {
-                setRelaod(true);
+                setReload(true);
                 showNotification({
                     message: data.data.message,
                     title: data.data.titulo,
@@ -100,27 +105,6 @@ const IndustriaPage = () => {
                 accessorKey: 'nome',
                 header: 'Nome',
             },
-
-            {
-                accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Financeiro) {
-                            return contato.nome;
-                        }
-                    });
-                },
-                header: 'Contato Financeiro',
-            },
-            {
-                accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Financeiro) {
-                            return contato.telefone;
-                        }
-                    });
-                },
-                header: 'Telefone Financeiro',
-            },
             {
                 accessorFn: (row) => {
                     return row.contatos.map((contato) => {
@@ -141,9 +125,30 @@ const IndustriaPage = () => {
                 },
                 header: 'Telefone Comercial',
             },
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Financeiro) {
+                            return contato.nome;
+                        }
+                    });
+                },
+                header: 'Contato Financeiro',
+            },
+            {
+                accessorFn: (row) => {
+                    return row.contatos.map((contato) => {
+                        if (contato.tipoContato == TipoContato.Financeiro) {
+                            return contato.telefone;
+                        }
+                    });
+                },
+                header: 'Telefone Financeiro',
+            },
         ],
         [],
     );
+
     const table = useMaterialReactTable({
         columns,
         data,
@@ -153,7 +158,6 @@ const IndustriaPage = () => {
         },
         enableRowActions: true,
         columnResizeMode: 'onChange',
-        layoutMode: 'grid',
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
@@ -165,7 +169,7 @@ const IndustriaPage = () => {
                 grow: true, //new in v2.8 (allow this column to grow to fill in remaining space)
             },
         },
-        renderRowActions: ({ row, table }) => (
+        renderRowActions: ({ row }) => (
             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
                 <IconButton
                     onClick={() => {
@@ -198,19 +202,17 @@ const IndustriaPage = () => {
                                         {contato.tipoContato}
                                     </Typography>
                                     <Typography variant="body2" color="text.primary">
-                                        Nome: {contato.nome}
+                                        <PersonIcon /> {contato.nome}
                                     </Typography>
                                     <Typography variant="body2" color="text.primary">
-                                        telefone: {contato.telefone}
+                                        <CallIcon /> {contato.telefone}
                                     </Typography>
-                                    <Typography variant="body2" color="text.primary">
-                                        Email: {contato.email}{' '}
-                                        <IconButton
-                                            color="primary"
-                                            onClick={() => window.open(`mailto:${contato.email}?subject=Ampla System!`)}
-                                        >
-                                            <Email />
-                                        </IconButton>{' '}
+                                    <Typography
+                                        variant="body2"
+                                        color="text.primary"
+                                        onClick={() => window.open(`mailto:${contato.email}?subject=Ampla System!`)}
+                                    >
+                                        <Email /> {contato.email}{' '}
                                     </Typography>
                                 </Box>
                             </>
@@ -219,120 +221,125 @@ const IndustriaPage = () => {
                 </Stack>
             );
         },
+        muiTableContainerProps: {
+            sx: { maxWidth: '100%' },
+        },
         muiTopToolbarProps: {
             sx: {
                 fontWeight: 'bold',
                 fontSize: '16px',
-                background: '#CACACA',
             },
         },
         muiBottomToolbarProps: {
             sx: {
                 fontWeight: 'bold',
                 fontSize: '16px',
-                background: '#CACACA',
             },
         },
         muiTableHeadCellProps: {
             sx: {
                 fontWeight: 'bold',
                 fontSize: '16px',
-                background: '#CACACA',
-            },
-        },
-
-        muiTableBodyRowProps: {
-            sx: {
-                background: '#CACACA',
-            },
-        },
-        muiTableBodyProps: {
-            sx: {
-                background: '#CACACA',
             },
         },
         muiTableBodyCellProps: {
             sx: {
                 fontWeight: 'normal',
                 fontSize: '16px',
-                background: '#CACACA',
             },
         },
     });
 
     return (
         <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
-            <Typography variant="h2" sx={{ textAlign: 'center' }} color="white">
+            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
                 Industrias
             </Typography>
             <Box
                 display={'flex'}
                 sx={{
                     justifyContent: 'space-between',
+                    marginBottom: '20px',
                 }}
             >
                 <Box>
                     {' '}
                     <Button
-                        component="label"
+                        aria-controls={openMenuOption ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openMenuOption ? 'true' : undefined}
+                        onClick={handleClick}
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
-                        sx={{
-                            backgroundColor: '#00747C',
-                        }}
-                        startIcon={<CloudUploadIcon />}
+                        sx={ButtonStyle.optionMenu}
+                        startIcon={<ArrowDropDownIcon />}
                     >
-                        Cadastro automático
-                        <Sx.VisuallyHiddenInput
-                            type="file"
-                            onChange={(event) => {
-                                setFile(event?.target?.files[0]);
-                                sendIndustriasFile();
-                            }}
-                        />
+                        Opções
                     </Button>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openMenuOption}
+                        onClose={handleClose}
+                        sx={{
+                            margin: '5px',
+                            padding: 0,
+                            '& .css-6hp17o-MuiList-root-MuiMenu-list': {
+                                padding: 0,
+                            },
+                        }}
+                    >
+                        <MenuItem
+                            onClick={handleClose}
+                            sx={{
+                                margin: 0,
+                                padding: 0,
+                            }}
+                        >
+                            <Button
+                                component="label"
+                                variant="contained"
+                                sx={ButtonStyle.menuButton}
+                                startIcon={<CloudUploadIcon />}
+                            >
+                                Cadastro automático
+                                <Input.VisuallyHiddenInput
+                                    type="file"
+                                    onChange={(event) => {
+                                        setFile(event?.target?.files[0]);
+                                        sendIndustriasFile();
+                                    }}
+                                />
+                            </Button>
+                        </MenuItem>
+                        <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
+                            <Link to="../../files/modelo.xlsx" target="_blank" download>
+                                {' '}
+                                <Button
+                                    component="label"
+                                    variant="contained"
+                                    sx={ButtonStyle.menuButton}
+                                    startIcon={<FileDownloadIcon />}
+                                >
+                                    Baixar a tabela modelo
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                    </Menu>
                 </Box>
-                <IconButton
-                    onClick={ChangeModalState}
-                    sx={{
-                        backgroundColor: '#00747C',
-                    }}
-                    aria-label="add"
-                >
-                    <AddOutlinedIcon sx={{ color: 'white' }} />
+                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
+                    <AddOutlinedIcon sx={ButtonStyle.iconButton} />
                 </IconButton>
             </Box>
-            <Box
-                sx={{
-                    marginTop: '20px',
-                }}
-            >
-                <MaterialReactTable table={table} />
-            </Box>{' '}
-            <Box>
-                <Link to="../../files/modelo.xlsx" target="_blank" download>
-                    <IconButton
-                        sx={{
-                            right: '30px',
-                            bottom: '30px',
-                            position: 'absolute',
-                            height: '45px',
-                            width: '45px',
-                            backgroundColor: '#00747C',
-                        }}
-                        aria-label="add"
-                    >
-                        <HelpOutlineIcon sx={{ color: 'white' }} />
-                    </IconButton>
-                </Link>
-            </Box>
+
+            <MaterialReactTable table={table} />
             {open ? (
                 <RegisterModal
                     openModal={open}
                     setOpenModal={setOpen}
                     updateIndustria={industria}
-                    setReload={setRelaod}
+                    setReload={setReload}
                 />
             ) : (
                 ''

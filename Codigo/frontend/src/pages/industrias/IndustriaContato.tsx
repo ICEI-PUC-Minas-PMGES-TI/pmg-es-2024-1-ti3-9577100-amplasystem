@@ -1,9 +1,10 @@
 import { TextField, Typography } from '@mui/material';
-import * as Sx from './IndustriasStyle';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { ContatoModel } from 'models/ContatoModels';
 import { IMaskInput } from 'react-imask';
 import Validade from '../../utils/Validate';
+import * as Input from '../../styles/InputStyles';
+
 interface IRegisterModalProps {
     contatoModel: ContatoModel;
     index: number;
@@ -76,7 +77,7 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                 name="nome"
                 fullWidth
                 value={contato.nome}
-                sx={Sx.input}
+                sx={Input.input}
                 onChange={handleChange}
             />
             <Typography
@@ -132,7 +133,7 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                 placeholder="Email"
                 fullWidth
                 value={contato.email}
-                sx={Sx.input}
+                sx={Input.input}
                 onChange={handleChange}
                 onBlur={() => {
                     if (contato.email != '') {
