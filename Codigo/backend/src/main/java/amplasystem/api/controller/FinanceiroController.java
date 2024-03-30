@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import amplasystem.api.dtos.FinanceiroDTO;
 import amplasystem.api.models.Financeiro;
 import amplasystem.api.services.FinanceiroService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.log4j.Log4j2;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/financeiro")
