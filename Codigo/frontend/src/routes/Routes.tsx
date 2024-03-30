@@ -3,9 +3,9 @@ import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-d
 import ProtectedRoute from '../routes/ProtectedRoutes';
 import { DashboardLayout } from '../layouts/DashboardLayout.tsx';
 
-const IndustriaPage = React.lazy(() => import('../pages/industrias/Industria.tsx'));
-const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
-const VendedoresPage = React.lazy(() => import('../pages/vendedores/Vendedores'));
+const IndustriaPage = React.lazy(() => import('../pages/industrias/IndustriaPage.tsx'));
+const DashboardPage = React.lazy(() => import('../pages/dashboard/DashboardPage.tsx'));
+const VendedoresPage = React.lazy(() => import('../pages/vendedores/VendedoresPage.tsx'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
 const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetEmail'));
 const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetNewPassword'));

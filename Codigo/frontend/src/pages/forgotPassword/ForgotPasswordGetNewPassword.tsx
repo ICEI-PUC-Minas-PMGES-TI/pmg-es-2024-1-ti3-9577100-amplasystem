@@ -12,7 +12,7 @@ import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
 import * as Input from '../../styles/InputStyles';
 import * as ButtonStyle from '../../styles/ButtonsStyles';
-const ForgotPasswordGetEmail = () => {
+const ForgotPasswordGetNewPassword = () => {
     const { passwordWasReset, changePassword } = useAuth();
     const navigate = useNavigate();
     const { showNotification } = useNotification();
@@ -132,4 +132,4 @@ const ForgotPasswordGetEmail = () => {
     );
 };
 
-export default ForgotPasswordGetEmail;
+export default ForgotPasswordGetNewPassword;

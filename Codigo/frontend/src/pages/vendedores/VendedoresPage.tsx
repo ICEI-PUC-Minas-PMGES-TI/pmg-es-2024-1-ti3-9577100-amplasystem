@@ -5,7 +5,7 @@ import apiFetch from '../../services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
-import RegisterModal from './ModalCadastro';
+import RegisterModal from './RegisterModal';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';

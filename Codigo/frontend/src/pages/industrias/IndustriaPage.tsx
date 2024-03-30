@@ -17,7 +17,7 @@ import apiFetch from '../../services/api';
 import { IndustriaModel } from 'models/IndustriaModel';
 import { TipoContato } from '../../enums/TipoContato';
 
-import RegisterModal from './ModalCadastro';
+import RegisterModal from './RegisterModal';
 
 import * as Input from '../../styles/InputStyles';
 import * as ButtonStyle from '../../styles/ButtonsStyles';

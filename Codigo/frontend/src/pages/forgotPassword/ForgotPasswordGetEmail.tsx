@@ -11,6 +11,7 @@ import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
 import * as Input from '../../styles/InputStyles';
 import * as ButtonStyle from '../../styles/ButtonsStyles';
+
 const ForgotPasswordGetEmail = () => {
     const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
     const navigate = useNavigate();
