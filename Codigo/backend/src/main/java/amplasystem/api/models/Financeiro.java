@@ -39,4 +39,12 @@ public class Financeiro {
     @JsonIgnore
     private Industria industria;
 
+    @Override
+    public String toString() {
+        return "Financeiro [id=" + id + ", comissao=" + comissao + ", faturamento=" + faturamento + ", tipoFiscal="
+                + tipoFiscal + "]";
+    }
+
+    
+
 }

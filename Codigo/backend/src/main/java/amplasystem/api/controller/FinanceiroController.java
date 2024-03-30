@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,17 +39,20 @@ public class FinanceiroController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Financeiro> create(@RequestBody FinanceiroDTO financeiroDTO) {
-        log.info(financeiroDTO);
         Financeiro newFinanceiro = financeiroService.create(financeiroDTO);
 
         return new ResponseEntity<>(newFinanceiro, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@RequestBody FinanceiroDTO financeiroDTO) {
-        log.info(financeiroDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody FinanceiroDTO financeiroDTO) {
+        try {
+            financeiroService.update(id, financeiroDTO);
+        } catch (NotFoundException e) {
+            log.equals(e);
+        }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
