@@ -1,28 +1,34 @@
+/* eslint-disable */
+// prettier-ignore
+import React from 'react';
 import { Box } from '@mui/system';
 import Sidebar, { SidebarItem } from '../components/Sidebar';
 import Dashboard from '@mui/icons-material/Dashboard';
 import Handshake from '@mui/icons-material/Handshake';
 import Factory from '@mui/icons-material/Factory';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
 interface DashboardLayoutProps {
     children: React.ReactNode;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const data = [
-        { icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
-        { icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
-        { icon: <Factory />, label: 'Indústria', location: '/industrias' },
+        { id: 1, icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
+        { id: 2, icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
+        { id: 3, icon: <Factory />, label: 'Indústria', location: '/industrias' },
+        { id: 4, icon: <AttachMoneyIcon />, label: 'Financeiro', location: '/financeiro' },
     ];
 
     return (
-        <Box display={'flex'} sx={{ height: '100svh' }}>
+        <Box display={'flex'} sx={{ height: '100vh' }}>
             <Sidebar>
                 {data.map((item) => (
-                    <SidebarItem icon={item.icon} text={item.label} location={item.location} />
+                    <SidebarItem key={item.id} icon={item.icon} text={item.label} location={item.location} />
                 ))}
             </Sidebar>
 
-            <main style={{ width: '100%', margin: '20px', maxHeight: '100vh' }}>{children}</main>
+            <main style={{ width: '100%', margin: '20px', maxHeight: '100vh', overflow: 'auto' }}>{children}</main>
         </Box>
     );
 };

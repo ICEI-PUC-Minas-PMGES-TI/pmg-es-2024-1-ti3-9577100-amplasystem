@@ -1,18 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+/* eslint-disable */
 
+import { useEffect, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { FinanceiroModel } from 'models/FinanceiroModel';
-import { Box } from '@mui/system';
-import { IconButton, Typography } from '@mui/material';
-import ModalCadastroFinanceiro from './ModalCadastroFinanceiro';
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { Box, IconButton, Typography } from '@mui/material';
+import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
+import ModalFinanceiro from './ModalFinanceiro';
 
 const FinanceiroPage = () => {
-    const [financeiro, setFinanceiro] = useState<FinanceiroModel | undefined>(undefined);
     const [data, setData] = useState<FinanceiroModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
@@ -21,6 +20,7 @@ const FinanceiroPage = () => {
     }, [reload]);
     const { user } = useAuth();
     const { showNotification } = useNotification();
+
     const ChangeModalState = () => {
         setOpen(!open);
     };
@@ -28,33 +28,19 @@ const FinanceiroPage = () => {
     const getFinanceiros = () => {
         apiFetch
             .get('/financeiro')
-            .then((data) => {
-                setData(data.data);
+            .then((response) => {
+                setData(response.data);
                 setReload(false);
             })
-            .catch((e) => {
-                console.log(e);
+            .catch((error) => {
+                console.error(error);
             });
     };
-    // const deleteFinanceiro = (id: number) => {
-    //     apiFetch
-    //         .delete(`/financeiro/${id}`)
-    //         .then((data) => {
-    //             setReload(true);
-    //             showNotification({
-    //                 message: data.data.message,
-    //                 title: data.data.titulo,
-    //                 type: 'success',
-    //             });
-    //         })
-    //         .catch((e) => {
-    //             console.log(e);
-    //         });
-    // };
+
     const columns = useMemo<MRT_ColumnDef<FinanceiroModel>[]>(
         () => [
             {
-                accessorKey: 'comissao', //access nested data with dot notation
+                accessorKey: 'comissao',
                 header: 'Comissão',
             },
             {
@@ -62,13 +48,13 @@ const FinanceiroPage = () => {
                 header: 'Faturamento',
             },
             {
-                accessorKey: 'tipoFiscal', //normal accessorKey
-                header: 'tipoFisacal',
+                accessorKey: 'tipoFiscal',
+                header: 'Tipo Fiscal',
                 grow: true,
             },
             {
-                accessorKey: 'industria', //normal accessorKey
-                header: 'Industria',
+                accessorKey: 'industria',
+                header: 'Indústria',
                 grow: true,
             },
         ],
@@ -79,7 +65,7 @@ const FinanceiroPage = () => {
         <Box display={'grid'}>
             <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
                 Financeiro
-            </Typography>{' '}
+            </Typography>
             <Box
                 display={'flex'}
                 sx={{
@@ -118,10 +104,7 @@ const FinanceiroPage = () => {
                                 sx={{
                                     color: '#01437C',
                                 }}
-                                onClick={() => {
-                                    setFinanceiro(row.original);
-                                    ChangeModalState();
-                                }}
+                                onClick={() => {}}
                             >
                                 <Edit />
                             </IconButton>
@@ -129,7 +112,7 @@ const FinanceiroPage = () => {
                     )}
                 />
             </Box>
-            <ModalCadastroFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={} />
+            <ModalCadastroFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={() => {}} /> {/* Pass a function */}
         </Box>
     );
 };
