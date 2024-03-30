@@ -14,11 +14,9 @@ import amplasystem.api.models.Financeiro;
 import amplasystem.api.models.Industria;
 import amplasystem.api.repositories.FinanceiroRepository;
 import jakarta.transaction.Transactional;
-import lombok.extern.log4j.Log4j2;
 
 @Transactional
 @Service
-@Log4j2
 public class FinanceiroService {
 
     @Autowired
@@ -39,17 +37,13 @@ public class FinanceiroService {
     }
 
     public Financeiro create(FinanceiroDTO financeiroDTO) {
-        log.warn("COMECO");
-        log.warn(financeiroDTO.getId());
         financeiroDTO.setId(null);
         Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
-        log.warn(industriaDoFinanceiro);
 
         Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.getComissao(),
                 financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
                 
         industriaDoFinanceiro.setFinanceiro(newFinanceiro);
-        log.warn("Financeiro criado");
         return financeiroRepository.save(newFinanceiro);
     }
 
