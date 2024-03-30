@@ -16,6 +16,9 @@ import { useNotification } from '../../hooks/useNotification';
 import Validade from '../../utils/Validate';
 import { Cargo } from '../../enums/Cargo';
 import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
+import * as ModalStyle from '../../styles/ModalStyles';
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -42,55 +45,59 @@ const RegisterModal = (props: IRegisterModalProps) => {
             cargo: refCargo,
         };
 
-        if (validate.validateEmail(refEmail) && refNome != '' && refCargo != '') {
-            if (props.updateVendedor == undefined) {
-                setLoading(true);
-                apiFetch
-                    .post('/vendedor/admin/save', obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({
-                            message: data.data.message,
-                            type: 'success',
-                            title: data.data.titulo,
+        if (refEmail != '' && refNome != '' && refCargo != '') {
+            if (validate.validateEmail(refEmail)) {
+                if (props.updateVendedor == undefined) {
+                    setLoading(true);
+                    apiFetch
+                        .post('/vendedor/admin/save', obj)
+                        .then((data) => {
+                            props.setReload(true);
+                            showNotification({
+                                message: data.data.message,
+                                type: 'success',
+                                title: data.data.titulo,
+                            });
+                        })
+                        .catch((error) => {
+                            showNotification({
+                                message: error.response.data.message,
+                                type: 'error',
+                                title: error.response.data.titulo,
+                            });
+                        })
+                        .finally(() => {
+                            setLoading(false);
                         });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
+                } else {
+                    setLoading(true);
+                    apiFetch
+                        .put(`/vendedor/admin/update/${obj.id}`, obj)
+                        .then((data) => {
+                            props.setReload(true);
+                            showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                        })
+                        .catch((error) => {
+                            showNotification({
+                                message: error.response.data.message,
+                                type: 'error',
+                                title: error.response.data.titulo,
+                            });
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                            props.setOpenModal(false);
                         });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
+                }
+                setRefCargo('');
+                setRefEmail('');
+                setRefNome('');
             } else {
-                setLoading(true);
-                apiFetch
-                    .put(`/vendedor/admin/update/${obj.id}`, obj)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                        props.setOpenModal(false);
-                    });
+                showNotification({ message: 'informe um email valido', type: 'error', title: 'Email invalido' });
             }
         } else {
             showNotification({ message: 'preencha todos os campos', type: 'error' });
         }
-        setRefCargo('');
-        setRefEmail('');
-        setRefNome('');
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
@@ -100,16 +107,6 @@ const RegisterModal = (props: IRegisterModalProps) => {
         setRefEmail(props.updateVendedor?.email || '');
         setRefNome(props.updateVendedor?.nome || '');
     }, [props.updateVendedor]);
-    const MODAL_STYLE = {
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        padding: '50px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        color: 'black',
-    };
     return (
         <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
             <Dialog
@@ -121,7 +118,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     pointerEvents: loading ? 'none' : 'auto',
                 }}
             >
-                <Box sx={{ ...MODAL_STYLE }}>
+                <Box sx={{ ...ModalStyle.Modal }}>
                     <CircularProgress
                         sx={{
                             visibility: loading ? 'visible' : 'hidden',
@@ -135,13 +132,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         color="inherit"
                         onClick={handleClose}
                         aria-label="close"
-                        sx={{
-                            padding: 0,
-                            height: '10px',
-                            position: 'absolute',
-                            top: 20,
-                            left: 20,
-                        }}
+                        sx={ButtonStyle.closeButton}
                     >
                         <CloseIcon />
                     </IconButton>
@@ -169,12 +160,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         placeholder="Nome"
                         fullWidth
                         value={refNome}
-                        sx={{
-                            marginBottom: '20px',
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Input.input}
                         onChange={(event) => {
                             setRefNome(event.target.value);
                         }}
@@ -194,12 +180,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         placeholder="Email"
                         fullWidth
                         value={refEmail}
-                        sx={{
-                            marginBottom: '20px',
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Input.input}
                         onChange={(event) => {
                             setRefEmail(event.target.value);
                         }}
@@ -235,32 +216,11 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         apenas administradores, podem cadastrar novos vendedores
                     </Typography>
 
-                    <Button
-                        onClick={onSubmit}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#788DAA',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
+                    <Button onClick={onSubmit} variant="contained" sx={ButtonStyle.greenButton}>
                         {props.updateVendedor == undefined ? 'Cadastrar' : 'Atualizar '}
                     </Button>
 
-                    <Button
-                        onClick={ChangeModalState}
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#FFFFFF',
-                            color: 'black',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
+                    <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
                         Cancelar
                     </Button>
                 </Box>

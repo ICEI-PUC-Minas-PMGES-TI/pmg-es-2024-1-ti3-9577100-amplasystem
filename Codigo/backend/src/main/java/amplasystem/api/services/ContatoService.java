@@ -25,12 +25,15 @@ public class ContatoService {
     @Autowired
     private Validator validator;
 
-    public Contato save(Contato contato) throws ParseException {
-        String phoneMask = "(##) #####-####";
+    public Contato save(Contato contato) {
+        try {
+            String phoneMask = "(##) #####-####";
+            MaskFormatter maskFormatter = new MaskFormatter(phoneMask);
+            maskFormatter.setValueContainsLiteralCharacters(false);
+            contato.setTelefone(maskFormatter.valueToString(contato.getTelefone()));
+        } catch (Exception e) {
 
-        MaskFormatter maskFormatter = new MaskFormatter(phoneMask);
-        maskFormatter.setValueContainsLiteralCharacters(false);
-        contato.setTelefone(maskFormatter.valueToString(contato.getTelefone()));
+        }
         Set<ConstraintViolation<Contato>> violations = validator.validate(contato);
         if (!violations.isEmpty()) {
             throw new ValidationException(violations.stream()

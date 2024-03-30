@@ -10,7 +10,8 @@ import { VisibilityOff } from '@mui/icons-material';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
-
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const LoginPage = () => {
     const { login, isAuthenticated } = useAuth();
     const navigate = useNavigate();
@@ -66,11 +67,7 @@ const LoginPage = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Input.input}
                         inputRef={refEmail}
                     />
                     <TextField
@@ -81,11 +78,7 @@ const LoginPage = () => {
                         placeholder="Password"
                         fullWidth
                         margin="normal"
-                        sx={{
-                            borderRadius: '8px',
-                            maxWidth: 720,
-                            height: 65,
-                        }}
+                        sx={Input.input}
                         inputRef={refPassword}
                         InputProps={{
                             endAdornment: (
@@ -112,7 +105,7 @@ const LoginPage = () => {
                     >
                         <Link
                             underline="hover"
-                            component="button"
+                            component="label"
                             variant="body2"
                             sx={{
                                 color: 'black',
@@ -125,17 +118,7 @@ const LoginPage = () => {
                         </Link>
                     </Box>
 
-                    <Button
-                        variant="contained"
-                        type="submit"
-                        sx={{
-                            mt: 2,
-                            maxWidth: 720,
-                            backgroundColor: '#45BCEF',
-                            width: '100%',
-                            height: 55,
-                        }}
-                    >
+                    <Button variant="contained" type="submit" sx={ButtonStyle.greenButton}>
                         Entrar
                     </Button>
                 </S.LoginForm>

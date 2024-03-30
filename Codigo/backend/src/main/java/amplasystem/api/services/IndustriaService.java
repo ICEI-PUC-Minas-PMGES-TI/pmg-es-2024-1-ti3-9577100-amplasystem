@@ -72,12 +72,7 @@ public class IndustriaService {
         Industria industriaSalva = industriaRepository.save(industria);
         industriaSalva.getContatos().forEach(contato -> {
             contato.setIndustria(industriaSalva);
-            try {
-                contatoService.save(contato);
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            contatoService.save(contato);
         });
         return IndustriaMapper.toDTO(industriaSalva);
     }
@@ -91,12 +86,7 @@ public class IndustriaService {
             Industria industriaSalva = industriaRepository.save(industria);
             industria.getContatos().forEach(contato -> {
                 contato.setIndustria(industriaSalva);
-                try {
-                    contatoService.save(contato);
-                } catch (ParseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                contatoService.save(contato);
             });
         } else {
             throw new ObjectNotFoundException("Indústria não encontrada na base de dados");
@@ -162,12 +152,7 @@ public class IndustriaService {
 
                 for (Contato contato : contatos) {
                     contato.setIndustria(newIndustria);
-                    try {
-                        contatoService.save(contato);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    contatoService.save(contato);
                 }
 
                 industrias.add(newIndustria);

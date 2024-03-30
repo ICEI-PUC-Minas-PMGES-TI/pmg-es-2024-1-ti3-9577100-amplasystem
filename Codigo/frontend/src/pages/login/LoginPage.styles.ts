@@ -1,6 +1,6 @@
 // import styled components
 import styled from 'styled-components';
-
+import * as colors from '../../styles/Colors';
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@ export const Container = styled.div`
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(5, 30, 52);
+    background-color: ${colors.asideColor};
 `;
 
 export const Logo = styled.img`
@@ -33,7 +33,7 @@ export const LoginWrapper = styled.div`
     border-radius: 40px 0 0 40px;
     gap: 10px;
     padding: 20px;
-    background-color: white;
+    background-color: ${colors.backgroundColor};
 
     @media (max-width: 1024px) {
         max-width: 60%;
@@ -48,7 +48,7 @@ export const LoginTitle = styled.h1`
     margin-top: 140px;
     margin-bottom: 98px;
     font-size: 2rem;
-    color: #4b4b4b;
+    color: ${colors.textColor};
     font-family: Inter;
     font-weight: bold;
 `;

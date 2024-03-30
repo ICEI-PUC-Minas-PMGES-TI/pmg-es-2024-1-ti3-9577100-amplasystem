@@ -6,10 +6,12 @@ import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCadastro';
-import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
+
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const VendedoresPage = () => {
     const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
     const [data, setData] = useState<VendedorModel[]>([]);
@@ -68,86 +70,103 @@ const VendedoresPage = () => {
         ],
         [],
     );
+    const table = useMaterialReactTable({
+        columns,
+        data,
+        //passing the static object variant if no dynamic logic is needed
+        muiSelectCheckboxProps: {
+            color: 'secondary', //makes all checkboxes use the secondary color
+        },
+        enableRowActions: true,
+        columnResizeMode: 'onChange',
+        positionActionsColumn: 'last',
+        displayColumnDefOptions: {
+            'mrt-row-select': {
+                size: 50, //adjust the size of the row select column
+                grow: false, //new in v2.8 (default is false for this column)
+            },
+            'mrt-row-numbers': {
+                size: 40,
+                grow: true, //new in v2.8 (allow this column to grow to fill in remaining space)
+            },
+        },
+        renderRowActions: ({ row }) => (
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+                <IconButton
+                    sx={{
+                        color: '#097C9C',
+                    }}
+                    onClick={() => window.open(`mailto:${row.original.email}?subject=Ampla System!`)}
+                >
+                    <Email />
+                </IconButton>
+                <IconButton
+                    onClick={() => {
+                        setOpen(true);
+                        setVendedor(JSON.parse(JSON.stringify(row.original)));
+                    }}
+                >
+                    <Edit />
+                </IconButton>
+                <IconButton
+                    color="error"
+                    onClick={() => {
+                        if (row.original.id != null) {
+                            deleteVendedor(row.original.id);
+                        }
+                    }}
+                >
+                    <Delete />
+                </IconButton>
+            </Box>
+        ),
 
+        muiTableContainerProps: {
+            sx: { maxWidth: '100%' },
+        },
+        muiTopToolbarProps: {
+            sx: {
+                fontWeight: 'bold',
+                fontSize: '16px',
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                fontWeight: 'bold',
+                fontSize: '16px',
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                fontWeight: 'bold',
+                fontSize: '16px',
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                fontWeight: 'normal',
+                fontSize: '16px',
+            },
+        },
+    });
     return (
         <Box display={'grid'}>
-            <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
+            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
                 Vendedores
-            </Typography>{' '}
+            </Typography>
             <Box
                 display={'flex'}
                 sx={{
+                    marginBottom: '20px',
                     justifyContent: 'flex-end',
                 }}
             >
-                <IconButton
-                    onClick={ChangeModalState}
-                    sx={{
-                        backgroundColor: '#788DAA',
-                    }}
-                    aria-label="add"
-                >
-                    <AddIcon />
+                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
+                    <AddIcon sx={ButtonStyle.iconButton} />
                 </IconButton>
             </Box>
-            <Box
-                sx={{
-                    marginTop: '20px',
-                }}
-            >
-                <MaterialReactTable
-                    columns={columns}
-                    data={data}
-                    layoutMode="semantic"
-                    enableRowActions
-                    displayColumnDefOptions={{
-                        'mrt-row-actions': {
-                            grow: false,
-                        },
-                    }}
-                    positionActionsColumn="last"
-                    renderRowActions={({ row }) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-                            <IconButton
-                                sx={{
-                                    color: '#097C9C',
-                                }}
-                                onClick={() => window.open(`mailto:${row.original.email}?subject=Ampla System!`)}
-                            >
-                                <Email />
-                            </IconButton>
-                            <IconButton
-                                sx={{
-                                    color: '#01437C',
-                                }}
-                                onClick={() => {
-                                    setVendedor(row.original);
-                                    ChangeModalState();
-                                }}
-                            >
-                                <Edit />
-                            </IconButton>
-                            <IconButton
-                                color="error"
-                                onClick={() => {
-                                    if (row.original.email != user.email) {
-                                        deleteVendedor(row.original.id);
-                                    } else {
-                                        <>
-                                            {showNotification({
-                                                message: 'Nao e possível deletar o vendedor logado',
-                                                type: 'error',
-                                            })}
-                                        </>;
-                                    }
-                                }}
-                            >
-                                <Delete />
-                            </IconButton>
-                        </Box>
-                    )}
-                />
-            </Box>
+
+            <MaterialReactTable table={table} />
             <RegisterModal setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={vendedor} />
         </Box>
     );

@@ -21,7 +21,7 @@ public class Industria {
     @NotBlank(message = "Nome da indústria é obrigatório.")
     private String nome;
 
-    @OneToMany(mappedBy = "industria")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "industria", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Contato> contatos;
 
     @OneToOne(mappedBy = "industria")
