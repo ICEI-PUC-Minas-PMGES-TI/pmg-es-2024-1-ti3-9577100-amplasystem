@@ -2,7 +2,6 @@ import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
-import * as Sx from './ForgotPasswordStyle.ts';
 import * as S from '../login/LoginPage.styles.ts';
 import { Button, IconButton, InputAdornment, TextField } from '@mui/material';
 import { VisibilityOff } from '@mui/icons-material';
@@ -11,7 +10,8 @@ import { VisibilityOff } from '@mui/icons-material';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
-
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const ForgotPasswordGetEmail = () => {
     const { passwordWasReset, changePassword } = useAuth();
     const navigate = useNavigate();
@@ -67,7 +67,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Token"
                         fullWidth
                         margin="normal"
-                        sx={Sx.materialUiTextFild}
+                        sx={Input.input}
                         inputRef={refToken}
                     />
                     <TextField
@@ -78,7 +78,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Senha"
                         fullWidth
                         margin="normal"
-                        sx={Sx.materialUiTextFild}
+                        sx={Input.input}
                         error={senhaError}
                         helperText={senhaHelperText}
                         inputRef={refSenha}
@@ -104,7 +104,7 @@ const ForgotPasswordGetEmail = () => {
                         placeholder="Confirmar Senha"
                         fullWidth
                         margin="normal"
-                        sx={Sx.materialUiTextFild}
+                        sx={Input.input}
                         error={senhaError}
                         helperText={senhaHelperText}
                         inputRef={refConfirmSenha}
@@ -123,7 +123,7 @@ const ForgotPasswordGetEmail = () => {
                         }}
                     />
 
-                    <Button variant="contained" type="submit" sx={Sx.materialUiButton}>
+                    <Button variant="contained" type="submit" sx={ButtonStyle.greenButton}>
                         Mudar senha
                     </Button>
                 </S.LoginForm>

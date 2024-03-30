@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as S from '../login/LoginPage.styles.ts';
-import * as Sx from './ForgotPasswordStyle';
-import { Button, TextField } from '@mui/material';
+import { Backdrop, Button, CircularProgress, TextField } from '@mui/material';
 
 // import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Logo from '../../assets/logo.png';
 import { useNotification } from '../../hooks/useNotification.ts';
 import Validade from '../../utils/Validate';
-
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const ForgotPasswordGetEmail = () => {
     const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ForgotPasswordGetEmail = () => {
     const validate = new Validade();
     const [emailError, setEmailError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState('');
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard');
@@ -51,9 +51,14 @@ const ForgotPasswordGetEmail = () => {
             setEmailHelperText('');
         }
         if (isEmailValid) {
-            sendForgotToken(email).catch(() => {
-                return showNotification({ message: 'Email invalido', type: 'error' });
-            });
+            setLoading(true);
+            sendForgotToken(email)
+                .catch(() => {
+                    return showNotification({ message: 'Email invalido', type: 'error' });
+                })
+                .then(() => {
+                    setLoading(false);
+                });
         }
     };
 
@@ -61,6 +66,15 @@ const ForgotPasswordGetEmail = () => {
         <S.Container>
             <S.Logo src={Logo} alt="logo" />
             <S.LoginWrapper>
+                <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+                    {' '}
+                    <CircularProgress
+                        sx={{
+                            visibility: loading ? 'visible' : 'hidden',
+                        }}
+                    />
+                </Backdrop>
+
                 <S.LoginTitle>Resetar sua senha</S.LoginTitle>
                 <S.LoginForm onSubmit={onSubmit}>
                     <TextField
@@ -72,7 +86,7 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        sx={Sx.materialUiTextFild}
+                        sx={Input.input}
                         inputRef={refEmail}
                     />
                     <TextField
@@ -84,11 +98,11 @@ const ForgotPasswordGetEmail = () => {
                         helperText={emailHelperText}
                         fullWidth
                         margin="normal"
-                        sx={Sx.materialUiTextFild}
+                        sx={Input.input}
                         inputRef={refConfirmEmail}
                     />
 
-                    <Button variant="contained" type="submit" sx={Sx.materialUiButton}>
+                    <Button variant="contained" type="submit" sx={ButtonStyle.greenButton}>
                         Enviar token
                     </Button>
                 </S.LoginForm>

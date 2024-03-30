@@ -4,7 +4,9 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IndustriaModel } from 'models/IndustriaModel';
-import * as Sx from './IndustriasStyle';
+import * as Input from '../../styles/InputStyles';
+import * as ModalStyle from '../../styles/ModalStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 import { TipoContato } from '../../enums/TipoContato';
 import IndustriaContato from './IndustriaContato';
 import { ContatoModel } from 'models/ContatoModels';
@@ -35,7 +37,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
     }
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (industria != undefined) {
-            setIndustria({ ...industria, [e.target.name]: e.target.value });
+            const { name, value } = e.target as HTMLInputElement;
+            setIndustria({ ...industria, [name]: value });
         }
     }
     function handleChangeContato(contato: ContatoModel, index: number) {
@@ -204,7 +207,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     pointerEvents: loading ? 'none' : 'auto',
                 }}
             >
-                <Box sx={{ ...Sx.MODAL_STYLE }}>
+                <Box sx={{ ...ModalStyle.Modal }}>
                     <CircularProgress
                         sx={{
                             visibility: loading ? 'visible' : 'hidden',
@@ -219,13 +222,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             color="inherit"
                             onClick={handleClose}
                             aria-label="close"
-                            sx={{
-                                padding: 0,
-                                height: '10px',
-                                position: 'fixed',
-                                top: 20,
-                                left: 20,
-                            }}
+                            sx={ButtonStyle.closeButton}
                         >
                             <CloseIcon />
                         </IconButton>
@@ -257,7 +254,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
                             },
                             '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: 'rgba(0,0,0,.1)',
+                                backgroundColor: '#00747C',
                                 outline: '1px solid slategrey',
                             },
                         }}
@@ -278,7 +275,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             placeholder="Nome"
                             fullWidth
                             value={industria?.nome}
-                            sx={Sx.input}
+                            sx={Input.input}
                             onChange={handleChange}
                         />
 
@@ -287,31 +284,10 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         })}
                     </Box>
                     <Container>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                mt: 2,
-                                maxWidth: 720,
-                                backgroundColor: '#788DAA',
-                                width: '100%',
-                                height: 55,
-                            }}
-                            onClick={onSubmit}
-                        >
+                        <Button variant="contained" sx={ButtonStyle.greenButton} onClick={onSubmit}>
                             {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
                         </Button>
-                        <Button
-                            onClick={ChangeModalState}
-                            variant="contained"
-                            sx={{
-                                mt: 2,
-                                maxWidth: 720,
-                                backgroundColor: '#FFFFFF',
-                                color: 'black',
-                                width: '100%',
-                                height: 55,
-                            }}
-                        >
+                        <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
                             Cancelar
                         </Button>
                     </Container>
