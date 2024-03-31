@@ -156,7 +156,7 @@ const ClientesPage = () => {
         <div>
             <header className="flex justify-between">
                 <Typography variant="h4">Clientes</Typography>
-                <Button variant="contained" onClick={function () {}} endIcon={<AddIcon />}>
+                <Button variant="contained" onClick={function () {}} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                     Adicionar cliente
                 </Button>
             </header>

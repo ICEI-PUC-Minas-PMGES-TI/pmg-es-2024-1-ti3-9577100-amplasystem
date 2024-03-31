@@ -116,11 +116,11 @@ const LoginPage = () => {
                                 navigate('/forgotPassword/email');
                             }}
                         >
-                            esqueceu sua senha?
+                            Esqueceu sua senha?
                         </Link>
                     </Box>
 
-                    <Button variant="contained" type="submit" sx={ButtonStyle.greenButton}>
+                    <Button type="submit" sx={ButtonStyle.greenButton}>
                         Entrar
                     </Button>
                 </S.LoginForm>

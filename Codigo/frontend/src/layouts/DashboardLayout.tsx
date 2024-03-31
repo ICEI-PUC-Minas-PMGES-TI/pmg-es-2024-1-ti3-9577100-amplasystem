@@ -26,13 +26,13 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     return (
         <Box>
             <Navbar />
-            <Box display={'flex'} sx={{ height: '100vh' }}>
+            {/* > Descobrir */}
+            <Box display={'flex'} sx={{ height: '100vh', background: '#f0f0f0' }}>
                 <Sidebar>
                     {data.map((item) => (
                         <SidebarItem key={item.id} icon={item.icon} text={item.label} location={item.location} />
                     ))}
                 </Sidebar>
-
                 <main style={{ width: '100%', margin: '20px', maxHeight: '100vh', overflow: 'auto' }}>{children}</main>
             </Box>
         </Box>

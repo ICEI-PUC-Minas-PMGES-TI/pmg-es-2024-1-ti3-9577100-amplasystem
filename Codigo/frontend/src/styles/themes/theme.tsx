@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 import { blue, orange, green, red, grey } from '@mui/material/colors';
-import './main.css';
+import '../main.css';
 
 const theme = createTheme({
     palette: {
@@ -27,8 +27,30 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    textTransform: 'none',
-                    borderRadius: 0,
+                    textTransform: 'uppercase',
+                    borderRadius: 2,
+                    padding: '10px 20px',
+                    ':hover': {
+                        backgroundColor: blue[800],
+                    },
+                },
+                iconSizeSmall: {
+                    '& > *:first-child': {
+                        fontSize: 16,
+                        opacity: 0.8,
+                    },
+                },
+                iconSizeMedium: {
+                    '& > *:first-child': {
+                        fontSize: 18,
+                        opacity: 0.8,
+                    },
+                },
+                iconSizeLarge: {
+                    '& > *:first-child': {
+                        fontSize: 20,
+                        opacity: 0.8,
+                    },
                 },
             },
             defaultProps: {
@@ -68,7 +90,7 @@ const theme = createTheme({
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    fontFamily: 'Poppins, sans-serif',
+                    fontFamily: 'Inter, sans-serif',
                 },
             },
         },

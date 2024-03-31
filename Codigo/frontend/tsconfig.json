@@ -20,11 +20,7 @@
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
         "typeRoots": ["./node_modules/@types"],
-
-        "baseUrl": "src",
-        "paths": {
-            "@/*": ["*"]
-        }
+        "baseUrl": "src"
     },
     "include": ["src"],
     "references": [{ "path": "./tsconfig.node.json" }]

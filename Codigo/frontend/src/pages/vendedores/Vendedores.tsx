@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
-import { IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCadastro';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
@@ -150,25 +150,24 @@ const VendedoresPage = () => {
         },
     });
     return (
-        <Box display={'grid'}>
-            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
-                Vendedores
-            </Typography>
-            <Box
-                display={'flex'}
-                sx={{
-                    marginBottom: '20px',
-                    justifyContent: 'flex-end',
-                }}
-            >
-                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
-                    <AddIcon sx={ButtonStyle.iconButton} />
-                </IconButton>
-            </Box>
+        <>
+            <header className="flex justify-between">
+                <Typography variant="h4">Vendedores</Typography>
+                <Button variant="contained" onClick={ChangeModalState} endIcon={<AddIcon />}>
+                    Adicionar cliente
+                </Button>
+            </header>
 
-            <MaterialReactTable table={table} />
-            <RegisterModal setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={vendedor} />
-        </Box>
+            <Box display={'grid'} className="my-5">
+                <MaterialReactTable table={table} />
+                <RegisterModal
+                    setOpenModal={setOpen}
+                    openModal={open}
+                    setReload={setReload}
+                    updateVendedor={vendedor}
+                />
+            </Box>
+        </>
     );
 };
 

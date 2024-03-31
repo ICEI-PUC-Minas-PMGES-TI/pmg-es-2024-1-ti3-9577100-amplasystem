@@ -23,7 +23,6 @@ export const optionMenu = {
 export const greenButton = {
     mt: 2,
     maxWidth: 720,
-    backgroundColor: colors.buttonColor,
     width: '100%',
     height: 55,
     ':hover': {
