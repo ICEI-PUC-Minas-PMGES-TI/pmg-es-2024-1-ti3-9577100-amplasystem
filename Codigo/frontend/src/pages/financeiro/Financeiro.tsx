@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete'; 
-import { Delete } from '@mui/icons-material'; 
-import apiFetch from '../../services/api';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Delete } from '@mui/icons-material';
+import apiFetch from '@/services/api';
 import { FinanceiroModel } from 'models/FinanceiroModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Edit } from '@mui/icons-material';
-import { useAuth } from '../../hooks/useAuth';
-import { useNotification } from '../../hooks/useNotification';
-import ModalFinanceiro from './ModalFinanceiro'; 
+import { useAuth } from '@/hooks/useAuth';
+import { useNotification } from '@/hooks/useNotification';
+import ModalFinanceiro from './ModalFinanceiro';
 
 const FinanceiroPage = () => {
     const [data, setData] = useState<FinanceiroModel[]>([]);
@@ -37,7 +37,7 @@ const FinanceiroPage = () => {
                 console.log(error);
             });
     };
-    
+
     const deleteFinanceiro = (id: number) => {
         apiFetch
             .delete(`/financeiro/${id}`)
@@ -77,7 +77,7 @@ const FinanceiroPage = () => {
             {
                 accessorKey: 'id',
                 header: 'Ações',
-                renderCell: ({ value }: { value: number }) => ( 
+                renderCell: ({ value }: { value: number }) => (
                     <IconButton
                         sx={{
                             color: '#01437C',
@@ -103,12 +103,12 @@ const FinanceiroPage = () => {
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
-                size: 50, 
-                grow: false, 
+                size: 50,
+                grow: false,
             },
             'mrt-row-numbers': {
                 size: 40,
-                grow: true, 
+                grow: true,
             },
         },
         renderRowActions: ({ row }) => (

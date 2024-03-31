@@ -1,7 +1,7 @@
 // import { Dashboard } from '@mui/icons-material';
 
 import { Typography } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth.ts';
+import { useAuth } from '@/hooks/useAuth.ts';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
