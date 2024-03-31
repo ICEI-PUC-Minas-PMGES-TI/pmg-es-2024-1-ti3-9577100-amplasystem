@@ -7,6 +7,7 @@ import FinanceiroPage from '../pages/financeiro/Financeiro.tsx';
 const IndustriaPage = React.lazy(() => import('../pages/industrias/Industria.tsx'));
 const DashboardPage = React.lazy(() => import('../pages/dashboard/Dashboard'));
 const VendedoresPage = React.lazy(() => import('../pages/vendedores/Vendedores'));
+const ClientesPage = React.lazy(() => import('../pages/clientes/Clientes'));
 const LoginPage = React.lazy(() => import('../pages/login/LoginPage'));
 const ForgotPasswordGetEmail = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetEmail'));
 const ForgotPasswordGetNewPassword = React.lazy(() => import('../pages/forgotPassword/ForgotPasswordGetNewPassword'));
@@ -39,6 +40,14 @@ const RouterRoutes = () => {
                             element={
                                 <DashboardLayout>
                                     <IndustriaPage />
+                                </DashboardLayout>
+                            }
+                        />
+                        <Route
+                            path="/clientes"
+                            element={
+                                <DashboardLayout>
+                                    <ClientesPage />
                                 </DashboardLayout>
                             }
                         />
