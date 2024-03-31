@@ -19,8 +19,8 @@ import { TipoContato } from '@/enums/TipoContato';
 
 import RegisterModal from './ModalCadastro';
 
-import * as Input from '@/styles/InputStyles';
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);

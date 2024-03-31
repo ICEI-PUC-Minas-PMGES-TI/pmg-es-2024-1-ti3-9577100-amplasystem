@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/AuthContext.tsx';
 import { NotificationProvider } from '@/context/NotificationContext.tsx';
 import RouterRoutes from '@/routes/Routes.tsx';
 import theme from '@/styles/themes/theme.tsx';
+import '@/styles/global.css';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(

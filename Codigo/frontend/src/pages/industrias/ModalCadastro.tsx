@@ -11,9 +11,9 @@ import { IndustriaModel } from '@/models/IndustriaModel';
 import { ContatoModel } from '@/models/ContatoModels';
 import IndustriaContato from '@/pages/industrias/IndustriaContato';
 import apiFetch from '@/services/api';
-import * as Input from '@/styles/InputStyles';
-import * as ModalStyle from '@/styles/ModalStyles';
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import * as ModalStyle from '@/styles/types/ModalStyles';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 import Validade from '@/utils/Validate';
 
 interface IRegisterModalProps {

@@ -11,7 +11,7 @@ import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 const VendedoresPage = () => {
     const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
     const [data, setData] = useState<VendedorModel[]>([]);

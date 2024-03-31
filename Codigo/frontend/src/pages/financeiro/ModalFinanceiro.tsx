@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-
 import {
     Modal,
     Box,
@@ -14,8 +13,7 @@ import {
     InputLabel,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
-import { FinanceiroModel } from '@/models/FinanceiroModel';
+import { FinanceiroModel } from 'models/FinanceiroModel';
 
 interface FinanceiroModalProps {
     open: boolean;

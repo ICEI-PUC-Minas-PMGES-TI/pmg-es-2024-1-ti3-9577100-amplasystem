@@ -10,7 +10,7 @@ import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Edit } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
-import ModalFinanceiro from './ModalFinanceiro';
+import ModalCorrigido from '@/pages/financeiro/ModalCorrigido';
 
 const FinanceiroPage = () => {
     const [data, setData] = useState<FinanceiroModel[]>([]);
@@ -168,7 +168,7 @@ const FinanceiroPage = () => {
             <header className="flex justify-between">
                 <Typography variant="h4">Financeiro</Typography>
                 <Button onClick={ChangeModalState} endIcon={<AddIcon />}>
-                    Adicionar informações
+                    Adicionar dados
                 </Button>
             </header>
             <Box
@@ -179,12 +179,7 @@ const FinanceiroPage = () => {
             >
                 {table} {/* Render the MaterialReactTable component */}
             </Box>
-            {/* <ModalFinanceiro
-                setOpenModal={setOpen}
-                openModal={open}
-                setReload={setReload}
-                // updateVendedor={() => {}} // This seems unnecessary here
-            /> */}
+            <ModalCorrigido open={open} handleClose={() => setOpen(false)} handleClickOpen={() => setOpen(true)} />
         </div>
     );
 };

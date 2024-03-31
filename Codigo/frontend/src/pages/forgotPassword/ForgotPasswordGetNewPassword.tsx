@@ -11,8 +11,8 @@ import * as S from '@/pages/login/LoginPage.styles.ts';
 import Logo from '@/assets/logo.png';
 import { useNotification } from '@/hooks/useNotification.ts';
 import Validade from '@/utils/Validate';
-import * as Input from '@/styles/InputStyles';
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 
 const ForgotPasswordGetEmail = () => {
     const { passwordWasReset, changePassword } = useAuth();

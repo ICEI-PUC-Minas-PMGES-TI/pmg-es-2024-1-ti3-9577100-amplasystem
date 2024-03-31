@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { ContatoModel } from 'models/ContatoModels';
 import { IMaskInput } from 'react-imask';
 import Validade from '@/utils/Validate';
-import * as Input from '@/styles/InputStyles';
+import * as Input from '@/styles/types/InputStyles';
 
 interface IRegisterModalProps {
     contatoModel: ContatoModel;

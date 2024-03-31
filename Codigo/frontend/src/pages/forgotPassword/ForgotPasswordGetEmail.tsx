@@ -7,8 +7,8 @@ import Logo from '@/assets/logo.png';
 import { useAuth } from '@/hooks/useAuth.ts';
 import { useNotification } from '@/hooks/useNotification.ts';
 import * as S from '@/pages/login/LoginPage.styles.ts';
-import * as ButtonStyle from '@/styles/ButtonsStyles';
-import * as Input from '@/styles/InputStyles';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
 import Validade from '@/utils/Validate';
 
 const ForgotPasswordGetEmail = () => {
