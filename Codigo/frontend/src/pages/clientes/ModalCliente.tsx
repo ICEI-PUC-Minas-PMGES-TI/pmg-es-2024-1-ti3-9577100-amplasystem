@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
+
 import { Box } from '@mui/system';
 import {
     Autocomplete,
@@ -9,16 +11,16 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import apiFetch from '../../services/api';
 import CloseIcon from '@mui/icons-material/Close';
-import { ClienteModel } from 'models/ClienteModel';
-import { useNotification } from '../../hooks/useNotification';
-import Validade from '../../utils/Validate';
-import { Cargo } from '../../enums/Cargo';
-import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
-import * as ModalStyle from '../../styles/ModalStyles';
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+
+import { Cargo } from '@/enums/Cargo';
+import { useNotification } from '@/hooks/useNotification';
+import { ClienteModel } from '@/models/ClienteModel';
+import apiFetch from '@/services/api';
+import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as Input from '@/styles/InputStyles';
+import * as ModalStyle from '@/styles/ModalStyles';
+import Validade from '@/utils/Validate';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;

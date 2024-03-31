@@ -49,8 +49,8 @@ const LoginPage = () => {
 
         if (!isEmailValid) return;
 
-        login(email, password).catch(() => {
-            return showNotification({ message: 'Email e/ou senha inválidos', type: 'error' });
+        login(email, password).catch((err) => {
+            return showNotification({ message: err.message, type: 'error' });
         });
     };
 

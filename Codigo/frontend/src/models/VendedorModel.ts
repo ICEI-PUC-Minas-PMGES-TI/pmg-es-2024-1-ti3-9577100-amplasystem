@@ -1,4 +1,4 @@
-import { Cargo } from '../enums/Cargo.ts';
+import { Cargo } from '@/enums/Cargo.ts';
 
 export interface VendedorModel {
     id: number;

@@ -1,4 +1,4 @@
-import { TipoContato } from '../enums/TipoContato';
+import { TipoContato } from '@/enums/TipoContato';
 
 export interface ContatoModel {
     id: number | null;

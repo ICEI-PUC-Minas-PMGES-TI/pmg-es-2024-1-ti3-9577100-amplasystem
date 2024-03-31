@@ -21,9 +21,10 @@ import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 import { useNavigate } from 'react-router-dom';
 import { PaletteMode } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
+import logo from '@/assets/favicon.png';
+
 const currentMode: PaletteMode = 'dark';
 const primaryColor = 'rgb(102, 157, 246)';
-import logo from '../assets/favicon.png';
 // const secondaryColor = 'rgb(71, 98, 130)';
 const backgroundColor = '#01437C';
 

@@ -1,15 +1,28 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, TextField, Button, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+
+import {
+    Modal,
+    Box,
+    Typography,
+    TextField,
+    Button,
+    CircularProgress,
+    MenuItem,
+    Select,
+    FormControl,
+    InputLabel,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { FinanceiroModel } from 'models/FinanceiroModel'; 
+
+import { FinanceiroModel } from '@/models/FinanceiroModel';
 
 interface FinanceiroModalProps {
     open: boolean;
     onClose: () => void;
     onSave: (data: FinanceiroModel) => void;
     financeiro?: FinanceiroModel;
-    industrias: string[]; 
+    industrias: string[];
 }
 
 const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave, financeiro, industrias }) => {
@@ -17,7 +30,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
     const [faturamento, setFaturamento] = useState<string>('');
     const [tipoFiscal, setTipoFiscal] = useState<string>('');
     const [industria, setIndustria] = useState<string>('');
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (financeiro) {
@@ -35,10 +48,10 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
 
     const handleSave = async () => {
         if (!comissao || !faturamento || !tipoFiscal || !industria) {
-            alert("Por favor, preencha todos os campos obrigatórios.");
+            alert('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
-    
+
         setLoading(true);
         try {
             const newFinanceiro: FinanceiroModel = {
@@ -51,13 +64,12 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
             await onSave(newFinanceiro);
         } catch (error) {
             console.error('Erro ao salvar:', error);
-            
         } finally {
             setLoading(false);
         }
     };
-    
-    if (!open) return null; 
+
+    if (!open) return null;
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -93,10 +105,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                 />
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Tipo Fiscal</InputLabel>
-                    <Select
-                        value={tipoFiscal}
-                        onChange={(e) => setTipoFiscal(e.target.value as string)}
-                    >
+                    <Select value={tipoFiscal} onChange={(e) => setTipoFiscal(e.target.value as string)}>
                         <MenuItem value="representação">Representação</MenuItem>
                         <MenuItem value="promoção de vendas">Promoção de Vendas</MenuItem>
                     </Select>
@@ -104,10 +113,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                 {industrias && (
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Indústria</InputLabel>
-                        <Select
-                            value={industria}
-                            onChange={(e) => setIndustria(e.target.value as string)}
-                        >
+                        <Select value={industria} onChange={(e) => setIndustria(e.target.value as string)}>
                             {industrias.map((industria) => (
                                 <MenuItem key={industria} value={industria}>
                                     {industria}

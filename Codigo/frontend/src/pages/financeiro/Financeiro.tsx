@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Delete } from '@mui/icons-material';
 import apiFetch from '@/services/api';
-import { FinanceiroModel } from 'models/FinanceiroModel';
+import { FinanceiroModel } from '@/models/FinanceiroModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';

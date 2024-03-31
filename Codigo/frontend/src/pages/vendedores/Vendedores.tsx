@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import apiFetch from '../../services/api';
+import apiFetch from '@/services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCadastro';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
-import { useAuth } from '../../hooks/useAuth';
-import { useNotification } from '../../hooks/useNotification';
+import { useAuth } from '@/hooks/useAuth';
+import { useNotification } from '@/hooks/useNotification';
 
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+import * as ButtonStyle from '@/styles/ButtonsStyles';
 const VendedoresPage = () => {
     const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
     const [data, setData] = useState<VendedorModel[]>([]);
