@@ -1,19 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import apiFetch from '../../services/api';
-import { ClienteModel } from 'models/ClienteModel';
+import apiFetch from '@/services/api';
+import { ClienteModel } from '@/models/ClienteModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCliente';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
-import { useAuth } from '../../hooks/useAuth';
-import { useNotification } from '../../hooks/useNotification';
-
-import * as ButtonStyle from '../../styles/ButtonsStyles';
-
-import Navbar from '../../components/Navbar';
+import { useAuth } from '@/hooks/useAuth';
+import { useNotification } from '@/hooks/useNotification';
 
 const ClientesPage = () => {
     const [cliente, setCliente] = useState<ClienteModel | undefined>(undefined);

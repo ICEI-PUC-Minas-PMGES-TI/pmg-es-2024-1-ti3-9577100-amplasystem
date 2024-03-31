@@ -11,16 +11,16 @@ import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'materi
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
-import { useNotification } from '../../hooks/useNotification';
-import apiFetch from '../../services/api';
+import { useNotification } from '@/hooks/useNotification';
+import apiFetch from '@/services/api';
 
 import { IndustriaModel } from 'models/IndustriaModel';
-import { TipoContato } from '../../enums/TipoContato';
+import { TipoContato } from '@/enums/TipoContato';
 
 import RegisterModal from './ModalCadastro';
 
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+import * as Input from '@/styles/InputStyles';
+import * as ButtonStyle from '@/styles/ButtonsStyles';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);

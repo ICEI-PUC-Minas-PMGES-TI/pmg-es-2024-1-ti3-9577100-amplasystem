@@ -1,16 +1,16 @@
-import { useAuth } from '../../hooks/useAuth.ts';
+import { useAuth } from '@/hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import * as S from '../login/LoginPage.styles.ts';
 import { Backdrop, Button, CircularProgress, TextField } from '@mui/material';
 
-// import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotification.ts';
-import Validade from '../../utils/Validate';
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+// import { ReactComponent as Logo } from '@/assets/logo.svg';
+import Logo from '@/assets/logo.png';
+import { useNotification } from '@/hooks/useNotification.ts';
+import Validade from '@/utils/Validate';
+import * as Input from '@/styles/InputStyles';
+import * as ButtonStyle from '@/styles/ButtonsStyles';
 const ForgotPasswordGetEmail = () => {
     const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
     const navigate = useNavigate();

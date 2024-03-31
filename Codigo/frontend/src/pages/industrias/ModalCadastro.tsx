@@ -1,19 +1,21 @@
+import { JSX } from 'react/jsx-runtime';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+
+import CloseIcon from '@mui/icons-material/Close';
 import { Container } from '@mui/system';
 import { Box, Button, CircularProgress, Dialog, IconButton, Modal, TextField, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { IndustriaModel } from 'models/IndustriaModel';
-import * as Input from '../../styles/InputStyles';
-import * as ModalStyle from '../../styles/ModalStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
-import { TipoContato } from '../../enums/TipoContato';
-import IndustriaContato from './IndustriaContato';
-import { ContatoModel } from 'models/ContatoModels';
-import { JSX } from 'react/jsx-runtime';
-import { useNotification } from '../../hooks/useNotification';
-import apiFetch from '../../services/api';
-import Validade from '../../utils/Validate';
+import { TipoContato } from '@/enums/TipoContato';
+import { useNotification } from '@/hooks/useNotification';
+import { IndustriaModel } from '@/models/IndustriaModel';
+import { ContatoModel } from '@/models/ContatoModels';
+import IndustriaContato from '@/pages/industrias/IndustriaContato';
+import apiFetch from '@/services/api';
+import * as Input from '@/styles/InputStyles';
+import * as ModalStyle from '@/styles/ModalStyles';
+import * as ButtonStyle from '@/styles/ButtonsStyles';
+import Validade from '@/utils/Validate';
+
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
