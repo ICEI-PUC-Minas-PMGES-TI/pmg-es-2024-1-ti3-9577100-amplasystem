@@ -25,7 +25,7 @@ const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
-    const [file, setFile] = useState<File | null>();
+    const [file, setFile] = useState<File | null>(null);
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
 
     const { showNotification } = useNotification();
@@ -307,7 +307,8 @@ const IndustriaPage = () => {
                                 <Input.VisuallyHiddenInput
                                     type="file"
                                     onChange={(event) => {
-                                        setFile(event?.target?.files[0]);
+                                        // setFile(event.target.files[0]);
+                                        console.log(event);
                                         sendIndustriasFile();
                                     }}
                                 />
