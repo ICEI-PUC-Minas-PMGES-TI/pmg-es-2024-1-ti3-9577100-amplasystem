@@ -1,12 +1,11 @@
 /* eslint-disable */
-
 import { useEffect, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { FinanceiroModel } from 'models/FinanceiroModel';
 import { Box, IconButton, Typography } from '@mui/material';
 import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';
-import { Delete, Edit, Email } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
 import ModalFinanceiro from './ModalFinanceiro';
@@ -112,7 +111,7 @@ const FinanceiroPage = () => {
                     )}
                 />
             </Box>
-            <ModalCadastroFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={() => {}} /> {/* Pass a function */}
+            <ModalFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={() => {}} /> {/* Pass a function */}
         </Box>
     );
 };
