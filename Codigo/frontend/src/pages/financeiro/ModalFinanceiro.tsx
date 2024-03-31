@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, TextField, Button, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { FinanceiroModel } from 'models/FinanceiroModel'; // Assuming you have a FinanceiroModel defined
+import { FinanceiroModel } from 'models/FinanceiroModel'; 
 
 interface FinanceiroModalProps {
     open: boolean;
@@ -33,17 +33,31 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
         }
     }, [financeiro]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (!comissao || !faturamento || !tipoFiscal || !industria) {
+            alert("Por favor, preencha todos os campos obrigatórios.");
+            return;
+        }
+    
         setLoading(true);
-        const newFinanceiro: FinanceiroModel = {
-            id: financeiro ? financeiro.id : 0,
-            comissao: parseFloat(comissao),
-            faturamento,
-            tipoFiscal,
-            industria,
-        };
-        onSave(newFinanceiro).finally(() => setLoading(false));
+        try {
+            const newFinanceiro: FinanceiroModel = {
+                id: financeiro ? financeiro.id : 0,
+                comissao: parseFloat(comissao),
+                faturamento,
+                tipoFiscal,
+                industria,
+            };
+            await onSave(newFinanceiro);
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            
+        } finally {
+            setLoading(false);
+        }
     };
+    
+    if (!open) return null; 
 
     return (
         <Modal open={open} onClose={onClose}>
