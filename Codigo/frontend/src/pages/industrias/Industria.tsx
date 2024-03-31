@@ -18,6 +18,7 @@ import { IndustriaModel } from 'models/IndustriaModel';
 import { TipoContato } from '@/enums/TipoContato';
 
 import RegisterModal from './ModalCadastro';
+import AddIcon from '@mui/icons-material/Add';
 
 import * as Input from '@/styles/InputStyles';
 import * as ButtonStyle from '@/styles/ButtonsStyles';
@@ -251,20 +252,10 @@ const IndustriaPage = () => {
     });
 
     return (
-        <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
-            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
-                Industrias
-            </Typography>
-            <Box
-                display={'flex'}
-                sx={{
-                    justifyContent: 'space-between',
-                    marginBottom: '20px',
-                }}
-            >
-                <Box>
-                    {' '}
-                    <Button
+        <>
+         <header className="flex justify-between">
+                <Typography variant="h4">Industrias</Typography>
+                       <Button
                         aria-controls={openMenuOption ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={openMenuOption ? 'true' : undefined}
@@ -272,8 +263,7 @@ const IndustriaPage = () => {
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
-                        sx={ButtonStyle.optionMenu}
-                        startIcon={<ArrowDropDownIcon />}
+                        endIcon={<ArrowDropDownIcon />}
                     >
                         Opções
                     </Button>
@@ -284,12 +274,17 @@ const IndustriaPage = () => {
                         onClose={handleClose}
                         sx={{
                             margin: '5px',
-                            padding: 0,
                             '& .css-6hp17o-MuiList-root-MuiMenu-list': {
                                 padding: 0,
                             },
                         }}
-                    >
+                >
+                     <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
+                                <Button variant="contained" onClick={ChangeModalState}fullWidth endIcon={<AddIcon />}>
+                                    Adicionar Industria
+                                </Button>
+                                
+                        </MenuItem> 
                         <MenuItem
                             onClick={handleClose}
                             sx={{
@@ -299,9 +294,9 @@ const IndustriaPage = () => {
                         >
                             <Button
                                 component="label"
-                                variant="contained"
-                                sx={ButtonStyle.menuButton}
-                                startIcon={<CloudUploadIcon />}
+                            variant="contained"
+                            fullWidth
+                                endIcon={<CloudUploadIcon />}
                             >
                                 Cadastro automático
                                 <Input.VisuallyHiddenInput
@@ -314,25 +309,23 @@ const IndustriaPage = () => {
                                 />
                             </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
+                        <MenuItem onClick={handleClose} sx={{ background: 0, padding: 0 }}>
                             <Link to="../../files/modelo.xlsx" target="_blank" download>
                                 {' '}
-                                <Button
+                            <Button
+                                fullWidth
                                     component="label"
                                     variant="contained"
-                                    sx={ButtonStyle.menuButton}
-                                    startIcon={<FileDownloadIcon />}
+                                    endIcon={<FileDownloadIcon />}
                                 >
                                     Baixar a tabela modelo
                                 </Button>
                             </Link>
-                        </MenuItem>
+                            </MenuItem>
+            
                     </Menu>
-                </Box>
-                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
-                    <AddOutlinedIcon sx={ButtonStyle.iconButton} />
-                </IconButton>
-            </Box>
+            </header>
+<Box display={'grid'} sx={{ maxHeight: '100vh' }} className="my-5">
 
             <MaterialReactTable table={table} />
             {open ? (
@@ -346,6 +339,8 @@ const IndustriaPage = () => {
                 ''
             )}
         </Box>
+        </>
+        
     );
 };
 export default IndustriaPage;
