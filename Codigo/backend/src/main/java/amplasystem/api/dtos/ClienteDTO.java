@@ -21,5 +21,4 @@ public class ClienteDTO {
     private Vendedor vendedor;
     private List<OrdemDeCompra> ordemDeCompras;
     private Endereco endereco;
-
 }

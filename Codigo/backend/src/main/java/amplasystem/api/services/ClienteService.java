@@ -1,16 +1,12 @@
 package amplasystem.api.services;
 
 import amplasystem.api.dtos.ClienteDTO;
-import amplasystem.api.dtos.VendedorDTO;
 import amplasystem.api.mappers.ClienteMapper;
-import amplasystem.api.mappers.VendedorMapper;
 import amplasystem.api.models.Cliente;
-import amplasystem.api.models.Vendedor;
+import amplasystem.api.repositories.ClienteRepository;
 import amplasystem.api.services.exceptions.ObjectNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import amplasystem.api.repositories.ClienteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,39 +17,30 @@ import java.util.stream.Collectors;
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
-    public ClienteDTO updateCliente(Integer id, ClienteDTO clienteDTO) {
-        return null;
+
+    public ClienteDTO update(Cliente cliente) {
+        if (clienteRepository.existsById(cliente.getId()))
+            return ClienteMapper.toDTO(clienteRepository.save(cliente));
+        else
+            throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
+
     }
 
-    public void deleteCliente(Integer id) {
-
-    }
-
-    private Cliente getById(Integer id) throws ObjectNotFoundException {
-        return clienteRepository.findById(id).get();
-    }
-    public ClienteDTO deleteClienteById(Integer id) throws EntityNotFoundException {
-        Cliente cliente = this.getById(id);
-        this.clienteRepository.delete(cliente);
-
+    public ClienteDTO getById(Integer id) throws ObjectNotFoundException {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
         return ClienteMapper.toDTO(cliente);
     }
 
-    public ClienteDTO getClienteById(Integer id) throws ObjectNotFoundException {
-        Cliente cliente = clienteRepository.findById(id).get();
-        return ClienteMapper.toDTO(cliente);
+    public ClienteDTO save(Cliente cliente) {
+        return ClienteMapper.toDTO(clienteRepository.save(cliente));
     }
 
-    public ClienteDTO createCliente(ClienteDTO clienteDTO) {
-        return null;
+    public void delete(Integer id) {
+        clienteRepository.deleteById(id);
     }
 
     public List<ClienteDTO> getAllClientes() {
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
     }
 
-    public void update(Cliente cliente) {
-        Cliente clienteInBase = getById(cliente.getId());
-        clienteRepository.save(cliente);
-    }
 }

@@ -1,4 +1,4 @@
-package amplasystem.api.controllers;
+package amplasystem.api.controller;
 
 import amplasystem.api.dtos.ClienteDTO;
 import amplasystem.api.models.Cliente;
@@ -29,25 +29,25 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Integer id) {
-        ClienteDTO cliente = clienteService.getClienteById(id);
+        ClienteDTO cliente = clienteService.getById(id);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> createCliente(@RequestBody ClienteDTO clienteDTO) {
-        ClienteDTO createdCliente = clienteService.createCliente(clienteDTO);
+    public ResponseEntity<ClienteDTO> createCliente(@RequestBody Cliente cliente) {
+        ClienteDTO createdCliente = clienteService.save(cliente);
         return new ResponseEntity<>(createdCliente, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> updateCliente(@PathVariable Integer id, @RequestBody ClienteDTO clienteDTO) {
-        ClienteDTO updatedCliente = clienteService.updateCliente(id, clienteDTO);
+    public ResponseEntity<ClienteDTO> updateCliente( @RequestBody Cliente cliente) {
+        ClienteDTO updatedCliente = clienteService.update(cliente);
         return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable Integer id) {
-        clienteService.deleteCliente(id);
+        clienteService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
