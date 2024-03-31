@@ -1,4 +1,4 @@
-package amplasystem.api.dtos;
+package amplasystem.api.dtos.cliente;
 
 import amplasystem.api.models.Endereco;
 import amplasystem.api.models.OrdemDeCompra;

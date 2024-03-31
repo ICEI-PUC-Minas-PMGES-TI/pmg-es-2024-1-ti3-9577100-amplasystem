@@ -1,6 +1,6 @@
 package amplasystem.api.controller;
 
-import amplasystem.api.dtos.ClienteDTO;
+import amplasystem.api.dtos.cliente.ClienteDTO;
 import amplasystem.api.models.Cliente;
 import amplasystem.api.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("Cliente")
+@RestController()
 @RequestMapping("/cliente")
 public class ClienteController {
 
@@ -40,7 +40,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> updateCliente( @RequestBody Cliente cliente) {
+    public ResponseEntity<ClienteDTO> updateCliente(@RequestBody Cliente cliente) {
         ClienteDTO updatedCliente = clienteService.update(cliente);
         return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
     }

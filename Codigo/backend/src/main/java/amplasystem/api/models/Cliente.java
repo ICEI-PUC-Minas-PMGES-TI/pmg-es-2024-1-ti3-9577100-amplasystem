@@ -2,15 +2,7 @@ package amplasystem.api.models;
 
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,19 +25,24 @@ public class Cliente {
     @NotBlank(message = "CNPJ do vendedor obrigatorio")
     private String cnpj;
 
-
     @ManyToOne
     @JoinColumn(name = "vendedor_id")
     private Vendedor vendedor;
 
     @OneToMany(mappedBy = "cliente")
     private List<OrdemDeCompra> ordemDeCompras;
-    @Column(name = "telefone", nullable = true, columnDefinition = "CHAR(15)")
-    @NotBlank(message = "telefone de telefone é obrigatório.")
-    private String telefone; 
 
-    @OneToOne
+    @Column(name = "telefone", nullable = true, columnDefinition = "CHAR(15)")
+    private String telefone;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
     @JoinColumn(name = "endereco")
     private Endereco endereco;
-    
+
+    public Cliente(Integer id, String nomeFantasia, String cnpj, Endereco endereco) {
+        this.id = id;
+        this.nomeFantasia = nomeFantasia;
+        this.cnpj = cnpj;
+        this.endereco = endereco;
+    }
 }

@@ -8,4 +8,6 @@ import amplasystem.api.models.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
+    boolean existsByCnpj(String cnpj);
+
 }

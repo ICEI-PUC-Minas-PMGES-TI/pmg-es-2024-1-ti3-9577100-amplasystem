@@ -1,6 +1,7 @@
 package amplasystem.api.services;
 
-import amplasystem.api.dtos.ClienteDTO;
+import amplasystem.api.dtos.cliente.ClienteDTO;
+import amplasystem.api.exceptions.EntityAlreadyExistsException;
 import amplasystem.api.mappers.ClienteMapper;
 import amplasystem.api.models.Cliente;
 import amplasystem.api.repositories.ClienteRepository;
@@ -23,7 +24,6 @@ public class ClienteService {
             return ClienteMapper.toDTO(clienteRepository.save(cliente));
         else
             throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
-
     }
 
     public ClienteDTO getById(Integer id) throws ObjectNotFoundException {
@@ -31,7 +31,10 @@ public class ClienteService {
         return ClienteMapper.toDTO(cliente);
     }
 
-    public ClienteDTO save(Cliente cliente) {
+    public ClienteDTO save(Cliente cliente) throws ObjectNotFoundException {
+        if (clienteRepository.existsByCnpj(cliente.getCnpj()))
+            throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
+
         return ClienteMapper.toDTO(clienteRepository.save(cliente));
     }
 

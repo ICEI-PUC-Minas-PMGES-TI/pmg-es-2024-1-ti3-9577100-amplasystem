@@ -1,6 +1,6 @@
 package amplasystem.api.mappers;
 
-import amplasystem.api.dtos.ClienteDTO;
+import amplasystem.api.dtos.cliente.ClienteDTO;
 import amplasystem.api.models.Cliente;
 
 
