@@ -21,6 +21,9 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
 
+### Diagrama de caso de uso
+[Primeira verção](UserCaseDiagram/userCaseDiagram_AmplaSystem.pdf) do diagrama de caso de uso
+
 #### Spring 1
 
 *  [Esqueci Minha Senha ](userInterface/sprint1/Interface%20de%20usuário%20de%20esqueci%20minha%20senha.pdf "") 
