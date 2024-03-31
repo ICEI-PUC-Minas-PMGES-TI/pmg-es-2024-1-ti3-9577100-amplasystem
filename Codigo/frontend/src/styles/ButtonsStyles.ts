@@ -52,7 +52,7 @@ export const closeButton = {
     height: '10px',
     position: 'fixed',
     top: 20,
-    left: 20,
+    right: 20,
 };
 export const addButton = {
     height: '45px',
