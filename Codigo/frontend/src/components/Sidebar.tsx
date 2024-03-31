@@ -26,7 +26,7 @@ const SidebarContext = createContext<SidebarContextType>({
 });
 
 export default function Sidebar({ children }: SidebarProps): JSX.Element {
-    const [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(false);
     const { user, isAuthenticated, logout } = useAuth();
 
     return (
