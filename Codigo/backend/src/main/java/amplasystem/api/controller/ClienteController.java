@@ -21,7 +21,7 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<ClienteDTO>> getAllClientes() {
         List<ClienteDTO> clientes = clienteService.getAllClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
@@ -33,7 +33,7 @@ public class ClienteController {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<ClienteDTO> createCliente(@RequestBody Cliente cliente) {
         ClienteDTO createdCliente = clienteService.save(cliente);
         return new ResponseEntity<>(createdCliente, HttpStatus.CREATED);
