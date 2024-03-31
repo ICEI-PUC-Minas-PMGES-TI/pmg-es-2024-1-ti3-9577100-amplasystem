@@ -14,7 +14,7 @@ export default function ButtonAppBar(): JSX.Element {
     // const title = location.pathname.split('/')[1];
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color="primary">
+            <AppBar position="static" color="secondary">
                 <Toolbar>
                     <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
                         <MenuIcon />
@@ -23,7 +23,7 @@ export default function ButtonAppBar(): JSX.Element {
                         <span className="font-base font-sans">Ampla</span>
                         <span className="font-light font-sans tracking-tight">System</span>
                     </Typography>
-                    <Button color="inherit">Logout</Button>
+                    <Button>Logout</Button>
                 </Toolbar>
             </AppBar>
         </Box>

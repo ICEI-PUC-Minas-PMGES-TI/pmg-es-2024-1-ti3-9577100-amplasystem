@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '../../services/api';
 import { FinanceiroModel } from 'models/FinanceiroModel';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import { Button, IconButton, Typography } from '@mui/material';
 import { MaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Edit } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
@@ -61,27 +62,15 @@ const FinanceiroPage = () => {
     );
 
     return (
-        <Box display={'grid'}>
-            <Typography variant="h2" sx={{ textAlign: 'center' }} color="text.primary">
-                Financeiro
-            </Typography>
+        <div>
+            <header className="flex justify-between">
+                <Typography variant="h4">Financeiro</Typography>
+                <Button onClick={function () {}} endIcon={<AddIcon />}>
+                    Adicionar
+                </Button>
+            </header>
             <Box
-                display={'flex'}
-                sx={{
-                    justifyContent: 'flex-end',
-                }}
-            >
-                <IconButton
-                    onClick={ChangeModalState}
-                    sx={{
-                        backgroundColor: '#788DAA',
-                    }}
-                    aria-label="add"
-                >
-                    <AddIcon />
-                </IconButton>
-            </Box>
-            <Box
+                display={'grid'}
                 sx={{
                     marginTop: '20px',
                 }}
@@ -111,8 +100,14 @@ const FinanceiroPage = () => {
                     )}
                 />
             </Box>
-            <ModalFinanceiro setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={() => {}} /> {/* Pass a function */}
-        </Box>
+            {/* <ModalFinanceiro
+                    setOpenModal={setOpen}
+                    openModal={open}
+                    setReload={setReload}
+                    updateVendedor={() => {}}
+                />{' '} */}
+            {/* Pass a function */}
+        </div>
     );
 };
 

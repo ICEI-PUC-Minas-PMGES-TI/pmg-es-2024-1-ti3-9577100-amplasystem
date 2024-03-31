@@ -154,13 +154,13 @@ const ClientesPage = () => {
     });
     return (
         <div>
-            <nav className="flex justify-between bg-neutral-200">
+            <header className="flex justify-between">
                 <Typography variant="h4">Clientes</Typography>
-                <Button variant="contained" onClick={function () {}} startIcon={<AddIcon />} color="success">
+                <Button variant="contained" onClick={function () {}} endIcon={<AddIcon />}>
                     Adicionar cliente
                 </Button>
-            </nav>
-            <Box display={'grid'}>
+            </header>
+            <Box display={'grid'} className="my-5">
                 <MaterialReactTable table={table} />
                 {/* <RegisterModal
                     setOpenModal={setOpen}
