@@ -4,8 +4,9 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CallIcon from '@mui/icons-material/Call';
 import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Stack, Typography, Menu, MenuItem } from '@mui/material';
+import { Button, IconButton, Stack, Typography, Menu, MenuItem, ButtonGroup, Icon } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
@@ -252,30 +253,20 @@ const IndustriaPage = () => {
 
     return (
         <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
-            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
-                Industrias
-            </Typography>
-            <Box
-                display={'flex'}
-                sx={{
-                    justifyContent: 'space-between',
-                    marginBottom: '20px',
-                }}
-            >
-                <Box>
-                    {' '}
+            <header className="flex justify-between mb-5">
+                <Typography variant="h4">Indústrias</Typography>
+                <ButtonGroup variant="contained" aria-label="Basic button group">
+                    <Button onClick={ChangeModalState} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                        Adicionar indústria
+                    </Button>
                     <Button
                         aria-controls={openMenuOption ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={openMenuOption ? 'true' : undefined}
                         onClick={handleClick}
                         role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        sx={ButtonStyle.optionMenu}
-                        startIcon={<ArrowDropDownIcon />}
                     >
-                        Opções
+                        <ArrowDropDownIcon />
                     </Button>
                     <Menu
                         id="basic-menu"
@@ -297,12 +288,7 @@ const IndustriaPage = () => {
                                 padding: 0,
                             }}
                         >
-                            <Button
-                                component="label"
-                                variant="contained"
-                                sx={ButtonStyle.menuButton}
-                                startIcon={<CloudUploadIcon />}
-                            >
+                            <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
                                 Cadastro automático
                                 <Input.VisuallyHiddenInput
                                     type="file"
@@ -314,13 +300,19 @@ const IndustriaPage = () => {
                                 />
                             </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
-                            <Link to="../../files/modelo.xlsx" target="_blank" download>
+                        <MenuItem
+                            onClick={handleClose}
+                            sx={{
+                                margin: 0,
+                                padding: 0,
+                            }}
+                        >
+                            <Link to="@/files/modelo.xlsx" target="_blank" download>
                                 {' '}
                                 <Button
                                     component="label"
+                                    fullWidth
                                     variant="contained"
-                                    sx={ButtonStyle.menuButton}
                                     startIcon={<FileDownloadIcon />}
                                 >
                                     Baixar a tabela modelo
@@ -328,12 +320,8 @@ const IndustriaPage = () => {
                             </Link>
                         </MenuItem>
                     </Menu>
-                </Box>
-                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
-                    <AddOutlinedIcon sx={ButtonStyle.iconButton} />
-                </IconButton>
-            </Box>
-
+                </ButtonGroup>
+            </header>
             <MaterialReactTable table={table} />
             {open ? (
                 <RegisterModal
