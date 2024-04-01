@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 
+import axios, { AxiosError } from 'axios';
+
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -9,12 +11,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Modal, Typography } from '@mui/material';
+import { Button, IconButton, Modal, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 
 import apiFetch from '@/services/api';
 import { ClienteModel } from '@/models/ClienteModel';
+import { VendedorModel } from '@/models/VendedorModel';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 
@@ -26,12 +29,32 @@ const ClientesPage = () => {
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = React.useState(false);
 
+    const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
+
+    const cleanFormData = () => {
+        setCliente(null);
+    };
+
     const handleClickOpen = () => {
         setDialogState(true);
+        cleanFormData();
     };
     const handleClose = () => {
         setDialogState(false);
     };
+
+    const getVendedores = useCallback(async () => {
+        try {
+            const res = await apiFetch.get('/vendedor');
+            setVendedores(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
+
+    useEffect(() => {
+        getVendedores();
+    }, [getVendedores]);
 
     const getClientes = useCallback(async () => {
         setTableLoading(true);
@@ -49,7 +72,7 @@ const ClientesPage = () => {
         getClientes();
     }, [getClientes]);
 
-    const postCliente = async (novoCliente: any) => {
+    const postCliente = async (novoCliente: ClienteModel) => {
         setTableLoading(true);
         try {
             const res = await apiFetch.post('/cliente/', novoCliente);
@@ -65,18 +88,27 @@ const ClientesPage = () => {
             setTableLoading(false);
         }
     };
-    const updateCliente = async () => {
+    const updateCliente = async (clienteAtualizado: ClienteModel) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.put(`/cliente/${cliente?.id}`, cliente);
+            const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err) {
-            console.log(err);
+        } catch (err: any | AxiosError) {
+            console.log('Update err', err);
+            if (axios.isAxiosError(err)) {
+                showNotification({
+                    message: err ? err.message : 'Erro não especificado',
+                    title: 'Erro ao atualizar cliente',
+                    type: 'error',
+                });
+            } else {
+                console.log('Update err', err);
+            }
         } finally {
             setTableLoading(false);
         }
@@ -100,7 +132,7 @@ const ClientesPage = () => {
     const columns = useMemo<MRT_ColumnDef<ClienteModel>[]>(
         () => [
             {
-                accessorKey: 'nome_fantasia',
+                accessorKey: 'nomeFantasia',
                 header: 'Nome fantasia',
                 Cell: ({ cell }) => (
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
@@ -210,7 +242,7 @@ const ClientesPage = () => {
     });
     return (
         <React.Fragment>
-            <header className="flex justify-between">
+            <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
                 <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                     Adicionar cliente
@@ -225,14 +257,14 @@ const ClientesPage = () => {
                     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries((formData as any).entries());
+                        const formJson = Object.fromEntries((formData as any).entries()) as ClienteModel;
                         console.log('FormJson', formJson);
-                        cliente ? updateCliente() : postCliente(formJson);
+                        cliente ? updateCliente(formJson) : postCliente(formJson);
                         handleClose();
                     },
                 }}
             >
-                <DialogTitle>{cliente ? `Editar ${cliente.nome_fantasia}` : `Adicionar cliente`}</DialogTitle>
+                <DialogTitle>{cliente ? `Editar ${cliente.nomeFantasia}` : `Adicionar cliente`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>{cliente ? 'Edição' : 'Criação'} de cliente</DialogContentText>
                     <TextField
@@ -240,10 +272,10 @@ const ClientesPage = () => {
                         required
                         margin="dense"
                         id="clienteNomeFantasia"
-                        name="nome_fantasia"
+                        name="nomeFantasia"
                         label="Nome fantasia"
                         fullWidth
-                        variant="standard"
+                        defaultValue={cliente?.nomeFantasia}
                     />
                     <TextField
                         required
@@ -252,34 +284,38 @@ const ClientesPage = () => {
                         name="cnpj"
                         label="CNPJ"
                         fullWidth
-                        variant="standard"
+                        defaultValue={cliente?.cnpj}
                     />
+                    <Select fullWidth defaultValue={cliente?.vendedor?.id} name="vendedorId">
+                        {vendedores.map((vendedor) => (
+                            <option key={vendedor.id} value={Number(vendedor.id)}>
+                                {vendedor.nome}
+                            </option>
+                        ))}
+                    </Select>
                     <TextField
-                        required
                         margin="dense"
                         id="clienteTelefone"
                         name="telefone"
                         label="Telefone"
                         fullWidth
-                        variant="standard"
+                        defaultValue={cliente?.telefone}
                     />
                     <TextField
-                        required
                         margin="dense"
                         id="clienteCidade"
                         name="cidade"
                         label="Cidade"
                         fullWidth
-                        variant="standard"
+                        defaultValue={cliente?.cidade}
                     />
                     <TextField
-                        required
                         margin="dense"
                         id="clienteEndereco"
                         name="endereco"
                         label="Endereço"
                         fullWidth
-                        variant="standard"
+                        defaultValue={cliente?.endereco}
                     />
                 </DialogContent>
                 <DialogActions>
