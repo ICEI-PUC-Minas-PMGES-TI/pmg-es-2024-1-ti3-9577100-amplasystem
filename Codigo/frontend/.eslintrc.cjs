@@ -39,6 +39,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     'react/react-in-jsx-scope': 'off',
     'no-debugger': 'warn',
+    'max-len': ['error', { code: 80, ignoreComments: true }],
   },
   settings: {
     'import/resolver': {
