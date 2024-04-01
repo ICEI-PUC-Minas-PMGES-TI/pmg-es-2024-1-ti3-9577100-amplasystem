@@ -298,11 +298,11 @@ const IndustriaPage = () => {
                             fullWidth
                                 endIcon={<CloudUploadIcon />}
                             >
-                                Cadastro automático
+                                importar indústrias
                                 <Input.VisuallyHiddenInput
                                     type="file"
                                     onChange={(event) => {
-                                        // setFile(event.target.files[0]);
+                                        setFile(event.target.files[0]);
                                         console.log(event);
                                         sendIndustriasFile();
                                     }}
