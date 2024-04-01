@@ -1,4 +1,4 @@
-package amplasystem.api.controllers;
+package amplasystem.api.controller;
 
 import amplasystem.api.dtos.ClienteDTO;
 import amplasystem.api.models.Cliente;
