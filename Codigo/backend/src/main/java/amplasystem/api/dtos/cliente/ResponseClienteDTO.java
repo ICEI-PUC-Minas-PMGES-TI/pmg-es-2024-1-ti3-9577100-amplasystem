@@ -1,5 +1,6 @@
 package amplasystem.api.dtos.cliente;
 
+import amplasystem.api.dtos.VendedorDTO;
 import amplasystem.api.models.Endereco;
 import amplasystem.api.models.OrdemDeCompra;
 import amplasystem.api.models.Vendedor;
@@ -14,11 +15,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteDTO {
+public class ResponseClienteDTO {
     private Integer id;
     private String nomeFantasia;
     private String cnpj;
-    private Vendedor vendedor;
-    private List<OrdemDeCompra> ordemDeCompras;
+    private VendedorDTO vendedor;
     private Endereco endereco;
+//    private List<OrdemDeCompra> ordemDeCompras;
 }
