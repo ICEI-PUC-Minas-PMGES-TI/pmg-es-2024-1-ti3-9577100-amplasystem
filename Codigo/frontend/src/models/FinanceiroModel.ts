@@ -3,5 +3,5 @@ export interface FinanceiroModel {
     comissao: number|null;
     faturamento: string;
     tipoFiscal: string;
-    industria: string;
+    Industrias_id: number|null;
 }
