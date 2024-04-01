@@ -132,6 +132,14 @@ const FinanceiroPage = () => {
     const columns = React.useMemo<MRT_ColumnDef<FinanceiroModel>[]>(
         () => [
             {
+                accessorKey: 'industria',
+                header: 'Nome da Industria',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
+            },
+            
+            {
                 accessorKey: 'comissao',
                 header: 'Comissão',
                 Cell: ({ cell }) => (
@@ -306,3 +314,298 @@ const FinanceiroPage = () => {
 };
 
 export default FinanceiroPage;
+
+// import { useEffect, useMemo, useState, useCallback } from 'react';
+
+// import axios, { AxiosError } from 'axios';
+
+// import * as React from 'react';
+// import TextField from '@mui/material/TextField';
+// import Dialog from '@mui/material/Dialog';
+// import DialogActions from '@mui/material/DialogActions';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogContentText from '@mui/material/DialogContentText';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import AddIcon from '@mui/icons-material/Add';
+// import { Box } from '@mui/system';
+// import { Button, IconButton, Modal, Select, Typography } from '@mui/material';
+// import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+// import { Delete, Edit, Email } from '@mui/icons-material';
+
+// import apiFetch from '@/services/api';
+// import { FinanceiroModel } from '@/models/FinanceiroModel';
+// import { IndustriaModel} from '@/models/IndustriaModel';
+// import { useAuth } from '@/hooks/useAuth';
+// import { useNotification } from '@/hooks/useNotification';
+
+// const FinanceiroPage = () => {
+//     const { showNotification } = useNotification();
+
+//     const [financeiro, setFinanceiro] = useState<FinanceiroModel| null>(null);
+//     const [financa, setFinanca] = useState<FinanceiroModel[]>([]);
+//     const [tableLoading, setTableLoading] = useState(true);
+//     const [dialogState, setDialogState] = React.useState(false);
+
+//     const [industrias, setIndustrias] = useState<IndustriaModel[]>([]);
+
+//     const cleanFormData = () => {
+//         setFinanceiro(null);
+//     };
+
+//     const handleClickOpen = () => {
+//         setDialogState(true);
+//         cleanFormData();
+//     };
+//     const handleClose = () => {
+//         setDialogState(false);
+//     };
+
+//     const getIndustrias = useCallback(async () => {
+//         try {
+//             const res = await apiFetch.get('/industrias/');
+//             setIndustrias(res.data);
+//         } catch (err) {
+//             console.log(err);
+//         }
+//     }, []);
+
+//     useEffect(() => {
+//         getIndustrias();
+//     }, [getIndustrias]);
+
+//     const getFinanca = useCallback(async () => {
+//         setTableLoading(true);
+//         try {
+//             const res = await apiFetch.get('/financeiro/');
+//             setFinanca(res.data);
+//         } catch (err) {
+//             console.log(err);
+//         } finally {
+//             setTableLoading(false);
+//         }
+//     }, []);
+
+//     useEffect(() => {
+//         getFinanca();
+//     }, [getFinanca]);
+
+//     const postfinanceiro = async (newFinanceiro: FinanceiroModel) => {
+//         setTableLoading(true);
+//         try {
+//             const res = await apiFetch.post('/financeiro/', newFinanceiro);
+//             showNotification({
+//                 message: res.data.message,
+//                 title: res.data.titulo,
+//                 type: 'success',
+//             });
+//             getFinanca();
+//         } catch (err) {
+//             console.log(err);
+//         } finally {
+//             setTableLoading(false);
+//         }
+//     };
+//     const updatefinanceiro = async (updatedFinanceiro: FinanceiroModel) => {
+//         setTableLoading(true);
+//         try {
+//             const res = await apiFetch.put(`/financeiro/${financeiro?.id}`, updatedFinanceiro);
+//             showNotification({
+//                 message: res.data.message,
+//                 title: res.data.titulo,
+//                 type: 'success',
+//             });
+//             getFinanca();
+//         } catch (err: any | AxiosError) {
+//             console.log('Update err', err);
+//             if (axios.isAxiosError(err)) {
+//                 showNotification({
+//                     message: err ? err.message : 'Erro não especificado',
+//                     title: 'Erro ao atualizar financeiro',
+//                     type: 'error',
+//                 });
+//             } else {
+//                 console.log('Update err', err);
+//             }
+//         } finally {
+//             setTableLoading(false);
+//         }
+//     };
+//     const deletefinanceiro = async (id: number) => {
+//         setTableLoading(true);
+//         try {
+//             const res = await apiFetch.delete(`/financeiro/${id}`);
+//             showNotification({
+//                 message: res.data.message,
+//                 title: res.data.titulo,
+//                 type: 'success',
+//             });
+//             getFinanca();
+//         } catch (err) {
+//             console.log(err);
+//         } finally {
+//             setTableLoading(false);
+//         }
+//     };
+//     const columns = useMemo<MRT_ColumnDef<FinanceiroModel>[]>(
+//         () => [
+//             {
+//                 accessorKey: 'comissao',
+//                 header: 'Comissão',
+//                 Cell: ({ cell }) => (
+//                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+//                 ),
+//             },
+//             {
+//                 accessorKey: 'faturamento',
+//                 header: 'Faturamento',
+//                 Cell: ({ cell }) => (
+//                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+//                 ),
+//             },
+//             {
+//                 accessorKey: 'tipoFiscal',
+//                 header: 'Tipo Fiscal',
+//                 Cell: ({ cell }) => (
+//                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+//                 ),
+//             },
+
+//         ],
+//         [],
+//     );
+//     const table = useMaterialReactTable({
+//         columns: columns,
+//         data: financa,
+//         //passing the static object variant if no dynamic logic is needed
+//         muiSelectCheckboxProps: {
+//             color: 'secondary', //makes all checkboxes use the secondary color
+//         },
+//         enableRowActions: true,
+//         columnResizeMode: 'onChange',
+//         positionActionsColumn: 'last',
+//         displayColumnDefOptions: {
+//             'mrt-row-select': {
+//                 size: 50, //adjust the size of the row select column
+//                 grow: false, //new in v2.8 (default is false for this column)
+//             },
+//             'mrt-row-numbers': {
+//                 size: 40,
+//                 grow: true, //new in v2.8 (allow this column to grow to fill in remaining space)
+//             },
+//         },
+//         renderRowActions: ({ row }) => (
+//             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+//                 <IconButton
+//                     onClick={() => {
+//                         setDialogState(true);
+//                         setFinanceiro(row.original);
+//                     }}
+//                 >
+//                     <Edit />
+//                 </IconButton>
+//                 <IconButton
+//                     color="error"
+//                     onClick={() => {
+//                         if (row.original.id != null) {
+//                             deletefinanceiro(row.original.id);
+//                         }
+//                     }}
+//                 >
+//                     <Delete />
+//                 </IconButton>
+//             </Box>
+//         ),
+
+//         muiTableContainerProps: {
+//             sx: { maxWidth: '100%' },
+//         },
+//         muiTopToolbarProps: {
+//             sx: {
+//                 fontWeight: 'bold',
+//                 fontSize: '16px',
+//             },
+//         },
+//         muiBottomToolbarProps: {
+//             sx: {
+//                 fontWeight: 'bold',
+//                 fontSize: '16px',
+//             },
+//         },
+//         muiTableHeadCellProps: {
+//             sx: {
+//                 fontWeight: 'bold',
+//                 fontSize: '16px',
+//             },
+//         },
+//         muiTableBodyCellProps: {
+//             sx: {
+//                 fontWeight: 'normal',
+//                 fontSize: '16px',
+//             },
+//         },
+//     });
+//     return (
+//         <React.Fragment>
+//             <header className="flex justify-between mb-5">
+//                 <Typography variant="h4">financa</Typography>
+//                 <Button onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+//                     Registrar informações do financeiro
+//                 </Button>
+//             </header>
+//             <MaterialReactTable table={table} />
+//             <Dialog
+//                 open={dialogState}
+//                 onClose={handleClose}
+//                 PaperProps={{
+//                     component: 'form',
+//                     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+//                         event.preventDefault();
+//                         const formData = new FormData(event.currentTarget);
+//                         const formJson = Object.fromEntries((formData as any).entries()) as FinanceiroModel;
+//                         console.log('FormJson', formJson);
+//                         financeiro ? updatefinanceiro(formJson) : postfinanceiro(formJson);
+//                         handleClose();
+//                     },
+//                 }}
+//             >
+//                 <DialogTitle>{financeiro ? `Editar ${financeiro.comissao}` : `Adicionar financeiro`}</DialogTitle>
+//                 <DialogContent>
+//                     <DialogContentText>{financeiro ? 'Edição' : 'Criação'} de financeiro</DialogContentText>
+//                     <TextField
+//                         autoFocus
+//                         required
+//                         margin="dense"
+//                         id="financeiroComissao"
+//                         name="comissao"
+//                         label="Comissão"
+//                         fullWidth
+//                         defaultValue={financeiro?.comissao}
+//                     />
+//                     <TextField
+//                         required
+//                         margin="dense"
+//                         id="financeiroFaturamento"
+//                         name="faturamento"
+//                         label="Faturamento"
+//                         fullWidth
+//                         defaultValue={financeiro?.faturamento}
+//                     />
+//                     <Select fullWidth defaultValue={financeiro?.industria?.id} name="nomeIndustria">
+//                         {industrias.map((industria) => (
+//                             <option key={industria.id} value={Number(industria.id)}>
+//                                 {industria.id}
+//                             </option>
+//                         ))}
+//                     </Select>
+
+//                 </DialogContent>
+//                 <DialogActions>
+//                     <Button onClick={handleClose}>Cancel</Button>
+//                     <Button type="submit">Salvar</Button>
+//                 </DialogActions>
+//             </Dialog>
+//         </React.Fragment>
+//     );
+// };
+
+// export default FinanceiroPage;
