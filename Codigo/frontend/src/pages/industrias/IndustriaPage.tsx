@@ -76,28 +76,29 @@ const IndustriaPage = () => {
                 console.log(e);
             });
     };
-    const sendIndustriasFile = () => {
-        apiFetch
-            .post(
-                '/industria/tabela',
-                {
-                    data: {
-                        file: file,
+    useEffect(() => {
+        console.log(file);
+        if (file != undefined) {
+            apiFetch
+                .post(
+                    '/industria/tabela',
+                    {
+                        file,
                     },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                     },
-                },
-            )
-            .then((data) => {
-                setData(data.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
+                )
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+    }, [file]);
 
     const columns = useMemo<MRT_ColumnDef<IndustriaModel>[]>(
         () => [
@@ -291,7 +292,6 @@ const IndustriaPage = () => {
                         }}
                     >
                         <MenuItem
-                            onClick={handleClose}
                             sx={{
                                 margin: 0,
                                 padding: 0,
@@ -308,13 +308,12 @@ const IndustriaPage = () => {
                                     type="file"
                                     onChange={(event) => {
                                         setFile(event?.target?.files[0]);
-                                        sendIndustriasFile();
                                     }}
                                 />
                             </Button>
                         </MenuItem>
                         <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
-                            <Link to="../../files/modelo.xlsx" target="_blank" download>
+                            <Link to="/files/modelo.xlsx" target="_blank" download>
                                 {' '}
                                 <Button
                                     component="label"
