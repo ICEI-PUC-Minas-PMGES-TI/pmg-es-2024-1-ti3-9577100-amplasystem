@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
@@ -7,14 +7,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import AddIcon from '@mui/icons-material/Add';
-import apiFetch from '@/services/api';
-import { ClienteModel } from '@/models/ClienteModel';
 import { Box } from '@mui/system';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Modal, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
+
+import apiFetch from '@/services/api';
+import { ClienteModel } from '@/models/ClienteModel';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 
@@ -33,21 +33,26 @@ const ClientesPage = () => {
         setDialogState(false);
     };
 
-    const getClientes = async () => {
+    const getClientes = useCallback(async () => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.get('/clientes');
+            const res = await apiFetch.get('/cliente/');
             setClientes(res.data);
         } catch (err) {
             console.log(err);
         } finally {
             setTableLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        getClientes();
+    }, [getClientes]);
+
     const postCliente = async (novoCliente: any) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.post('/clientes/', novoCliente);
+            const res = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
@@ -63,7 +68,7 @@ const ClientesPage = () => {
     const updateCliente = async () => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.put(`/clientes/${cliente?.id}`, cliente);
+            const res = await apiFetch.put(`/cliente/${cliente?.id}`, cliente);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
@@ -79,7 +84,7 @@ const ClientesPage = () => {
     const deleteCliente = async (id: number) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.delete(`/clientes/${id}`);
+            const res = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
@@ -97,22 +102,37 @@ const ClientesPage = () => {
             {
                 accessorKey: 'nome_fantasia',
                 header: 'Nome fantasia',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
             },
             {
                 accessorKey: 'cnpj',
                 header: 'CNPJ',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
             },
             {
                 accessorKey: 'telefone',
                 header: 'Telefone',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
             },
             {
                 accessorKey: 'cidade',
                 header: 'Cidade',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
             },
             {
                 accessorKey: 'endereco',
                 header: 'Endereço',
+                Cell: ({ cell }) => (
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                ),
             },
         ],
         [],
@@ -140,17 +160,9 @@ const ClientesPage = () => {
         renderRowActions: ({ row }) => (
             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
                 <IconButton
-                    sx={{
-                        color: '#097C9C',
-                    }}
-                    onClick={() => window.open(`mailto:${row.original.cnpj}?subject=Ampla System!`)}
-                >
-                    <Email />
-                </IconButton>
-                <IconButton
                     onClick={() => {
                         setDialogState(true);
-                        setCliente(JSON.parse(JSON.stringify(row.original)));
+                        setCliente(row.original);
                     }}
                 >
                     <Edit />
@@ -215,7 +227,7 @@ const ClientesPage = () => {
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
                         console.log('FormJson', formJson);
-                        postCliente(formJson);
+                        cliente ? updateCliente() : postCliente(formJson);
                         handleClose();
                     },
                 }}
