@@ -92,11 +92,11 @@ const IndustriaContato = (props: IRegisterModalProps) => {
 
             <div
                 style={{ marginBottom: '20px' }}
-                className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+                className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1ddq39s-MuiInputBase-root-MuiOutlinedInput-root"
             >
                 <IMaskInput
                     style={{ width: '100%' }}
-                    className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                    className="MuiInputBase-input MuiOutlinedInput-input css-17cvodc-MuiInputBase-input-MuiOutlinedInput-input"
                     id="telefone"
                     name="telefone"
                     placeholder="Telefone"

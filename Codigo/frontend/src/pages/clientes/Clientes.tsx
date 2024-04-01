@@ -244,7 +244,7 @@ const ClientesPage = () => {
         <React.Fragment>
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
-                <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                <Button onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                     Adicionar cliente
                 </Button>
             </header>

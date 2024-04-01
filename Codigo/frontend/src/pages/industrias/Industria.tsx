@@ -256,7 +256,7 @@ const IndustriaPage = () => {
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Indústrias</Typography>
                 <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={ChangeModalState} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                    <Button onClick={ChangeModalState} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                         Adicionar indústria
                     </Button>
                     <Button
@@ -268,58 +268,6 @@ const IndustriaPage = () => {
                     >
                         <ArrowDropDownIcon />
                     </Button>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={openMenuOption}
-                        onClose={handleClose}
-                        sx={{
-                            margin: '5px',
-                            padding: 0,
-                            '& .css-6hp17o-MuiList-root-MuiMenu-list': {
-                                padding: 0,
-                            },
-                        }}
-                    >
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                margin: 0,
-                                padding: 0,
-                            }}
-                        >
-                            <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
-                                Cadastro automático
-                                <Input.VisuallyHiddenInput
-                                    type="file"
-                                    onChange={(event) => {
-                                        // setFile(event.target.files[0]);
-                                        console.log(event);
-                                        sendIndustriasFile();
-                                    }}
-                                />
-                            </Button>
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                margin: 0,
-                                padding: 0,
-                            }}
-                        >
-                            <Link to="@/files/modelo.xlsx" target="_blank" download>
-                                {' '}
-                                <Button
-                                    component="label"
-                                    fullWidth
-                                    variant="contained"
-                                    startIcon={<FileDownloadIcon />}
-                                >
-                                    Baixar a tabela modelo
-                                </Button>
-                            </Link>
-                        </MenuItem>
-                    </Menu>
                 </ButtonGroup>
             </header>
             <MaterialReactTable table={table} />
@@ -333,6 +281,53 @@ const IndustriaPage = () => {
             ) : (
                 ''
             )}
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={openMenuOption}
+                onClose={handleClose}
+                sx={{
+                    margin: '5px',
+                    padding: 0,
+                    '& .css-6hp17o-MuiList-root-MuiMenu-list': {
+                        padding: 0,
+                    },
+                }}
+            >
+                <MenuItem
+                    onClick={handleClose}
+                    sx={{
+                        margin: 0,
+                        padding: 0,
+                    }}
+                >
+                    <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
+                        Cadastro automático
+                        <Input.VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => {
+                                // setFile(event.target.files[0]);
+                                console.log(event);
+                                sendIndustriasFile();
+                            }}
+                        />
+                    </Button>
+                </MenuItem>
+                <MenuItem
+                    onClick={handleClose}
+                    sx={{
+                        margin: 0,
+                        padding: 0,
+                    }}
+                >
+                    <Link to="@/files/modelo.xlsx" target="_blank" download>
+                        {' '}
+                        <Button component="label" fullWidth variant="contained" startIcon={<FileDownloadIcon />}>
+                            Baixar a tabela modelo
+                        </Button>
+                    </Link>
+                </MenuItem>
+            </Menu>
         </Box>
     );
 };

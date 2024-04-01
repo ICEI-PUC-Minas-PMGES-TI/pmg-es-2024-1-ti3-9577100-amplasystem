@@ -280,7 +280,6 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             sx={Input.input}
                             onChange={handleChange}
                         />
-
                         {contatoList.map((element) => {
                             return element;
                         })}
