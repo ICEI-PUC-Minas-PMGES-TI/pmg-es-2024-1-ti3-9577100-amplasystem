@@ -103,7 +103,7 @@ const VendedoresPage = () => {
                 <IconButton
                     onClick={() => {
                         setOpen(true);
-                        setVendedor(JSON.parse(JSON.stringify(row.original)));
+                        setVendedor((row.original));
                     }}
                 >
                     <Edit />
