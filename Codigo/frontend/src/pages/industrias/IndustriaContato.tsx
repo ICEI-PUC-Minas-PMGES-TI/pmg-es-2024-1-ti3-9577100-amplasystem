@@ -90,13 +90,10 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                 Telefone
             </Typography>
 
-            <div
-                style={{ marginBottom: '20px' }}
-                className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
-            >
-                <IMaskInput
+            <div   style={{ marginBottom: '20px' }} className="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-1ddq39s-MuiInputBase-root-MuiOutlinedInput-root">
+                  <IMaskInput
                     style={{ width: '100%' }}
-                    className="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                    className="MuiInputBase-input MuiOutlinedInput-input css-17cvodc-MuiInputBase-input-MuiOutlinedInput-input"
                     id="telefone"
                     name="telefone"
                     placeholder="Telefone"
@@ -107,15 +104,10 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                     }}
                     onChange={handleChange}
                 />
-                <fieldset
-                    aria-hidden="true"
-                    className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
-                >
-                    <legend className="css-ihdtdm">
-                        <span className="notranslate" />
-                    </legend>
-                </fieldset>
-            </div>
+                    <fieldset aria-hidden="true" className="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline">
+                        <legend className="css-ihdtdm">
+                            <span className="notranslate"/>
+                        </legend></fieldset></div>
             <Typography
                 variant="subtitle1"
                 sx={{
