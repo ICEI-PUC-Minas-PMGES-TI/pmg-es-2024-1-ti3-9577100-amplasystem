@@ -4,9 +4,9 @@ import ProtectedRoute from '@/routes/ProtectedRoutes';
 import { DashboardLayout } from '@/layouts/DashboardLayout.tsx';
 
 const FinanceiroPage = React.lazy(() => import('@/pages/financeiro/Financeiro.tsx'));
-const IndustriaPage = React.lazy(() => import('@/pages/industrias/Industria.tsx'));
-const DashboardPage = React.lazy(() => import('@/pages/dashboard/Dashboard'));
-const VendedoresPage = React.lazy(() => import('@/pages/vendedores/Vendedores'));
+const IndustriaPage = React.lazy(() => import('@/pages/industrias/IndustriaPage.tsx'));
+const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage'));
+const VendedoresPage = React.lazy(() => import('@/pages/vendedores/VendedoresPage'));
 const ClientesPage = React.lazy(() => import('@/pages/clientes/Clientes'));
 const LoginPage = React.lazy(() => import('@/pages/login/LoginPage'));
 const ForgotPasswordGetEmail = React.lazy(() => import('@/pages/forgotPassword/ForgotPasswordGetEmail'));

@@ -4,29 +4,28 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CallIcon from '@mui/icons-material/Call';
 import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Stack, Typography, Menu, MenuItem, ButtonGroup, Icon } from '@mui/material';
+import { Button, IconButton, Stack, Typography, Menu, MenuItem } from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
-import { useNotification } from '@/hooks/useNotification';
-import apiFetch from '@/services/api';
+import { useNotification } from '../../hooks/useNotification';
+import apiFetch from '../../services/api';
 
 import { IndustriaModel } from 'models/IndustriaModel';
-import { TipoContato } from '@/enums/TipoContato';
+import { TipoContato } from '../../enums/TipoContato';
 
-import RegisterModal from './ModalCadastro';
+import RegisterModal from './RegisterModal';
 
-import * as Input from '@/styles/types/InputStyles';
-import * as ButtonStyle from '@/styles/types/ButtonsStyles';
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>();
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
 
     const { showNotification } = useNotification();
@@ -77,28 +76,29 @@ const IndustriaPage = () => {
                 console.log(e);
             });
     };
-    const sendIndustriasFile = () => {
-        apiFetch
-            .post(
-                '/industria/tabela',
-                {
-                    data: {
-                        file: file,
+    useEffect(() => {
+        console.log(file);
+        if (file != undefined) {
+            apiFetch
+                .post(
+                    '/industria/tabela',
+                    {
+                        file,
                     },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                     },
-                },
-            )
-            .then((data) => {
-                setData(data.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
+                )
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+    }, [file]);
 
     const columns = useMemo<MRT_ColumnDef<IndustriaModel>[]>(
         () => [
@@ -253,23 +253,85 @@ const IndustriaPage = () => {
 
     return (
         <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
-            <header className="flex justify-between mb-5">
-                <Typography variant="h4">Indústrias</Typography>
-                <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={ChangeModalState} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
-                        Adicionar indústria
-                    </Button>
+            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
+                Industrias
+            </Typography>
+            <Box
+                display={'flex'}
+                sx={{
+                    justifyContent: 'space-between',
+                    marginBottom: '20px',
+                }}
+            >
+                <Box>
+                    {' '}
                     <Button
                         aria-controls={openMenuOption ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={openMenuOption ? 'true' : undefined}
                         onClick={handleClick}
                         role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        sx={ButtonStyle.optionMenu}
+                        startIcon={<ArrowDropDownIcon />}
                     >
-                        <ArrowDropDownIcon />
+                        Opções
                     </Button>
-                </ButtonGroup>
-            </header>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={openMenuOption}
+                        onClose={handleClose}
+                        sx={{
+                            margin: '5px',
+                            padding: 0,
+                            '& .css-6hp17o-MuiList-root-MuiMenu-list': {
+                                padding: 0,
+                            },
+                        }}
+                    >
+                        <MenuItem
+                            sx={{
+                                margin: 0,
+                                padding: 0,
+                            }}
+                        >
+                            <Button
+                                component="label"
+                                variant="contained"
+                                sx={ButtonStyle.menuButton}
+                                startIcon={<CloudUploadIcon />}
+                            >
+                                Cadastro automático
+                                <Input.VisuallyHiddenInput
+                                    type="file"
+                                    onChange={(event) => {
+                                        setFile(event?.target?.files[0]);
+                                    }}
+                                />
+                            </Button>
+                        </MenuItem>
+                        <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
+                            <Link to="/files/modelo.xlsx" target="_blank" download>
+                                {' '}
+                                <Button
+                                    component="label"
+                                    variant="contained"
+                                    sx={ButtonStyle.menuButton}
+                                    startIcon={<FileDownloadIcon />}
+                                >
+                                    Baixar a tabela modelo
+                                </Button>
+                            </Link>
+                        </MenuItem>
+                    </Menu>
+                </Box>
+                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
+                    <AddOutlinedIcon sx={ButtonStyle.iconButton} />
+                </IconButton>
+            </Box>
+
             <MaterialReactTable table={table} />
             {open ? (
                 <RegisterModal
@@ -281,53 +343,6 @@ const IndustriaPage = () => {
             ) : (
                 ''
             )}
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={openMenuOption}
-                onClose={handleClose}
-                sx={{
-                    margin: '5px',
-                    padding: 0,
-                    '& .css-6hp17o-MuiList-root-MuiMenu-list': {
-                        padding: 0,
-                    },
-                }}
-            >
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        margin: 0,
-                        padding: 0,
-                    }}
-                >
-                    <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
-                        Cadastro automático
-                        <Input.VisuallyHiddenInput
-                            type="file"
-                            onChange={(event) => {
-                                // setFile(event.target.files[0]);
-                                console.log(event);
-                                sendIndustriasFile();
-                            }}
-                        />
-                    </Button>
-                </MenuItem>
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        margin: 0,
-                        padding: 0,
-                    }}
-                >
-                    <Link to="@/files/modelo.xlsx" target="_blank" download>
-                        {' '}
-                        <Button component="label" fullWidth variant="contained" startIcon={<FileDownloadIcon />}>
-                            Baixar a tabela modelo
-                        </Button>
-                    </Link>
-                </MenuItem>
-            </Menu>
         </Box>
     );
 };

@@ -134,4 +134,4 @@ const ForgotPasswordGetEmail = () => {
     );
 };
 
-export default ForgotPasswordGetEmail;
+export default ForgotPasswordGetNewPassword;

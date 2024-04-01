@@ -317,6 +317,46 @@ const FinanceiroPage = () => {
                 </DialogActions>
             </Dialog>
         </React.Fragment>
+            <Box
+                sx={{
+                    marginTop: '20px',
+                }}
+            >
+                <MaterialReactTable
+                    columns={columns}
+                    data={data}
+                    layoutMode="semantic"
+                    enableRowActions
+                    displayColumnDefOptions={{
+                        'mrt-row-actions': {
+                            grow: false,
+                        },
+                    }}
+                    positionActionsColumn="last"
+                    renderRowActions={({ row }) => (
+                        <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+                            <IconButton
+                                sx={{
+                                    color: '#01437C',
+                                }}
+                                onClick={() => {
+                                    setFinanceiro(row.original);
+                                    ChangeModalState();
+                                }}
+                            >
+                                <Edit />
+                            </IconButton>
+                        </Box>
+                    )}
+                />
+            </Box>
+            <ModalCadastroFinanceiro
+                setOpenModal={setOpen}
+                openModal={open}
+                setReload={setReload}
+                updateVendedor={financeiro}
+            />
+        </Box>
     );
 };
 
