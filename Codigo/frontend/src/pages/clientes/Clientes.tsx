@@ -1,77 +1,125 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '@/services/api';
 import { ClienteModel } from '@/models/ClienteModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
-import RegisterModal from './ModalCliente';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 
 const ClientesPage = () => {
-    const [cliente, setCliente] = useState<ClienteModel | undefined>(undefined);
-    const [data, setData] = useState<ClienteModel[]>([]);
-    const [open, setOpen] = useState(false);
-    const [reload, setReload] = useState(true);
-    useEffect(() => {
-        getClientes();
-    }, [reload]);
-    const { user } = useAuth();
     const { showNotification } = useNotification();
-    const ChangeModalState = () => {
-        setOpen(!open);
+
+    const [cliente, setCliente] = useState<ClienteModel | null>(null);
+    const [clientes, setClientes] = useState<ClienteModel[]>([]);
+    const [tableLoading, setTableLoading] = useState(true);
+    const [dialogState, setDialogState] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setDialogState(true);
+    };
+    const handleClose = () => {
+        setDialogState(false);
     };
 
-    const getClientes = () => {
-        apiFetch
-            .get('/cliente')
-            .then((data) => {
-                setData(data.data);
-                setReload(false);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+    const getClientes = async () => {
+        setTableLoading(true);
+        try {
+            const res = await apiFetch.get('/clientes');
+            setClientes(res.data);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(false);
+        }
     };
-    const deleteCliente = (id: number) => {
-        apiFetch
-            .delete(`/cliente/${id}`)
-            .then((data) => {
-                setReload(true);
-                showNotification({
-                    message: data.data.message,
-                    title: data.data.titulo,
-                    type: 'success',
-                });
-            })
-            .catch((e) => {
-                console.log(e);
+    const postCliente = async (novoCliente: any) => {
+        setTableLoading(true);
+        try {
+            const res = await apiFetch.post('/clientes/', novoCliente);
+            showNotification({
+                message: res.data.message,
+                title: res.data.titulo,
+                type: 'success',
             });
+            getClientes();
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(false);
+        }
+    };
+    const updateCliente = async () => {
+        setTableLoading(true);
+        try {
+            const res = await apiFetch.put(`/clientes/${cliente?.id}`, cliente);
+            showNotification({
+                message: res.data.message,
+                title: res.data.titulo,
+                type: 'success',
+            });
+            getClientes();
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(false);
+        }
+    };
+    const deleteCliente = async (id: number) => {
+        setTableLoading(true);
+        try {
+            const res = await apiFetch.delete(`/clientes/${id}`);
+            showNotification({
+                message: res.data.message,
+                title: res.data.titulo,
+                type: 'success',
+            });
+            getClientes();
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(false);
+        }
     };
     const columns = useMemo<MRT_ColumnDef<ClienteModel>[]>(
         () => [
             {
-                accessorKey: 'nome', //access nested data with dot notation
-                header: 'Nome',
+                accessorKey: 'nome_fantasia',
+                header: 'Nome fantasia',
             },
             {
-                accessorKey: 'email',
-                header: 'Email',
+                accessorKey: 'cnpj',
+                header: 'CNPJ',
             },
             {
-                accessorKey: 'cargo', //normal accessorKey
-                header: 'Cargo',
-                grow: true,
+                accessorKey: 'telefone',
+                header: 'Telefone',
+            },
+            {
+                accessorKey: 'cidade',
+                header: 'Cidade',
+            },
+            {
+                accessorKey: 'endereco',
+                header: 'Endereço',
             },
         ],
         [],
     );
     const table = useMaterialReactTable({
-        columns,
-        data,
+        columns: columns,
+        data: clientes,
         //passing the static object variant if no dynamic logic is needed
         muiSelectCheckboxProps: {
             color: 'secondary', //makes all checkboxes use the secondary color
@@ -101,7 +149,7 @@ const ClientesPage = () => {
                 </IconButton>
                 <IconButton
                     onClick={() => {
-                        setOpen(true);
+                        setDialogState(true);
                         setCliente(JSON.parse(JSON.stringify(row.original)));
                     }}
                 >
@@ -149,23 +197,85 @@ const ClientesPage = () => {
         },
     });
     return (
-        <div>
+        <React.Fragment>
             <header className="flex justify-between">
                 <Typography variant="h4">Clientes</Typography>
-                <Button variant="contained" onClick={function () {}} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                     Adicionar cliente
                 </Button>
             </header>
-            <Box display={'grid'} className="my-5">
-                <MaterialReactTable table={table} />
-                {/* <RegisterModal
-                    setOpenModal={setOpen}
-                    openModal={open}
-                    setReload={setReload}
-                    updateCliente={undefined}
-                /> */}
-            </Box>
-        </div>
+            <MaterialReactTable table={table} />
+            <Dialog
+                open={dialogState}
+                onClose={handleClose}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData as any).entries());
+                        console.log('FormJson', formJson);
+                        postCliente(formJson);
+                        handleClose();
+                    },
+                }}
+            >
+                <DialogTitle>{cliente ? `Editar ${cliente.nome_fantasia}` : `Adicionar cliente`}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{cliente ? 'Edição' : 'Criação'} de cliente</DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="clienteNomeFantasia"
+                        name="nome_fantasia"
+                        label="Nome fantasia"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        required
+                        margin="dense"
+                        id="clienteCnpj"
+                        name="cnpj"
+                        label="CNPJ"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        required
+                        margin="dense"
+                        id="clienteTelefone"
+                        name="telefone"
+                        label="Telefone"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        required
+                        margin="dense"
+                        id="clienteCidade"
+                        name="cidade"
+                        label="Cidade"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        required
+                        margin="dense"
+                        id="clienteEndereco"
+                        name="endereco"
+                        label="Endereço"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button type="submit">Salvar</Button>
+                </DialogActions>
+            </Dialog>
+        </React.Fragment>
     );
 };
 

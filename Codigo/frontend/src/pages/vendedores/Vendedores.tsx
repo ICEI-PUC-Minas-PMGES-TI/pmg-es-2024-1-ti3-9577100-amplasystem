@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
 import apiFetch from '@/services/api';
-import { VendedorModel } from 'models/VendedorModel';
+import { VendedorModel } from '@/models/VendedorModel';
 import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './ModalCadastro';

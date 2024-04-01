@@ -1,4 +1,4 @@
-export interface ClienteModel {
+export type ClienteModel = {
     id: number | null;
     cnpj: string;
     telefone: string; 
