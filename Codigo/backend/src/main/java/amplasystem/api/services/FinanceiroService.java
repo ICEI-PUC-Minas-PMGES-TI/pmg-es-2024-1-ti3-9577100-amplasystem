@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -52,15 +53,29 @@ public class FinanceiroService {
         financeiroOptional.ifPresent(financeiro -> financeiroRepository.delete(financeiro));
     }
 
-    public void update(Integer id, FinanceiroDTO financeiroDTO) throws NotFoundException {
-        financeiroRepository.findById(id).orElseThrow(() -> new NotFoundException());
+    public FinanceiroDTO update(Integer id, FinanceiroDTO financeiroDTO) {
+        try {
+            financeiroRepository.findById(id).orElseThrow(() -> new NotFoundException());
 
-        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
+            Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
 
-        Financeiro newFinanceiro = new Financeiro(id, financeiroDTO.getComissao(),
-                financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
+            Financeiro newFinanceiro = new Financeiro(id, financeiroDTO.getComissao(),
+                    financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
 
-        financeiroRepository.save(newFinanceiro);
+            financeiroRepository.save(newFinanceiro);
+
+            return FinanceiroMapper.toDTO(newFinanceiro);
+        } catch (NotFoundException e) {
+            throw new ObjectNotFoundException("Requisição com ID " + id + " não encontrado.");
+        }
     }
 
+    public FinanceiroDTO getById(Integer id) throws ObjectNotFoundException {
+        Financeiro financeiro = financeiroRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("ID não encontrada na base de dados"));
+        return FinanceiroMapper.toDTO(financeiro);
+    }
+
+    public FinanceiroDTO save(Financeiro financeiro) {
+        return FinanceiroMapper.toDTO(financeiroRepository.save(financeiro));
+    }
 }
