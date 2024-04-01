@@ -23,20 +23,19 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 ### Interfaces de Usuário
 
 A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
+* [Esqueci Minha Senha ](userInterface/InterfacedeusuarioEsqueciminhasenha.pdf "") 
 
+*  [Tela Vendedor ](userInterface/InterfacedeusuarioTelaVendedor.pdf "") 
 
-#### Spring 1
+*  [Cadastrar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf "") 
 
-*  [Esqueci Minha Senha ](userInterface/sprint1/Interface_de_usuário_de_esqueci_minha_senha.pdf "") 
+*  [Atualizar Vendedores ](userInterface/InterfacedeusuarioAtualizacaoVendedor.pdf "") 
 
-*  [Tabela Geral ](userInterface/sprint1/InterfaceTabelaGeral.pdf "") 
+*  [Tela Industria ](userInterface/InterfacedeusuarioTelaIndustria.pdf "") 
 
-*  [Cadastrar Vendedores ](userInterface/sprint1/CadastrarVendedor.pdf "") 
+*  [Cadastrar Industrias ](userInterface/InterfacedeusuarioCadastroIndustria.pdf "") 
 
-*  [Alterar Vendedores ](userInterface/sprint1/AlterarVendedor.pdf "") 
-
-*  [Cadastrar Industrias por Planilha ](userInterface/sprint1/PlanilhaIndustria.pdf "") 
-
+*  [Atualizar Industrias ](userInterface/InterfacedeusuarioAtualizarIndustria.pdf "") 
 
 
 ### Diagrama de caso de uso
