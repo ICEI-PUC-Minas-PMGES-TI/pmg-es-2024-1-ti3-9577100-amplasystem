@@ -138,7 +138,7 @@ const FinanceiroPage = () => {
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
                 ),
             },
-            
+
             {
                 accessorKey: 'comissao',
                 header: 'Comissão',
@@ -240,7 +240,7 @@ const FinanceiroPage = () => {
         <React.Fragment>
             <header className="flex justify-between">
                 <Typography variant="h4">Financeiro</Typography>
-                <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                <Button onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                     Adicionar informações
                 </Button>
             </header>
@@ -252,7 +252,9 @@ const FinanceiroPage = () => {
                     component: 'form',
                     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                         event.preventDefault();
-                        financeiro ? updateFinanceiro() : postFinanceiro(financeiro);
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData as any).entries()) as FinanceiroModel;
+                        financeiro ? updateFinanceiro() : postFinanceiro(formJson);
                         handleClose();
                     },
                 }}
@@ -269,8 +271,7 @@ const FinanceiroPage = () => {
                         name="comissao"
                         label="Comissão"
                         fullWidth
-                        variant="standard"
-                        value={financeiro && financeiro.comissao !== null ? financeiro.comissao.toString() : ''}
+                        defaultValue={financeiro && financeiro.comissao !== null ? financeiro.comissao.toString() : ''}
                         onChange={handleFormChange}
                     />
                     <TextField
@@ -280,11 +281,14 @@ const FinanceiroPage = () => {
                         name="faturamento"
                         label="Faturamento"
                         fullWidth
-                        variant="standard"
                         value={financeiro && financeiro.faturamento !== null ? financeiro.faturamento : ''}
                         onChange={handleFormChange}
                     />
-                    <Select fullWidth defaultValue={financeiro?.industria?.id} name="IndustriaId">
+                    <Select
+                        fullWidth
+                        value={financeiro?.industria?.id}
+                        name="IndustriaId"
+                    >
                         {industrias.map((industria) => (
                             <option key={industria.id} value={Number(industria.id)}>
                                 {industria.nome}
@@ -298,7 +302,6 @@ const FinanceiroPage = () => {
                         name="tipoFiscal"
                         label="Tipo Fiscal"
                         fullWidth
-                        variant="standard"
                         value={financeiro && financeiro.tipoFiscal !== null ? financeiro.tipoFiscal : ''}
                         onChange={handleFormChange}
                     />
