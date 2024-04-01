@@ -10,6 +10,9 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 *  [Ata da 2° reunião ](./atas/Ata2reuniao.pdf "") Ata da segunda reunião com o cliente realizada no dia 28 de fevereiro de 2025
 
+*  [Ata da 3° reunião ](./atas/Ata3reuniao.pdf "") Ata da terceira reunião com o cliente realizada no dia 28 de marco de 2025
+
+
 ### DER
 
 *  [Primeira versão do Der ](./DER/bd1.0.png "") A versão que estava sendo utilizada no software legado 
@@ -21,12 +24,10 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
 
-### Diagrama de caso de uso
-[Primeira verção](UserCaseDiagram/userCaseDiagram_AmplaSystem.pdf) do diagrama de caso de uso
 
 #### Spring 1
 
-*  [Esqueci Minha Senha ](userInterface/sprint1/Interface%20de%20usuário%20de%20esqueci%20minha%20senha.pdf "") 
+*  [Esqueci Minha Senha ](userInterface/sprint1/Interface_de_usuário_de_esqueci_minha_senha.pdf "") 
 
 *  [Tabela Geral ](userInterface/sprint1/InterfaceTabelaGeral.pdf "") 
 
@@ -36,3 +37,7 @@ A seguir estarão os documentos referentes as interfaces criadas para o usuário
 
 *  [Cadastrar Industrias por Planilha ](userInterface/sprint1/PlanilhaIndustria.pdf "") 
 
+
+
+### Diagrama de caso de uso
+[Primeira versão](UserCaseDiagram/userCaseDiagram_AmplaSystem.pdf) do diagrama de caso de uso
