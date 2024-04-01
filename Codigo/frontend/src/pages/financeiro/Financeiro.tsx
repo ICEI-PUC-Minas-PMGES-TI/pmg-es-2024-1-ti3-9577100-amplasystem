@@ -8,13 +8,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography, Select } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit } from '@mui/icons-material';
 
 import apiFetch from '@/services/api';
 import { useNotification } from '@/hooks/useNotification';
 import { FinanceiroModel } from '@/models/FinanceiroModel';
+import { IndustriaModel } from '@/models/IndustriaModel';
 
 const FinanceiroPage = () => {
     const { showNotification } = useNotification();
@@ -24,6 +25,7 @@ const FinanceiroPage = () => {
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = useState(false);
     const dialogRef = useRef<HTMLFormElement>(null);
+    const [industrias, setIndustrias] = useState<IndustriaModel[]>([]);
 
     const handleClickOpen = () => {
         setDialogState(true);
@@ -33,6 +35,19 @@ const FinanceiroPage = () => {
         setDialogState(false);
         setFinanceiro(null);
     };
+
+    const getIndustrias = useCallback(async () => {
+        try {
+            const res = await apiFetch.get('/industria/');
+            setIndustrias(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
+
+    useEffect(() => {
+        getIndustrias();
+    }, [getIndustrias]);
 
     const getFinanceiros = useCallback(async () => {
         setTableLoading(true);
@@ -70,13 +85,15 @@ const FinanceiroPage = () => {
     const updateFinanceiro = async () => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.put(`/financeiro/${financeiro?.id}`, financeiro);
-            showNotification({
-                message: res.data.message,
-                title: res.data.titulo,
-                type: 'success',
-            });
-            getFinanceiros();
+            if (financeiro && financeiro.id) {
+                const res = await apiFetch.put(`/financeiro/${financeiro.id}`, financeiro);
+                showNotification({
+                    message: res.data.message,
+                    title: res.data.titulo,
+                    type: 'success',
+                });
+                getFinanceiros();
+            }
         } catch (err) {
             console.log(err);
         } finally {
@@ -84,20 +101,31 @@ const FinanceiroPage = () => {
         }
     };
 
-    const deleteFinanceiro = async (id: number|null) => {
+    const deleteFinanceiro = async (id: number | null) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.delete(`/financeiro/${id}`);
-            showNotification({
-                message: res.data.message,
-                title: res.data.titulo,
-                type: 'success',
-            });
-            getFinanceiros();
+            if (id) {
+                const res = await apiFetch.delete(`/financeiro/${id}`);
+                showNotification({
+                    message: res.data.message,
+                    title: res.data.titulo,
+                    type: 'success',
+                });
+                getFinanceiros();
+            }
         } catch (err) {
             console.log(err);
         } finally {
             setTableLoading(false);
+        }
+    };
+
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (financeiro) {
+            setFinanceiro({
+                ...financeiro,
+                [e.target.name]: e.target.value,
+            });
         }
     };
 
@@ -117,13 +145,14 @@ const FinanceiroPage = () => {
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
                 ),
             },
+
             {
                 accessorKey: 'tipoFiscal',
                 header: 'Tipo Fiscal',
                 Cell: ({ cell }) => (
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
                 ),
-            }
+            },
         ],
         [],
     );
@@ -204,7 +233,7 @@ const FinanceiroPage = () => {
             <header className="flex justify-between">
                 <Typography variant="h4">Financeiro</Typography>
                 <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
-                    Editar informações
+                    Adicionar informações
                 </Button>
             </header>
             <MaterialReactTable table={table} />
@@ -215,16 +244,15 @@ const FinanceiroPage = () => {
                     component: 'form',
                     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                         event.preventDefault();
-                        const formData = new FormData(dialogRef.current as HTMLFormElement);
-                        const formJson = Object.fromEntries(formData.entries());
-                        financeiro ? updateFinanceiro() : postFinanceiro(formJson);
+                        financeiro ? updateFinanceiro() : postFinanceiro(financeiro);
                         handleClose();
                     },
                 }}
             >
-                <DialogTitle>{financeiro ? `Editar ${financeiro.comissao}` : `Adicionar informações`}</DialogTitle>
+                <DialogTitle>{financeiro ? `Adicionar ${financeiro.comissao}` : `Adicionar informações`}</DialogTitle>
+
                 <DialogContent>
-                    <DialogContentText>{financeiro ? 'Edição' : 'Criação'} para financeiro</DialogContentText>
+                    <DialogContentText>{financeiro ? 'Edição' : 'Informações'} para o financeiro</DialogContentText>
                     <TextField
                         autoFocus
                         required
@@ -234,6 +262,8 @@ const FinanceiroPage = () => {
                         label="Comissão"
                         fullWidth
                         variant="standard"
+                        value={financeiro && financeiro.comissao !== null ? financeiro.comissao.toString() : ''}
+                        onChange={handleFormChange}
                     />
                     <TextField
                         required
@@ -243,7 +273,16 @@ const FinanceiroPage = () => {
                         label="Faturamento"
                         fullWidth
                         variant="standard"
+                        value={financeiro && financeiro.faturamento !== null ? financeiro.faturamento : ''}
+                        onChange={handleFormChange}
                     />
+                    <Select fullWidth defaultValue={financeiro?.industria?.id} name="IndustriaId">
+                        {industrias.map((industria) => (
+                            <option key={industria.id} value={Number(industria.id)}>
+                                {industria.nome}
+                            </option>
+                        ))}
+                    </Select>
                     <TextField
                         required
                         margin="dense"
@@ -252,8 +291,11 @@ const FinanceiroPage = () => {
                         label="Tipo Fiscal"
                         fullWidth
                         variant="standard"
+                        value={financeiro && financeiro.tipoFiscal !== null ? financeiro.tipoFiscal : ''}
+                        onChange={handleFormChange}
                     />
                 </DialogContent>
+
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button type="submit">Salvar</Button>
