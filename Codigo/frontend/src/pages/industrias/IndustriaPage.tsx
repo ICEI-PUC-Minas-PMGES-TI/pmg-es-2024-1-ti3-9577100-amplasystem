@@ -11,22 +11,21 @@ import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'materi
 import { Delete, Edit, Email } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
-import { useNotification } from '@/hooks/useNotification';
-import apiFetch from '@/services/api';
+import { useNotification } from '../../hooks/useNotification';
+import apiFetch from '../../services/api';
 
 import { IndustriaModel } from 'models/IndustriaModel';
-import { TipoContato } from '@/enums/TipoContato';
+import { TipoContato } from '../../enums/TipoContato';
 
-import RegisterModal from './ModalCadastro';
-import AddIcon from '@mui/icons-material/Add';
+import RegisterModal from './RegisterModal';
 
-import * as Input from '@/styles/InputStyles';
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as Input from '../../styles/InputStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File | null>();
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
 
     const { showNotification } = useNotification();
@@ -77,28 +76,29 @@ const IndustriaPage = () => {
                 console.log(e);
             });
     };
-    const sendIndustriasFile = () => {
-        apiFetch
-            .post(
-                '/industria/tabela',
-                {
-                    data: {
-                        file: file,
+    useEffect(() => {
+        console.log(file);
+        if (file != undefined) {
+            apiFetch
+                .post(
+                    '/industria/tabela',
+                    {
+                        file,
                     },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
                     },
-                },
-            )
-            .then((data) => {
-                setData(data.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
+                )
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+    }, [file]);
 
     const columns = useMemo<MRT_ColumnDef<IndustriaModel>[]>(
         () => [
@@ -252,10 +252,20 @@ const IndustriaPage = () => {
     });
 
     return (
-        <>
-         <header className="flex justify-between">
-                <Typography variant="h4">Industrias</Typography>
-                       <Button
+        <Box display={'grid'} sx={{ maxHeight: '100vh' }}>
+            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
+                Industrias
+            </Typography>
+            <Box
+                display={'flex'}
+                sx={{
+                    justifyContent: 'space-between',
+                    marginBottom: '20px',
+                }}
+            >
+                <Box>
+                    {' '}
+                    <Button
                         aria-controls={openMenuOption ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={openMenuOption ? 'true' : undefined}
@@ -263,7 +273,8 @@ const IndustriaPage = () => {
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
-                        endIcon={<ArrowDropDownIcon />}
+                        sx={ButtonStyle.optionMenu}
+                        startIcon={<ArrowDropDownIcon />}
                     >
                         Opções
                     </Button>
@@ -274,19 +285,13 @@ const IndustriaPage = () => {
                         onClose={handleClose}
                         sx={{
                             margin: '5px',
+                            padding: 0,
                             '& .css-6hp17o-MuiList-root-MuiMenu-list': {
                                 padding: 0,
                             },
                         }}
-                >
-                     <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
-                                <Button variant="contained" onClick={ChangeModalState}fullWidth endIcon={<AddIcon />}>
-                                    Adicionar Industria
-                                </Button>
-                                
-                        </MenuItem> 
+                    >
                         <MenuItem
-                            onClick={handleClose}
                             sx={{
                                 margin: 0,
                                 padding: 0,
@@ -294,38 +299,38 @@ const IndustriaPage = () => {
                         >
                             <Button
                                 component="label"
-                            variant="contained"
-                            fullWidth
-                                endIcon={<CloudUploadIcon />}
+                                variant="contained"
+                                sx={ButtonStyle.menuButton}
+                                startIcon={<CloudUploadIcon />}
                             >
-                                importar indústrias
+                                Cadastro automático
                                 <Input.VisuallyHiddenInput
                                     type="file"
                                     onChange={(event) => {
-                                        setFile(event.target.files[0]);
-                                        console.log(event);
-                                        sendIndustriasFile();
+                                        setFile(event?.target?.files[0]);
                                     }}
                                 />
                             </Button>
                         </MenuItem>
-                        <MenuItem onClick={handleClose} sx={{ background: 0, padding: 0 }}>
-                            <Link to="../../files/modelo.xlsx" target="_blank" download>
+                        <MenuItem onClick={handleClose} sx={{ margin: 0, padding: 0 }}>
+                            <Link to="/files/modelo.xlsx" target="_blank" download>
                                 {' '}
-                            <Button
-                                fullWidth
+                                <Button
                                     component="label"
                                     variant="contained"
-                                    endIcon={<FileDownloadIcon />}
+                                    sx={ButtonStyle.menuButton}
+                                    startIcon={<FileDownloadIcon />}
                                 >
                                     Baixar a tabela modelo
                                 </Button>
                             </Link>
-                            </MenuItem>
-            
+                        </MenuItem>
                     </Menu>
-            </header>
-<Box display={'grid'} sx={{ maxHeight: '100vh' }} className="my-5">
+                </Box>
+                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
+                    <AddOutlinedIcon sx={ButtonStyle.iconButton} />
+                </IconButton>
+            </Box>
 
             <MaterialReactTable table={table} />
             {open ? (
@@ -339,8 +344,6 @@ const IndustriaPage = () => {
                 ''
             )}
         </Box>
-        </>
-        
     );
 };
 export default IndustriaPage;

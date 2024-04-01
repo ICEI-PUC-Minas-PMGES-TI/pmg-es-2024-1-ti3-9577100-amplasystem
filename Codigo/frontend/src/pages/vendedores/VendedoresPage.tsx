@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import AddIcon from '@mui/icons-material/Add';
-import apiFetch from '@/services/api';
+import apiFetch from '../../services/api';
 import { VendedorModel } from 'models/VendedorModel';
 import { Box } from '@mui/system';
-import { Button, IconButton, Typography } from '@mui/material';
-import RegisterModal from './ModalCadastro';
+import { IconButton, Typography } from '@mui/material';
+import RegisterModal from './RegisterModal';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
-import { useNotification } from '@/hooks/useNotification';
+import { useAuth } from '../../hooks/useAuth';
+import { useNotification } from '../../hooks/useNotification';
 
-import * as ButtonStyle from '@/styles/ButtonsStyles';
+import * as ButtonStyle from '../../styles/ButtonsStyles';
 const VendedoresPage = () => {
     const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
     const [data, setData] = useState<VendedorModel[]>([]);
@@ -150,24 +150,25 @@ const VendedoresPage = () => {
         },
     });
     return (
-        <>
-            <header className="flex justify-between">
-                <Typography variant="h4">Vendedores</Typography>
-                <Button variant="contained" onClick={ChangeModalState} endIcon={<AddIcon />}>
-                    Adicionar Vendedor
-                </Button>
-            </header>
-
-            <Box display={'grid'} className="my-5">
-                <MaterialReactTable table={table} />
-                <RegisterModal
-                    setOpenModal={setOpen}
-                    openModal={open}
-                    setReload={setReload}
-                    updateVendedor={vendedor}
-                />
+        <Box display={'grid'}>
+            <Typography variant="h4" sx={{ textAlign: 'left', paddingBottom: '20px' }} color="#202022">
+                Vendedores
+            </Typography>
+            <Box
+                display={'flex'}
+                sx={{
+                    marginBottom: '20px',
+                    justifyContent: 'flex-end',
+                }}
+            >
+                <IconButton onClick={ChangeModalState} sx={ButtonStyle.addButton} aria-label="add">
+                    <AddIcon sx={ButtonStyle.iconButton} />
+                </IconButton>
             </Box>
-        </>
+
+            <MaterialReactTable table={table} />
+            <RegisterModal setOpenModal={setOpen} openModal={open} setReload={setReload} updateVendedor={vendedor} />
+        </Box>
     );
 };
 
