@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Modal, Select, Typography } from '@mui/material';
+import { Button, FormControl, IconButton, InputLabel, Modal, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 
@@ -286,13 +286,21 @@ const ClientesPage = () => {
                         fullWidth
                         defaultValue={cliente?.cnpj}
                     />
-                    <Select fullWidth defaultValue={cliente?.vendedor?.id} name="vendedorId">
-                        {vendedores.map((vendedor) => (
-                            <option key={vendedor.id} value={Number(vendedor.id)}>
-                                {vendedor.nome}
-                            </option>
-                        ))}
-                    </Select>
+                    <FormControl fullWidth>
+                        <InputLabel id="vendedorLabel">Vendedor</InputLabel>
+                        <Select
+                            labelId="vendedorLabel"
+                            label="Vendedor"
+                            defaultValue={cliente?.vendedor?.id}
+                            name="vendedorId"
+                        >
+                            {vendedores.map((vendedor) => (
+                                <option key={vendedor.id} value={Number(vendedor.id)}>
+                                    {vendedor.nome}
+                                </option>
+                            ))}
+                        </Select>
+                    </FormControl>
                     <TextField
                         margin="dense"
                         id="clienteTelefone"
