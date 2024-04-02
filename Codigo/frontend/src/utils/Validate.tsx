@@ -14,3 +14,24 @@ class Validade {
     };
 }
 export default Validade;
+ 
+export const formatPhoneNumber =  (phoneNumber: string)=> {
+ const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+        // Verificar o tamanho do número de telefone
+        if (numericPhoneNumber.length >= 2 && numericPhoneNumber.length <= 11) {
+            // Formatando com DDD
+            let formattedPhoneNumber = '(' + numericPhoneNumber.substring(0, 2) + ') ';
+            // Adicionando o restante do número
+            if (numericPhoneNumber.length <= 7) {
+                formattedPhoneNumber += numericPhoneNumber.substring(2);
+            } else {
+                formattedPhoneNumber += numericPhoneNumber.substring(2, 7) + '-' + numericPhoneNumber.substring(7);
+            }
+            return formattedPhoneNumber;
+        } else {
+            // Se o número de telefone não for válido, retornar o próprio número
+            return phoneNumber;
+        }
+    }
+

@@ -20,8 +20,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     const data = [
         { id: 1, icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
         { id: 2, icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
+          { id: 4, icon: <Person />, label: 'Cliente', location: '/clientes' },
         { id: 3, icon: <Factory />, label: 'Indústria', location: '/industrias' },
-        { id: 4, icon: <Person />, label: 'Cliente', location: '/clientes' },
         { id: 5, icon: <AttachMoneyIcon />, label: 'Financeiro', location: '/financeiro' },
     ];
 

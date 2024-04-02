@@ -105,129 +105,129 @@ const RegisterModal = (props: IRegisterModalProps) => {
         props.setOpenModal(!open);
     }
     useEffect(() => {
-        setRefCargo(props.updateCliente?.nome_fantasia || '');
+        setRefCargo(props.updateCliente?.nomeFantasia || '');
         setRefEmail(props.updateCliente?.cnpj || '');
         setRefNome(props.updateCliente?.endereco || '');
     }, [props.updateCliente]);
     return (
-        <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
-            <Dialog
-                fullWidth={true}
-                maxWidth="md"
-                open={props.openModal}
-                onClose={handleClose}
-                sx={{
-                    pointerEvents: loading ? 'none' : 'auto',
-                }}
-            >
-                <Box sx={{ ...ModalStyle.Modal }}>
-                    <CircularProgress
-                        sx={{
-                            visibility: loading ? 'visible' : 'hidden',
-                            position: 'absolute',
-                            top: '40%',
-                            left: '45%',
-                        }}
-                    />
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
-                        sx={ButtonStyle.closeButton}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h3"
-                        gutterBottom
-                        sx={{
-                            color: '#344054',
-                        }}
-                    >
-                        {props.updateCliente == undefined ? 'Cadastrar' : 'Atualizar '} cliente
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Nome *
-                    </Typography>
-                    <TextField
-                        id="nome"
-                        variant="outlined"
-                        placeholder="Nome"
-                        fullWidth
-                        value={refNome}
-                        sx={Input.input}
-                        onChange={(event) => {
-                            setRefNome(event.target.value);
-                        }}
-                    />
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Email *
-                    </Typography>
-                    <TextField
-                        id="cnpj"
-                        variant="outlined"
-                        placeholder="Email"
-                        fullWidth
-                        value={refEmail}
-                        sx={Input.input}
-                        onChange={(event) => {
-                            setRefEmail(event.target.value);
-                        }}
-                    />
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Cargo *
-                    </Typography>
-                    <Autocomplete
-                        disablePortal
-                        id="nome_fantasia"
-                        options={optionCargo}
-                        fullWidth
-                        value={refCargo}
-                        renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
-                        onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
-                            setRefCargo((event.target as HTMLInputElement).value || '');
-                        }}
-                    />
-                    <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                        sx={{
-                            color: '#344054',
-                        }}
-                    >
-                        apenas administradores, podem cadastrar novos clientees
-                    </Typography>
+            <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
+                <Dialog
+                    fullWidth={true}
+                    maxWidth="md"
+                    open={props.openModal}
+                    onClose={handleClose}
+                    sx={{
+                        pointerEvents: loading ? 'none' : 'auto',
+                    }}
+                >
+                    <Box sx={{ ...ModalStyle.Modal }}>
+                        <CircularProgress
+                            sx={{
+                                visibility: loading ? 'visible' : 'hidden',
+                                position: 'absolute',
+                                top: '40%',
+                                left: '45%',
+                            }}
+                        />
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleClose}
+                            aria-label="close"
+                            sx={ButtonStyle.closeButton}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography
+                            variant="h3"
+                            gutterBottom
+                            sx={{
+                                color: '#344054',
+                            }}
+                        >
+                            {props.updateCliente == undefined ? 'Cadastrar' : 'Atualizar '} cliente
+                        </Typography>
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Nome *
+                        </Typography>
+                        <TextField
+                            id="nome"
+                            variant="outlined"
+                            placeholder="Nome"
+                            fullWidth
+                            value={refNome}
+                            sx={Input.input}
+                            onChange={(event) => {
+                                setRefNome(event.target.value);
+                            }}
+                        />
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Email *
+                        </Typography>
+                        <TextField
+                            id="cnpj"
+                            variant="outlined"
+                            placeholder="Email"
+                            fullWidth
+                            value={refEmail}
+                            sx={Input.input}
+                            onChange={(event) => {
+                                setRefEmail(event.target.value);
+                            }}
+                        />
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Cargo *
+                        </Typography>
+                        <Autocomplete
+                            disablePortal
+                            id="nome_fantasia"
+                            options={optionCargo}
+                            fullWidth
+                            value={refCargo}
+                            renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
+                            onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
+                                setRefCargo((event.target as HTMLInputElement).value || '');
+                            }}
+                        />
+                        <Typography
+                            variant="caption"
+                            display="block"
+                            gutterBottom
+                            sx={{
+                                color: '#344054',
+                            }}
+                        >
+                            apenas administradores, podem cadastrar novos clientees
+                        </Typography>
 
-                    <Button onClick={onSubmit} variant="contained" sx={ButtonStyle.greenButton}>
-                        {props.updateCliente == undefined ? 'Cadastrar' : 'Atualizar '}
-                    </Button>
+                        <Button onClick={onSubmit} variant="contained" sx={ButtonStyle.greenButton}>
+                            {props.updateCliente == undefined ? 'Cadastrar' : 'Atualizar '}
+                        </Button>
 
-                    <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
-                        Cancelar
-                    </Button>
-                </Box>
-            </Dialog>
-        </Modal>
+                        <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
+                            Cancelar
+                        </Button>
+                    </Box>
+                </Dialog>
+            </Modal>
     );
 };
 export default RegisterModal;
