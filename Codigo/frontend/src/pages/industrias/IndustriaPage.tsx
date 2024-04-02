@@ -21,7 +21,7 @@ import RegisterModal from './RegisterModal.tsx';
 
 import * as Input from '@/styles/types/InputStyles';
 import * as ButtonStyle from '@/styles/types/ButtonsStyles';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
@@ -79,29 +79,30 @@ const IndustriaPage = () => {
                 console.log(e);
             });
     };
-    const sendIndustriasFile = () => {
-        apiFetch
-            .post(
-                '/industria/tabela',
-                {
-                    data: {
-                        file: file,
-                    },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                },
-            )
-            .then((data) => {
-                setData(data.data);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    };
 
+    useEffect(() => {
+        console.log(file);
+        if (file != undefined) {
+            apiFetch
+                .post(
+                    '/industria/tabela',
+                    {
+                        file,
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                )
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+    }, [file]);
     const columns = useMemo<MRT_ColumnDef<IndustriaModel>[]>(
         () => [
             {
@@ -297,7 +298,6 @@ const IndustriaPage = () => {
                 } }
             >
                 <MenuItem
-                    onClick={ handleClose }
                     sx={ {
                         margin: 0,
                         padding: 0,
@@ -307,10 +307,8 @@ const IndustriaPage = () => {
                         Importar industria
                         <Input.VisuallyHiddenInput
                             type="file"
-                            onChange={ (event) => {
-                                // setFile(event.target.files[0]);
-                                console.log(event);
-                                sendIndustriasFile();
+                            onChange={(event) => {
+                                    setFile(event.target.files[0]);
                             } }
                         />
                     </Button>
