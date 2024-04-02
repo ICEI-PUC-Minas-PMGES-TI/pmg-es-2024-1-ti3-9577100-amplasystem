@@ -115,7 +115,7 @@
 // }
 // /* eslint-enable */
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 import { ChevronFirst, ChevronLast, MoreVertical } from 'lucide-react';
@@ -123,10 +123,11 @@ import logo from '../assets/logo.png';
 import { createContext, ReactNode, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import theme from '../styles/themes/theme';
 
 type SidebarProps = {
     children: ReactNode;
+        setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
+    openSideBar: boolean;
 };
 
 type SidebarItemProps = {
@@ -151,10 +152,12 @@ const StyledBox = styled(Box)(({ theme }) => ({
     height: '100vh',
 }));
 
-export default function CustomSidebar({ children }: SidebarProps): JSX.Element {
-    const [expanded, setExpanded] = useState(false);
+export default function CustomSidebar({ children,openSideBar }: SidebarProps): JSX.Element {
+    const [expanded, setExpanded] = useState(openSideBar);
     const { user } = useAuth();
-
+    useEffect(() => {
+        setExpanded(openSideBar)
+    },[openSideBar])
     return (
         <>
             <aside className="h-screen">
@@ -165,12 +168,7 @@ export default function CustomSidebar({ children }: SidebarProps): JSX.Element {
                             className={`overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}
                             alt="Logo"
                         />
-                        <button
-                            onClick={() => setExpanded((curr) => !curr)}
-                            className="p-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition-all duration-300 ease-in-out"
-                        >
-                            {expanded ? <ChevronFirst /> : <ChevronLast />}
-                        </button>
+                   
                     </div>
 
                     <SidebarContext.Provider value={{ expanded }}>

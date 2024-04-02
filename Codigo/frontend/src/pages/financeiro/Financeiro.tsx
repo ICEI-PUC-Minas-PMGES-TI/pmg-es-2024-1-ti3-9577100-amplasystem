@@ -292,7 +292,7 @@ const FinanceiroPage = () => {
                         value={financeiro && financeiro.faturamento !== null ? financeiro.faturamento : ''}
                         onChange={handleFormChange}
                     />
-                    <Select fullWidth value={financeiro?.industria?.id} name="IndustriaId">
+                    <Select fullWidth value={financeiro?.Industrias_id} name="IndustriaId">
                         {industrias.map((industria) => (
                             <option key={industria.id} value={Number(industria.id)}>
                                 {industria.nome}

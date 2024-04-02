@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box } from '@mui/system';
 import Dashboard from '@mui/icons-material/Dashboard';
@@ -15,6 +15,8 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+
+    const [openNavBar,setOpenNavBar]=  useState<boolean>(false)
     const data = [
         { id: 1, icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
         { id: 2, icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
@@ -25,9 +27,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
 
     return (
         <Box>
-            <Navbar />
+            <Navbar openSideBar={openNavBar} setOpenSideBar={setOpenNavBar} />
             <Box display={'flex'} sx={{ height: '100vh' }}>
-                <Sidebar>
+                <Sidebar openSideBar ={openNavBar} setOpenSideBar={setOpenNavBar}>
                     {data.map((item) => (
                         <SidebarItem key={item.id} icon={item.icon} text={item.label} location={item.location} />
                     ))}
