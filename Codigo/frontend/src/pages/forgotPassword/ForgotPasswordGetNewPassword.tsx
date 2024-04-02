@@ -14,7 +14,7 @@ import Validade from '@/utils/Validate';
 import * as Input from '@/styles/types/InputStyles';
 import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 
-const ForgotPasswordGetEmail = () => {
+const ForgotPasswordGetNewPassword = () => {
     const { passwordWasReset, changePassword } = useAuth();
     const navigate = useNavigate();
     const { showNotification } = useNotification();
@@ -134,4 +134,4 @@ const ForgotPasswordGetEmail = () => {
     );
 };
 
-export default ForgotPasswordGetEmail;
+export default ForgotPasswordGetNewPassword;
