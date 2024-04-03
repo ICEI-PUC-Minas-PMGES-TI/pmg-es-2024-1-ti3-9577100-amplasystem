@@ -15,12 +15,11 @@ interface DashboardLayoutProps {
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-
-    const [openNavBar,setOpenNavBar]=  useState<boolean>(false)
+    const [openNavBar, setOpenNavBar] = useState<boolean>(false);
     const data = [
         { id: 1, icon: <Dashboard />, label: 'Dashboard', location: '/dashboard' },
         { id: 2, icon: <Handshake />, label: 'Vendedor', location: '/vendedores' },
-          { id: 4, icon: <Person />, label: 'Cliente', location: '/clientes' },
+        { id: 4, icon: <Person />, label: 'Cliente', location: '/clientes' },
         { id: 3, icon: <Factory />, label: 'Indústria', location: '/industrias' },
         { id: 5, icon: <AttachMoneyIcon />, label: 'Financeiro', location: '/financeiro' },
     ];
@@ -29,7 +28,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         <Box>
             <Navbar openSideBar={openNavBar} setOpenSideBar={setOpenNavBar} />
             <Box display={'flex'} sx={{ height: '100vh' }}>
-                <Sidebar openSideBar ={openNavBar} setOpenSideBar={setOpenNavBar}>
+                <Sidebar openSideBar={openNavBar} setOpenSideBar={setOpenNavBar}>
                     {data.map((item) => (
                         <SidebarItem key={item.id} icon={item.icon} text={item.label} location={item.location} />
                     ))}
