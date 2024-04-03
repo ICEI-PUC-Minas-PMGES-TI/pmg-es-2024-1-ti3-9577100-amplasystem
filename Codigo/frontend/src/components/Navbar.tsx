@@ -18,7 +18,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
 import { useAuth } from '@/hooks/useAuth.ts';
- interface INavBar {
+interface INavBar {
     setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
     openSideBar: boolean;
 }
@@ -167,7 +167,16 @@ export default function PrimarySearchAppBar(props: INavBar) {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="sticky" color="secondary">
                 <Toolbar>
-                    <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }} onClick={()=>{props.setOpenSideBar(!props.openSideBar)}}>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        sx={{ mr: 2 }}
+                        onClick={() => {
+                            props.setOpenSideBar(!props.openSideBar);
+                        }}
+                    >
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>

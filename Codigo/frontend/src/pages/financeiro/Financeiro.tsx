@@ -39,7 +39,7 @@ const FinanceiroPage = () => {
 
     const getIndustrias = useCallback(async () => {
         try {
-            const res = await apiFetch.get('/industria/');
+            const res = await apiFetch.get('/industrias/');
             setIndustrias(res.data);
         } catch (err) {
             console.log(err);

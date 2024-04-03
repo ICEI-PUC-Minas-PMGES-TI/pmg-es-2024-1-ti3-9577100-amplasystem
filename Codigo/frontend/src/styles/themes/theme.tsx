@@ -12,6 +12,11 @@ const theme = createTheme({
         secondary: {
             main: grey[900],
         },
+        third: {
+            main : blue[200],
+
+        },
+
         success: {
             main: green[500],
         },
