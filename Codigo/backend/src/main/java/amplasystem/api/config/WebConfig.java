@@ -45,6 +45,8 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     public void run(String... args) {
         Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"),
                 "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());
+        Vendedor v2 = new Vendedor(null, "admin@admin", SecurityConfig.passwordEncoder().encode("admin"),
+                "Admin", Cargo.ADMINISTRADOR, new ArrayList<>());
 
         Industria i1 = new Industria(null, "Industria teste 1", new ArrayList<>(), null, new ArrayList<>());
         Industria i2 = new Industria(null, "Industria teste 2", new ArrayList<>(), null, new ArrayList<>());
@@ -56,6 +58,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
         // i1.setFinanceiro(f1);
 
         vendedorRepository.save(v1);
+        vendedorRepository.save(v2);
         industriaRepository.saveAll(Arrays.asList(i1, i2, i3, i4));
         financeiroRepository.save(f1);
     }

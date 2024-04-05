@@ -39,10 +39,11 @@ public class Cliente {
     @JoinColumn(name = "endereco")
     private Endereco endereco;
 
-    public Cliente(Integer id, String nomeFantasia, String cnpj, Endereco endereco) {
+    public Cliente(Integer id, String nomeFantasia, String cnpj, String telefone, Endereco endereco) {
         this.id = id;
         this.nomeFantasia = nomeFantasia;
         this.cnpj = cnpj;
+        this.telefone = telefone;
         this.endereco = endereco;
     }
 }

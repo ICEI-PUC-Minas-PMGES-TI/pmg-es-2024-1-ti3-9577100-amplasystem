@@ -27,5 +27,7 @@ public class RequestClientDTO {
     @NotNull(message = "Id do vendedor é obrigatório")
     private Integer idVendedor;
 
+    private String telefone;
+
     private Endereco endereco;
 }

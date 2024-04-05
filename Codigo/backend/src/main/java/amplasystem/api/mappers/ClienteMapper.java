@@ -11,6 +11,7 @@ public class ClienteMapper {
                 cliente.getId(),
                 cliente.getNomeFantasia(),
                 cliente.getCnpj(),
+                cliente.getTelefone(),
                 VendedorMapper.toDTO(cliente.getVendedor()),
 //                cliente.getOrdemDeCompras(),
                 cliente.getEndereco()
@@ -22,6 +23,7 @@ public class ClienteMapper {
                 cliente.getId(),
                 cliente.getNomeFantasia(),
                 cliente.getCnpj(),
+                cliente.getTelefone(),
                 cliente.getEndereco()
         );
     }

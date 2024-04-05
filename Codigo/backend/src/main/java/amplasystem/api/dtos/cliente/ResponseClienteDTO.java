@@ -19,6 +19,7 @@ public class ResponseClienteDTO {
     private Integer id;
     private String nomeFantasia;
     private String cnpj;
+    private String telefone;
     private VendedorDTO vendedor;
     private Endereco endereco;
 //    private List<OrdemDeCompra> ordemDeCompras;
