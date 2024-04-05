@@ -11,12 +11,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, FormControl, IconButton, InputLabel, Modal, Select, Typography } from '@mui/material';
+import { Button, FormControl, IconButton, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 
 import apiFetch from '@/services/api';
-import { ClienteModel } from '@/models/ClienteModel';
+import { ClienteFormModel, ClienteModel } from '@/models/ClienteModel';
 import { VendedorModel } from '@/models/VendedorModel';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
@@ -72,7 +72,7 @@ const ClientesPage = () => {
         getClientes();
     }, [getClientes]);
 
-    const postCliente = async (novoCliente: ClienteModel) => {
+    const postCliente = async (novoCliente: ClienteFormModel) => {
         setTableLoading(true);
         try {
             const res = await apiFetch.post('/cliente/', novoCliente);
@@ -88,7 +88,7 @@ const ClientesPage = () => {
             setTableLoading(false);
         }
     };
-    const updateCliente = async (clienteAtualizado: ClienteModel) => {
+    const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
         setTableLoading(true);
         try {
             const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
@@ -153,15 +153,15 @@ const ClientesPage = () => {
                 ),
             },
             {
-                accessorKey: 'cidade',
+                accessorKey: 'endereco.cidade',
                 header: 'Cidade',
                 Cell: ({ cell }) => (
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
                 ),
             },
             {
-                accessorKey: 'endereco',
-                header: 'Endereço',
+                accessorKey: 'endereco.rua',
+                header: 'Rua',
                 Cell: ({ cell }) => (
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
                 ),
@@ -194,6 +194,7 @@ const ClientesPage = () => {
                 <IconButton
                     onClick={() => {
                         setDialogState(true);
+                        console.log('Row', row.original);
                         setCliente(row.original);
                     }}
                 >
@@ -257,9 +258,23 @@ const ClientesPage = () => {
                     onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries((formData as any).entries()) as ClienteModel;
+                        const formJson = Object.fromEntries(formData.entries());
+
+                        let _cliente: ClienteFormModel = {
+                            id: cliente?.id ?? null,
+                            nomeFantasia: String(formJson?.nomeFantasia),
+                            cnpj: String(formJson.cnpj),
+                            idVendedor: formJson.idVendedor ? Number(formJson.idVendedor) : 0,
+                            telefone: formJson.telefone ? String(formJson.telefone) : undefined,
+                            endereco: {
+                                id: formJson.enderecoId ? Number(formJson.enderecoId) : null,
+                                cidade: formJson.cidade ? String(formJson.cidade) : undefined,
+                                rua: formJson.rua ? String(formJson.rua) : undefined,
+                            },
+                        };
+
                         console.log('FormJson', formJson);
-                        cliente ? updateCliente(formJson) : postCliente(formJson);
+                        _cliente.id ? updateCliente(_cliente) : postCliente(_cliente);
                         handleClose();
                     },
                 }}
@@ -292,12 +307,12 @@ const ClientesPage = () => {
                             labelId="vendedorLabel"
                             label="Vendedor"
                             defaultValue={cliente?.vendedor?.id}
-                            name="vendedorId"
+                            name="idVendedor"
                         >
                             {vendedores.map((vendedor) => (
-                                <option key={vendedor.id} value={Number(vendedor.id)}>
+                                <MenuItem key={vendedor.id} value={Number(vendedor.id)}>
                                     {vendedor.nome}
-                                </option>
+                                </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -315,7 +330,7 @@ const ClientesPage = () => {
                         name="cidade"
                         label="Cidade"
                         fullWidth
-                        defaultValue={cliente?.endereco.cidade}
+                        defaultValue={cliente?.endereco?.cidade}
                     />
                     <TextField
                         margin="dense"
@@ -323,7 +338,7 @@ const ClientesPage = () => {
                         name="rua"
                         label="Rua"
                         fullWidth
-                        defaultValue={cliente?.endereco.rua}
+                        defaultValue={cliente?.endereco?.rua}
                     />
                 </DialogContent>
                 <DialogActions>
