@@ -315,15 +315,15 @@ const ClientesPage = () => {
                         name="cidade"
                         label="Cidade"
                         fullWidth
-                        defaultValue={cliente?.cidade}
+                        defaultValue={cliente?.endereco.cidade}
                     />
                     <TextField
                         margin="dense"
                         id="clienteEndereco"
-                        name="endereco"
-                        label="Endereço"
+                        name="rua"
+                        label="Rua"
                         fullWidth
-                        defaultValue={cliente?.endereco}
+                        defaultValue={cliente?.endereco.rua}
                     />
                 </DialogContent>
                 <DialogActions>

@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from '@/routes/ProtectedRoutes';
 import { DashboardLayout } from '@/layouts/DashboardLayout.tsx';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const FinanceiroPage = React.lazy(() => import('@/pages/financeiro/Financeiro.tsx'));
 const IndustriaPage = React.lazy(() => import('@/pages/industrias/IndustriaPage.tsx'));
@@ -15,7 +16,12 @@ const RouterRoutes = () => {
     return (
         <Router>
             {/* TODO: Add a loader component */}
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Backdrop
+  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={true}
+>
+  <CircularProgress color="inherit" />
+</Backdrop>}>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<ProtectedRoute />}>

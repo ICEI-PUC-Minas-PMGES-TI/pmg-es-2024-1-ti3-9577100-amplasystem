@@ -1,18 +1,15 @@
 import {useEffect, useMemo, useState} from 'react';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import CallIcon from '@mui/icons-material/Call';
-import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import {Box} from '@mui/system';
-import {Button, IconButton, Stack, Typography, Menu, MenuItem, ButtonGroup, Icon} from '@mui/material';
+import {Button, IconButton, Typography, Menu, MenuItem, ButtonGroup} from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {MRT_ColumnDef, MaterialReactTable, useMaterialReactTable} from 'material-react-table';
-import {Delete, Edit, Email} from '@mui/icons-material';
+import {Delete, Edit} from '@mui/icons-material';
 
 import {useNotification} from '@/hooks/useNotification';
-import apiFetch from '@/services/api';
+    import apiFetch from '@/services/api';
 
 import {IndustriaModel} from 'models/IndustriaModel';
 import {TipoContato} from '@/enums/TipoContato';
@@ -20,12 +17,14 @@ import {TipoContato} from '@/enums/TipoContato';
 import RegisterModal from './RegisterModal.tsx';
 
 import * as Input from '@/styles/types/InputStyles';
-import * as ButtonStyle from '@/styles/types/ButtonsStyles';
-import {Link} from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Link } from 'react-router-dom';
+import { IndustriasDetailView } from './IndustriasDetailView.tsx';
 
 const IndustriaPage = () => {
     const [data, setData] = useState<IndustriaModel[]>([]);
     const [open, setOpen] = useState(false);
+    const [openDetailView, setOpenDetailView] = useState(false);
     const [reload, setReload] = useState(true);
     const [file, setFile] = useState<File | null>(null);
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
@@ -174,7 +173,15 @@ const IndustriaPage = () => {
             },
         },
         renderRowActions: ({row}) => (
-            <Box sx={ {display: 'flex', flexWrap: 'nowrap', gap: '8px'} }>
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
+                <IconButton
+                    onClick={() => {
+                        setOpenDetailView(true)
+                         setIndustria(JSON.parse(JSON.stringify(row.original)));
+                    } }
+                >
+                    <VisibilityIcon/>
+                </IconButton>
                 <IconButton
                     onClick={ () => {
                         setOpen(true);
@@ -195,36 +202,7 @@ const IndustriaPage = () => {
                 </IconButton>
             </Box>
         ),
-        renderDetailPanel: ({row}) => {
-            return (
-                <Stack spacing={ 2 } direction="row">
-                    { row.original.contatos.map((contato) => {
-                        return (
-                            <>
-                                <Box>
-                                    <Typography variant="h6" color="text.primary">
-                                        { contato.tipoContato }
-                                    </Typography>
-                                    <Typography variant="body2" color="text.primary">
-                                        <PersonIcon/> { contato.nome }
-                                    </Typography>
-                                    <Typography variant="body2" color="text.primary">
-                                        <CallIcon/> { contato.telefone }
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        color="text.primary"
-                                        onClick={ () => window.open(`mailto:${ contato.email }?subject=Ampla System!`) }
-                                    >
-                                        <Email/> { contato.email }{ ' ' }
-                                    </Typography>
-                                </Box>
-                            </>
-                        );
-                    }) }
-                </Stack>
-            );
-        },
+      
         muiTableContainerProps: {
             sx: {maxWidth: '100%'},
         },
@@ -308,7 +286,9 @@ const IndustriaPage = () => {
                         <Input.VisuallyHiddenInput
                             type="file"
                             onChange={(event) => {
-                                    setFile(event.target.files[0]);
+                                if (event.target.files[0] != null) {
+                                        setFile(event.target.files[0]);
+                                  }
                             } }
                         />
                     </Button>
@@ -328,6 +308,7 @@ const IndustriaPage = () => {
 
                 </MenuItem>
             </Menu>
+            {openDetailView && industria != undefined ? <IndustriasDetailView industria={industria} open={openDetailView} handleClose={() => { setOpenDetailView(false); setIndustria(undefined)}}/> : ""}
         </Box>
     );
 };

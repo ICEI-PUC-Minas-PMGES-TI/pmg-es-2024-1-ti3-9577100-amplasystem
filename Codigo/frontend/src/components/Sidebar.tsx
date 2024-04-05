@@ -150,7 +150,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
     height: '100vh',
-}));
+})); 
 
 export default function CustomSidebar({ children, openSideBar }: SidebarProps): JSX.Element {
     const [expanded, setExpanded] = useState(openSideBar);

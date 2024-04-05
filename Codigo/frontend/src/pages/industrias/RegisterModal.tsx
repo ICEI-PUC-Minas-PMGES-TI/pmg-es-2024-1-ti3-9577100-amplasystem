@@ -101,9 +101,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
 
     useEffect(() => {
         const aux2: JSX.Element[] = [];
-        console.log("eu estodasdasu tenteando");
         industria?.contatos.map((element, index) => {
-            console.log("eu estou tenteando");
             aux2.push(
                 <IndustriaContato
                     key={ element.tipoContato }

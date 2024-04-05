@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         ex.getConstraintViolations().forEach(violation -> {
             String propertyPath = violation.getPropertyPath().toString();
-            String message = violation.getMessage();
+            String message = violation.getMessage();    
             errors.put(propertyPath, message);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
