@@ -154,7 +154,7 @@ const VendedoresPage = () => {
             <header className="flex justify-between">
                 <Typography variant="h4">Vendedores</Typography>
                 <Button variant="contained" onClick={ChangeModalState} endIcon={<AddIcon />}>
-                    Adicionar cliente
+                    Adicionar Vendedor
                 </Button>
             </header>
 
