@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import {
     Modal,
     Box,
@@ -14,51 +14,54 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FinanceiroModel } from 'models/FinanceiroModel';
+import { IndustriaModel } from '@/models/IndustriaModel';
 
 interface FinanceiroModalProps {
     open: boolean;
     onClose: () => void;
     onSave: (data: FinanceiroModel) => void;
     financeiro?: FinanceiroModel;
-    industrias: string[];
+    industrias: IndustriaModel[];
 }
 
 const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave, financeiro, industrias }) => {
-    const [comissao, setComissao] = useState<string>('');
-    const [faturamento, setFaturamento] = useState<string>('');
-    const [tipoFiscal, setTipoFiscal] = useState<string>('');
-    const [industria, setIndustria] = useState<string>('');
+    const [newFinanceiro, setNewFinanceiro] = useState<FinanceiroModel>()
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (financeiro) {
-            setComissao(financeiro.comissao.toString());
-            setFaturamento(financeiro.faturamento);
-            setTipoFiscal(financeiro.tipoFiscal);
-            setIndustria(financeiro.industria);
-        } else {
-            setComissao('');
-            setFaturamento('');
-            setTipoFiscal('');
-            setIndustria('');
+     function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        if (newFinanceiro != undefined) {
+            const {name, value} = e.target as HTMLInputElement;
+            if (name == "comissao") {
+                setNewFinanceiro({ ...newFinanceiro, [name]: parseFloat(value) })
+            } else {
+                setNewFinanceiro({ ...newFinanceiro, [name]: value });
+            }
+            console.log(newFinanceiro)
         }
-    }, [financeiro]);
-
+    }
+    useEffect(() => {
+        if (financeiro != undefined) {
+            setNewFinanceiro(financeiro)
+            console.log(industrias)
+            console.log(financeiro)
+        } else {
+            setNewFinanceiro({
+                id: null,
+                comissao: 0.0,
+                tipoFiscal: "",
+                tipoPagamento: "",
+                industria:{}
+            })
+        }
+    },[financeiro])
     const handleSave = async () => {
-        if (!comissao || !faturamento || !tipoFiscal || !industria) {
+        if (!newFinanceiro.comissao || !newFinanceiro.tipoPagamento || !newFinanceiro.tipoFiscal || !newFinanceiro.industria) {
             alert('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
         setLoading(true);
         try {
-            const newFinanceiro: FinanceiroModel = {
-                id: financeiro ? financeiro.id : 0,
-                comissao: parseFloat(comissao),
-                faturamento,
-                tipoFiscal,
-                industria,
-            };
             await onSave(newFinanceiro);
         } catch (error) {
             console.error('Erro ao salvar:', error);
@@ -91,30 +94,31 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                     fullWidth
                     margin="normal"
                     label="Comissão"
-                    value={comissao}
-                    onChange={(e) => setComissao(e.target.value)}
+                    name="comissao"
+                    value={financeiro?.comissao}
+                    onChange={handleChange}
                 />
-                <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Faturamento"
-                    value={faturamento}
-                    onChange={(e) => setFaturamento(e.target.value)}
-                />
+                 <FormControl fullWidth margin="normal">
+                    <InputLabel>Tipo Pagamento</InputLabel>
+                    <Select value={financeiro?.tipoPagamento}name="tipoPagamento" onChange={handleChange}>
+                        <MenuItem value="Faturamento">Faturamento</MenuItem>
+                        <MenuItem value="Liquidez">liquidez</MenuItem>
+                    </Select>
+                </FormControl>
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Tipo Fiscal</InputLabel>
-                    <Select value={tipoFiscal} onChange={(e) => setTipoFiscal(e.target.value as string)}>
-                        <MenuItem value="representação">Representação</MenuItem>
-                        <MenuItem value="promoção de vendas">Promoção de Vendas</MenuItem>
+                    <Select value={financeiro?.tipoFiscal} name='tipoFiscal' onChange={handleChange}>
+                        <MenuItem value="REPRESENTACAO">Representação</MenuItem>
+                        <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
                     </Select>
                 </FormControl>
                 {industrias && (
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Indústria</InputLabel>
-                        <Select value={industria} onChange={(e) => setIndustria(e.target.value as string)}>
+                        <Select value={financeiro?.industria} name='industria' onChange={handleChange}>
                             {industrias.map((industria) => (
-                                <MenuItem key={industria} value={industria}>
-                                    {industria}
+                                <MenuItem key={industria.id} value={industria}>
+                                    {industria.nome}
                                 </MenuItem>
                             ))}
                         </Select>

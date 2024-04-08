@@ -18,11 +18,12 @@ import { useNotification } from '@/hooks/useNotification';
 import { FinanceiroModel } from '@/models/FinanceiroModel';
 import { IndustriaModel } from '@/models/IndustriaModel';
 import { log } from 'console';
+import FinanceiroModal from './FinanceiroModal';
 
 const FinanceiroPage = () => {
     const { showNotification } = useNotification();
 
-    const [financeiro, setFinanceiro] = useState<FinanceiroModel | null>(null);
+    const [financeiro, setFinanceiro] = useState<FinanceiroModel | undefined>(undefined);
     const [financeiros, setFinanceiros] = useState<FinanceiroModel[]>([]);
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = useState(false);
@@ -36,12 +37,12 @@ const FinanceiroPage = () => {
 
     const handleClose = () => {
         setDialogState(false);
-        setFinanceiro(null);
+        setFinanceiro(undefined);
     };
 
     const getIndustrias = useCallback(async () => {
         try {
-            const res = await apiFetch.get('/industria/');
+            const res = await apiFetch.get('/industria');
             setIndustrias(res.data);
         } catch (err) {
             console.log(err);
@@ -50,14 +51,17 @@ const FinanceiroPage = () => {
 
     useEffect(() => {
         getIndustrias();
+        getIndustriasWithOutFinanceiro()
     }, [getIndustrias]);
 
-    useEffect(() => {
-        const industriasSemCad = industrias.filter(
-            (industria) => !financeiros.some((financeiro) => financeiro.Industrias_id === industria.id),
-        );
-        setIndustriasSemCadastro(industriasSemCad);
-    }, [financeiros, industrias]);
+     const getIndustriasWithOutFinanceiro = useCallback(async () => {
+        try {
+            const res = await apiFetch.get('/industria/withOutFinanceiro');
+            setIndustriasSemCadastro(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
 
     const getFinanceiros = useCallback(async () => {
         setTableLoading(true);
@@ -128,26 +132,26 @@ const FinanceiroPage = () => {
         }
     };
 
-    const handleTextFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setFinanceiro({
-            ...financeiro,
-            [name]: value,
-        });
-    };
+    // const handleTextFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const { name, value } = event.target;
+    //     setFinanceiro({
+    //         ...financeiro,
+    //         [name]: value,
+    //     });
+    // };
     
-    const handleSelectChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setFinanceiro({
-            ...financeiro,
-            [name]: value,
-        });
-    };
+    // const handleSelectChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const { name, value } = event.target;
+    //     setFinanceiro({
+    //         ...financeiro,
+    //         [name]: value,
+    //     });
+    // };
 
     const columns = React.useMemo<MRT_ColumnDef<FinanceiroModel>[]>(
         () => [
             {
-                accessorKey: 'industria',
+                accessorKey: 'industria.nome',
                 header: 'Nome da Indústria',
                 Cell: ({ cell }) => (
                     <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
@@ -260,86 +264,8 @@ const FinanceiroPage = () => {
                 </Button>
             </header>
             <MaterialReactTable table={table} />
-            <Dialog
-                open={dialogState}
-                onClose={handleClose}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                        event.preventDefault();
-                        const formData = new FormData(event.currentTarget);
-                        const formJson: any = {};
-                        formData.forEach((value, key) => formJson[key as keyof FinanceiroModel] = value);
-                        financeiro ? updateFinanceiro() : postFinanceiro(formJson as FinanceiroModel);
-                    },
-                }}
-            >
-                <DialogTitle>{financeiro ? `Editar ${financeiro.comissao}` : `Adicionar informações`}</DialogTitle>
-
-                <DialogContent>
-                    <DialogContentText>{financeiro ? 'Edição' : 'Informações'} para o financeiro</DialogContentText>
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="financeiroComissao"
-                        name="comissao"
-                        label="Comissão"
-                        fullWidth
-                        defaultValue={financeiro?.comissao ?? ''}
-                        onChange={handleTextFieldChange}
-                    />
-                    
-                    <TextField
-                        fullWidth
-                        required
-                        value={financeiro?.Industrias_id ?? ''}
-                        name="Industrias_id"
-                        label="Indústria"
-                        onChange={handleSelectChange}
-                        select
-                    >
-                        {industriasSemCadastro.map((industria) => (
-                            <MenuItem key={industria.id} value={String(industria.id)}>
-                                {industria.nome}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <TextField
-                        required
-                        margin="dense"
-                        id="financeiroTipoPagamento"
-                        name="tipoPagamento"
-                        label="Tipo Pagamento"
-                        fullWidth
-                        value={financeiro?.tipoPagamento ?? ''}
-                        onChange={handleTextFieldChange}
-                        select
-                    >
-                        <MenuItem value="liquidez">Liquidez</MenuItem>
-                        <MenuItem value="faturamento">Faturamento</MenuItem>
-                    </TextField>
-                    <TextField
-                        required
-                        margin="dense"
-                        id="financeiroTipoFiscal"
-                        name="tipoFiscal"
-                        label="Tipo Fiscal"
-                        fullWidth
-                        value={financeiro?.tipoFiscal ?? ''}
-                        onChange={handleTextFieldChange}
-                        select
-                    >
-                        <MenuItem value="representação">Representação</MenuItem>
-                        <MenuItem value="promoção de vendas">Promoção de Vendas</MenuItem>
-                    </TextField>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
-                    <Button type="submit">Salvar</Button>
-                </DialogActions>
-            </Dialog>
+           
+            <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} onSave={postFinanceiro} financeiro={financeiro}/>
         </React.Fragment>
     );
 };

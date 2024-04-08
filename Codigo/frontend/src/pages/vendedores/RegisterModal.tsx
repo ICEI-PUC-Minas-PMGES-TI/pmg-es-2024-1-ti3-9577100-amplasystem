@@ -207,6 +207,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             setRefCargo((event.target as HTMLInputElement).value || '');
                         }}
                     />
+                    
                     <Typography
                         variant="caption"
                         display="block"

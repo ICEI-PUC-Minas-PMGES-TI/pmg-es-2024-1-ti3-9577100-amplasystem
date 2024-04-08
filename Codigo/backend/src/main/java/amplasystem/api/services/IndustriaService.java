@@ -44,6 +44,9 @@ public class IndustriaService {
         return industriaRepository.findAll().stream().map(IndustriaMapper::toDTO).collect(Collectors.toList());
     }
 
+    public List<IndustriaDTO> getAllIndustriasWithOutFinanceiro() {
+        return industriaRepository.findByFinanceiroIsNull().stream().map(IndustriaMapper::toDTO).collect(Collectors.toList());
+    }
     public IndustriaDTO getIndustriaById(Integer id) throws NoSuchElementException {
         Optional<Industria> industria = industriaRepository.findById(id);
         if (industria.isEmpty()) {

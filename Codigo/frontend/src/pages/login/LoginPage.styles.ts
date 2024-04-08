@@ -1,7 +1,7 @@
 // import styled components
 import styled from 'styled-components';
 import * as colors from '../../styles/types/Colors';
-
+import theme from '@/styles/themes/theme';
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -9,7 +9,7 @@ export const Container = styled.div`
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    background-color: ${colors.asideColor};
+    background-color: ${theme.palette.secondary.main};
 `;
 
 export const Logo = styled.img`

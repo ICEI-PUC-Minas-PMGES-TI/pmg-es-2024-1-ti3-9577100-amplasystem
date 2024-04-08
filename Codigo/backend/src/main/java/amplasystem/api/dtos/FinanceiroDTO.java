@@ -16,6 +16,6 @@ public class FinanceiroDTO {
         private Double comissao;
         private Faturamento faturamento;
         private TipoFiscal tipoFiscal;
-        private String industria;
+        private IndustriaDTO industria;
 
 }

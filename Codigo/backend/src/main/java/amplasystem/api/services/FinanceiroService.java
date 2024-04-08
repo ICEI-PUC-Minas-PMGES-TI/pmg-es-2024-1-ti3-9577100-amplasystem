@@ -39,7 +39,7 @@ public class FinanceiroService {
 
     public Financeiro create(FinanceiroDTO financeiroDTO) {
         financeiroDTO.setId(null);
-        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
+        Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria().getNome());
 
         Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.getComissao(),
                 financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
@@ -57,7 +57,7 @@ public class FinanceiroService {
         try {
             financeiroRepository.findById(id).orElseThrow(() -> new NotFoundException());
 
-            Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria());
+            Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria().getNome());
 
             Financeiro newFinanceiro = new Financeiro(id, financeiroDTO.getComissao(),
                     financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
