@@ -11,6 +11,10 @@ import {
     Select,
     FormControl,
     InputLabel,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { FinanceiroModel } from 'models/FinanceiroModel';
@@ -73,23 +77,29 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
     if (!open) return null;
 
     return (
-        <Modal open={open} onClose={onClose}>
-            <Box
-                sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    bgcolor: 'background.paper',
-                    boxShadow: 24,
-                    p: 4,
-                    minWidth: 400,
-                }}
-            >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="h5">{financeiro ? 'Editar Financeiro' : 'Novo Financeiro'}</Typography>
-                    <CloseIcon onClick={onClose} style={{ cursor: 'pointer' }} />
-                </Box>
+         <Dialog
+            open={ open }
+            onClose={ onClose }
+            fullWidth={ true }
+            maxWidth={ "sm" }
+            PaperProps={ {
+                component: 'form',
+                onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                    event.preventDefault();
+                },
+            } }
+        >
+
+            <DialogTitle>{financeiro ? 'Editar Financeiro' : 'Novo Financeiro'} </DialogTitle>
+            <DialogContent>
+                   <CircularProgress
+                    sx={ {
+                        visibility: loading ? 'visible' : 'hidden',
+                        position: 'absolute',
+                        top: '40%',
+                        left: '45%',
+                    } }
+                />
                 <TextField
                     fullWidth
                     margin="normal"
@@ -124,11 +134,12 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                         </Select>
                     </FormControl>
                 )}
-                <Button variant="contained" onClick={handleSave} disabled={loading}>
-                    {loading ? <CircularProgress size={24} /> : 'Salvar'}
-                </Button>
-            </Box>
-        </Modal>
+ </DialogContent>
+ <DialogActions>
+                <Button onClick={ onClose }>Cancel</Button>
+                <Button onClick={ handleSave }>Salvar</Button>
+            </DialogActions>
+            </Dialog>
     );
 };
 
