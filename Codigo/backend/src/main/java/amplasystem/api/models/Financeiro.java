@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ public class Financeiro {
     private Double comissao;
 
     @Column(name = "faturamento", nullable = false)
-    private Faturamento faturamento;
+    private Faturamento tipoPagamento;
 
     @Column(name = "tipo_fiscal", nullable = false)
     private TipoFiscal tipoFiscal;
@@ -38,5 +37,13 @@ public class Financeiro {
     @JoinColumn(name = "industria_id")
     @JsonIgnore
     private Industria industria;
+
+    @Override
+    public String toString() {
+        return "Financeiro [id=" + id + ", comissao=" + comissao + ", faturamento=" + tipoPagamento + ", tipoFiscal="
+                + tipoFiscal + " nome industria" + industria.getNome() +" ]";
+    }
+
+    
 
 }

@@ -1,16 +1,15 @@
-import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as S from '../login/LoginPage.styles.ts';
 import { Backdrop, Button, CircularProgress, TextField } from '@mui/material';
 
-// import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotification.ts';
-import Validade from '../../utils/Validate';
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+import Logo from '@/assets/logo.png';
+import { useAuth } from '@/hooks/useAuth.ts';
+import { useNotification } from '@/hooks/useNotification.ts';
+import * as S from '@/pages/login/LoginPage.styles.ts';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import Validade from '@/utils/Validate';
 
 const ForgotPasswordGetEmail = () => {
     const { sendForgotToken, isAuthenticated, tokenWasSend } = useAuth();
@@ -54,8 +53,8 @@ const ForgotPasswordGetEmail = () => {
         if (isEmailValid) {
             setLoading(true);
             sendForgotToken(email)
-                .catch(() => {
-                    return showNotification({ message: 'Email invalido', type: 'error' });
+                .catch((err) => {
+                    return showNotification({ message: err.message, type: 'error' });
                 })
                 .then(() => {
                     setLoading(false);

@@ -8,9 +8,10 @@ public class FinanceiroMapper {
         return new FinanceiroDTO(
                 financeiro.getId(),
                 financeiro.getComissao(),
-                financeiro.getFaturamento(),
+                financeiro.getTipoPagamento(),
                 financeiro.getTipoFiscal(),
-                financeiro.getIndustria().getNome());
+                IndustriaMapper.toDTO(financeiro.getIndustria())
+        );
     }
 
 }

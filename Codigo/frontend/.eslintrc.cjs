@@ -4,14 +4,16 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/errors',
+    'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
     'plugin:prettier/recommended',
+    'plugin:jsx-a11y',
+    'prettier'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['import', 'jsx-a11y', 'react', 'react-refresh'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
@@ -37,5 +39,16 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     'react/react-in-jsx-scope': 'off',
     'no-debugger': 'warn',
+    'max-len': ['error', { code: 80, ignoreComments: true }],
   },
+  settings: {
+    'import/resolver': {
+      'react': {
+        'version': 'detect'
+      },
+      'node': {
+        'extensions': ['.ts', '.tsx']
+      }
+    }
+  }
 }

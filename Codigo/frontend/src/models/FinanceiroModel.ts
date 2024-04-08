@@ -1,7 +1,9 @@
+import { IndustriaModel } from "./IndustriaModel";
+
 export interface FinanceiroModel {
-    id: number;
+    id: number|null;
     comissao: number;
-    faturamento: string;
+    tipoPagamento: string;
     tipoFiscal: string;
-    industria: string;
+    industria: IndustriaModel;
 }

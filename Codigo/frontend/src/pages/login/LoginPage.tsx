@@ -1,17 +1,19 @@
-import { useAuth } from '../../hooks/useAuth.ts';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Visibility from '@mui/icons-material/Visibility';
 
-import * as S from './LoginPage.styles.ts';
-import { Box, Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 import { VisibilityOff } from '@mui/icons-material';
+import Visibility from '@mui/icons-material/Visibility';
+import { Box, Button, IconButton, InputAdornment, Link, TextField } from '@mui/material';
 
-import Logo from '../../assets/logo.png';
-import { useNotification } from '../../hooks/useNotification.ts';
-import Validade from '../../utils/Validate';
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+import Logo from '@/assets/logo.png';
+import { useAuth } from '@/hooks/useAuth.ts';
+import { useNotification } from '@/hooks/useNotification.ts';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import Validade from '@/utils/Validate';
+
+import * as S from '@/pages/login/LoginPage.styles.ts';
+
 const LoginPage = () => {
     const { login, isAuthenticated } = useAuth();
     const navigate = useNavigate();
@@ -47,8 +49,8 @@ const LoginPage = () => {
 
         if (!isEmailValid) return;
 
-        login(email, password).catch(() => {
-            return showNotification({ message: 'Email e/ou senha inválidos', type: 'error' });
+        login(email, password).catch((err) => {
+            return showNotification({ message: err.message, type: 'error' });
         });
     };
 
@@ -114,11 +116,11 @@ const LoginPage = () => {
                                 navigate('/forgotPassword/email');
                             }}
                         >
-                            esqueceu sua senha?
+                            Esqueceu sua senha?
                         </Link>
                     </Box>
 
-                    <Button variant="contained" type="submit" sx={ButtonStyle.greenButton}>
+                    <Button type="submit" sx={ButtonStyle.greenButton}>
                         Entrar
                     </Button>
                 </S.LoginForm>

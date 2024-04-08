@@ -11,4 +11,6 @@ public interface IndustriaRepository extends JpaRepository<Industria, Integer> {
     boolean existsByNome(String nome);
 
     Industria findByNome(String nome);
+
+    List<Industria> findByFinanceiroIsNull();
 }

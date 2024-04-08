@@ -1,7 +1,6 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.IndustriaService;
-import jakarta.mail.Multipart;
 import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.models.Industria;
@@ -27,7 +26,11 @@ public class IndustriaController {
     public ResponseEntity<List<IndustriaDTO>> getAllIndustrias() {
         return ResponseEntity.ok(industriaService.getAllIndustrias());
     }
-
+    @GetMapping(value = "/withOutFinanceiro")
+    @ResponseBody
+    public ResponseEntity<List<IndustriaDTO>> getAllIndustriasWithOutFinanceiro() {
+        return ResponseEntity.ok(industriaService.getAllIndustriasWithOutFinanceiro());
+    }
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<?> getIndustriaById(@PathVariable Integer id) throws NoSuchElementException {
@@ -85,7 +88,7 @@ public class IndustriaController {
     @PostMapping(value = "/tabela")
     @ResponseBody
     public ResponseEntity<?> saveTable(@RequestParam MultipartFile  file) {
-        industriaService.saveTable(file);
+        industriaService.createTable(file);
         return ResponseEntity.status(HttpStatus.CREATED).body("CREATED");
     }
 }

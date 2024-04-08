@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { VendedorModel } from '../models/VendedorModel.ts';
-import api from '../services/api.tsx';
-import { useNotification } from '../hooks/useNotification.ts';
+import { VendedorModel } from '@/models/VendedorModel.ts';
+import api from '@/services/api.tsx';
+import { useNotification } from '@/hooks/useNotification.ts';
 
 interface AuthState {
     isAuthenticated: boolean;

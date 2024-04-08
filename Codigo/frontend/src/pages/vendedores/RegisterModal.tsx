@@ -1,24 +1,29 @@
+import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
+
 import { Box } from '@mui/system';
 import {
     Autocomplete,
     Button,
     CircularProgress,
     Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     IconButton,
     Modal,
     TextField,
     Typography,
 } from '@mui/material';
-import apiFetch from '../../services/api';
 import CloseIcon from '@mui/icons-material/Close';
-import { VendedorModel } from 'models/VendedorModel';
-import { useNotification } from '../../hooks/useNotification';
-import Validade from '../../utils/Validate';
-import { Cargo } from '../../enums/Cargo';
-import { Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
-import * as ModalStyle from '../../styles/ModalStyles';
-import * as Input from '../../styles/InputStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
+
+import { Cargo } from '@/enums/Cargo';
+import { useNotification } from '@/hooks/useNotification';
+import { VendedorModel } from '@/models/VendedorModel';
+import apiFetch from '@/services/api';
+import * as ButtonStyle from '@/styles/types/ButtonsStyles';
+import * as Input from '@/styles/types/InputStyles';
+import * as ModalStyle from '@/styles/types/ModalStyles';
+import Validade from '@/utils/Validate';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -108,124 +113,115 @@ const RegisterModal = (props: IRegisterModalProps) => {
         setRefNome(props.updateVendedor?.nome || '');
     }, [props.updateVendedor]);
     return (
-        <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
-            <Dialog
-                fullWidth={true}
-                maxWidth="md"
-                open={props.openModal}
-                onClose={handleClose}
-                sx={{
-                    pointerEvents: loading ? 'none' : 'auto',
-                }}
-            >
-                <Box sx={{ ...ModalStyle.Modal }}>
-                    <CircularProgress
-                        sx={{
-                            visibility: loading ? 'visible' : 'hidden',
-                            position: 'absolute',
-                            top: '40%',
-                            left: '45%',
-                        }}
-                    />
-                    <IconButton
-                        edge="start"
-                        color="inherit"
-                        onClick={handleClose}
-                        aria-label="close"
-                        sx={ButtonStyle.closeButton}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                    <Typography
-                        variant="h3"
-                        gutterBottom
-                        sx={{
-                            color: '#344054',
-                        }}
-                    >
-                        {props.updateVendedor == undefined ? 'Cadastrar' : 'Atualizar '} vendedor
-                    </Typography>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Nome *
-                    </Typography>
-                    <TextField
-                        id="nome"
-                        variant="outlined"
-                        placeholder="Nome"
-                        fullWidth
-                        value={refNome}
-                        sx={Input.input}
-                        onChange={(event) => {
-                            setRefNome(event.target.value);
-                        }}
-                    />
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Email *
-                    </Typography>
-                    <TextField
-                        id="email"
-                        variant="outlined"
-                        placeholder="Email"
-                        fullWidth
-                        value={refEmail}
-                        sx={Input.input}
-                        onChange={(event) => {
-                            setRefEmail(event.target.value);
-                        }}
-                    />
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            color: '#344054',
-                        }}
-                        display="block"
-                    >
-                        Cargo *
-                    </Typography>
-                    <Autocomplete
-                        disablePortal
-                        id="cargo"
-                        options={optionCargo}
-                        fullWidth
-                        value={refCargo}
-                        renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
-                        onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
-                            setRefCargo((event.target as HTMLInputElement).value || '');
-                        }}
-                    />
-                    <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                        sx={{
-                            color: '#344054',
-                        }}
-                    >
-                        apenas administradores, podem cadastrar novos vendedores
-                    </Typography>
+        <Dialog
+            fullWidth
+            maxWidth="sm"
+            open={props.openModal}
+            onClose={handleClose}
+            sx={{
+                pointerEvents: loading ? 'none' : 'auto',
+            }}
+        >
+            <DialogTitle>
+                {props.updateVendedor == undefined ? 'Cadastrar vendedor' : 'Atualizar ' + props.updateVendedor.nome} 
+            </DialogTitle>
+            <DialogContent>
+                <CircularProgress
+                    sx={{
+                        visibility: loading ? 'visible' : 'hidden',
+                        position: 'absolute',
+                        top: '40%',
+                        left: '45%',
+                    }}
+                />
+                <IconButton
+                    edge="start"
+                    color="inherit"
+                    onClick={handleClose}
+                    aria-label="close"
+                    sx={ButtonStyle.closeButton}
+                >
+                    <CloseIcon />
+                </IconButton>
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: '#344054',
+                    }}
+                    display="block"
+                >
+                    Nome *
+                </Typography>
+                <TextField
+                    id="nome"
+                    variant="outlined"
+                    placeholder="Nome"
+                    fullWidth
+                    value={refNome}
+                    onChange={(event) => {
+                        setRefNome(event.target.value);
+                    }}
+                />
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: '#344054',
+                    }}
+                    display="block"
+                >
+                    Email *
+                </Typography>
+                <TextField
+                    id="email"
+                    variant="outlined"
+                    placeholder="Email"
+                    fullWidth
+                    value={refEmail}
+                    onChange={(event) => {
+                        setRefEmail(event.target.value);
+                    }}
+                />
+                <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: '#344054',
+                    }}
+                    display="block"
+                >
+                    Cargo *
+                </Typography>
+                <Autocomplete
+                    disablePortal
+                    id="cargo"
+                    options={optionCargo}
+                    fullWidth
+                    value={refCargo}
+                    renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
+                    onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
+                        setRefCargo((event.target as HTMLInputElement).value || '');
+                    }}
+                />
 
-                    <Button onClick={onSubmit} variant="contained" sx={ButtonStyle.greenButton}>
-                        {props.updateVendedor == undefined ? 'Cadastrar' : 'Atualizar '}
-                    </Button>
-
-                    <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
-                        Cancelar
-                    </Button>
-                </Box>
-            </Dialog>
-        </Modal>
+                <Typography
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                    sx={{
+                        color: '#344054',
+                    }}
+                >
+                    apenas administradores, podem cadastrar novos vendedores
+                </Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={ChangeModalState} variant="contained">
+                    Cancelar
+                </Button>
+                <Button onClick={onSubmit} variant="contained">
+                    {props.updateVendedor == undefined ? 'Cadastrar' : 'Atualizar '}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 export default RegisterModal;

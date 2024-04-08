@@ -1,19 +1,29 @@
-import { Container } from '@mui/system';
-import { Box, Button, CircularProgress, Dialog, IconButton, Modal, TextField, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {JSX} from 'react/jsx-runtime';
+import {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import CheckIcon from '@mui/icons-material/Check';
+import {
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Tab,
+    Tabs,
+    TextField,
+    Typography
+} from '@mui/material';
 
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { IndustriaModel } from 'models/IndustriaModel';
-import * as Input from '../../styles/InputStyles';
-import * as ModalStyle from '../../styles/ModalStyles';
-import * as ButtonStyle from '../../styles/ButtonsStyles';
-import { TipoContato } from '../../enums/TipoContato';
-import IndustriaContato from './IndustriaContato';
-import { ContatoModel } from 'models/ContatoModels';
-import { JSX } from 'react/jsx-runtime';
-import { useNotification } from '../../hooks/useNotification';
-import apiFetch from '../../services/api';
-import Validade from '../../utils/Validate';
+import {TipoContato} from '@/enums/TipoContato';
+import {useNotification} from '@/hooks/useNotification';
+import {IndustriaModel} from '@/models/IndustriaModel';
+import {ContatoModel} from '@/models/ContatoModels';
+import IndustriaContato from '@/pages/industrias/IndustriaContato';
+import apiFetch from '@/services/api';
+import Validade from '@/utils/Validate';
+
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
@@ -21,39 +31,90 @@ interface IRegisterModalProps {
     updateIndustria: IndustriaModel | undefined;
 }
 
+interface TabPanelProps {
+    children?: React.ReactNode;
+    index: number;
+    value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+    const {children, value, index} = props;
+
+    return (
+        <div
+            style={ {width: "100%"} }
+            role="tabpanel"
+            hidden={ value !== index }
+            id={ `vertical-tabpanel-${ index }` }
+            aria-labelledby={ `vertical-tab-${ index }` }
+        >
+            { value === index && (
+                <Box sx={ {paddingLeft: 3} }>
+                    { children }
+                </Box>
+            ) }
+        </div>
+    );
+}
+
+function a11yProps(index: number) {
+    return {
+        id: `vertical-tab-${ index }`,
+        'aria-controls': `vertical-tabpanel-${ index }`,
+    };
+}
+
 const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
     const tiposContatos = Object.values(TipoContato);
-    const { showNotification } = useNotification();
+    const {showNotification} = useNotification();
     const [reset, setRest] = useState<boolean>(false);
     const [contatoList, setContatoList] = useState<JSX.Element[]>([]);
+    const [industria, setIndustria] = useState<IndustriaModel | undefined>(props.updateIndustria);
     const validade = new Validade();
     const handleClose = () => {
         props.setOpenModal(false);
     };
 
-    function ChangeModalState() {
-        props.setOpenModal(!open);
-    }
+
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (industria != undefined) {
-            const { name, value } = e.target as HTMLInputElement;
-            setIndustria({ ...industria, [name]: value });
+            const {name, value} = e.target as HTMLInputElement;
+            setIndustria({...industria, [name]: value});
         }
     }
+
     function handleChangeContato(contato: ContatoModel, index: number) {
         const aux: IndustriaModel | undefined = industria;
         if (aux != undefined) {
             aux.contatos[index] = contato;
             setIndustria(aux);
+            console.log(contato)
         }
     }
+
     useEffect(() => {
         setIndustria(props.updateIndustria);
-    }, [props.updateIndustria]);
-    const [industria, setIndustria] = useState<IndustriaModel | undefined>(props.updateIndustria);
-    console.log;
 
+    }, [props.updateIndustria]);
+
+
+    useEffect(() => {
+        const aux2: JSX.Element[] = [];
+        industria?.contatos.map((element, index) => {
+            aux2.push(
+                <IndustriaContato
+                    key={ element.tipoContato }
+                    contatoModel={element}
+                    preenchido ={ element.nome != "" && element.email != "" && element.telefone != ""}
+                    index={ index }
+                    handleChange={ handleChangeContato }
+                    reset={ reset }
+                />,
+            );
+        });
+        setContatoList(aux2);
+    }, [handleChangeContato])
     useEffect(() => {
         if (industria == undefined || reset) {
             setIndustria({
@@ -111,21 +172,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
             });
             setIndustria(aux);
         }
-        const aux2: JSX.Element[] = [];
-        industria?.contatos.map((element, index) => {
-            console.log(element);
-            aux2.push(
-                <IndustriaContato
-                    key={element.tipoContato}
-                    contatoModel={element}
-                    index={index}
-                    handleChange={handleChangeContato}
-                    reset={reset}
-                />,
-            );
-        });
-        setContatoList(aux2);
+
     }, [props.updateIndustria, reset]);
+
 
     function onSubmit() {
         const obj: IndustriaModel = JSON.parse(JSON.stringify(industria));
@@ -179,7 +228,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     .put(`industria/`, obj)
                     .then((data) => {
                         props.setReload(true);
-                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                        showNotification({message: data.data.message, type: 'success', title: data.data.titulo});
                     })
                     .catch((error) => {
                         showNotification({
@@ -196,104 +245,83 @@ const RegisterModal = (props: IRegisterModalProps) => {
         }
     }
 
+    const [value, setValue] = useState(0);
+
+    const changeTab = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
     return (
-        <Modal open={props.openModal} aria-labelledby="parent-modal-title" aria-describedby="parent-modal-description">
-            <Dialog
-                fullWidth={true}
-                maxWidth="md"
-                open={props.openModal}
-                onClose={handleClose}
-                sx={{
-                    pointerEvents: loading ? 'none' : 'auto',
-                }}
-            >
-                <Box sx={{ ...ModalStyle.Modal }}>
-                    <CircularProgress
-                        sx={{
-                            visibility: loading ? 'visible' : 'hidden',
-                            position: 'absolute',
-                            top: '40%',
-                            left: '45%',
-                        }}
-                    />
-                    <Container>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            onClick={handleClose}
-                            aria-label="close"
-                            sx={ButtonStyle.closeButton}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography
-                            variant="h3"
-                            gutterBottom
-                            sx={{
-                                color: '#344054',
-                            }}
-                        >
-                            {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '} Industria
-                        </Typography>
-                    </Container>
-                    <Box
-                        sx={{
-                            maxHeight: '40vh',
+        <Dialog
+            open={ props.openModal }
+            onClose={ handleClose }
+            fullWidth={ true }
+            maxWidth={ "md" }
+            PaperProps={ {
+                component: 'form',
+                onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                    event.preventDefault();
+                },
+            } }
+        >
 
-                            overflowY: 'scroll',
-                            overflowX: 'hidden',
-                            paddingRight: 3,
+            <DialogTitle>{ props.updateIndustria == undefined ? 'Adicionar industria' : 'Atualizar ' + props?.updateIndustria?.nome } </DialogTitle>
+            <DialogContent>
+                <CircularProgress
+                    sx={ {
+                        visibility: loading ? 'visible' : 'hidden',
+                        position: 'absolute',
+                        top: '40%',
+                        left: '45%',
+                    } }
+                />
+                <DialogContentText>{ props.updateIndustria == undefined ? 'Criação' : 'Edição' } de
+                    industria</DialogContentText>
+                <TextField
+                    autoFocus
+                    required
+                    margin="dense"
+                    id="nome"
+                    name="nome"
+                    label="Nome fantasia"
+                    fullWidth
+                    value={ industria?.nome }
+                    onChange={ handleChange }
 
-                            listStyle: 'none',
-
-                            '&::-webkit-scrollbar': {
-                                width: '0.4em',
-                            },
-                            '&::-webkit-scrollbar-track': {
-                                boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                                webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                            },
-                            '&::-webkit-scrollbar-thumb': {
-                                backgroundColor: '#00747C',
-                                outline: '1px solid slategrey',
-                            },
-                        }}
+                />
+                <Typography variant={ 'h6' }>Contatos</Typography>
+                <Box
+                    sx={ {flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224} }
+                >
+                    <Tabs
+                        orientation="vertical"
+                        variant="scrollable"
+                        value={ value }
+                        onChange={ changeTab }
+                        aria-label="Vertical tabs example"
+                        sx={ {borderRight: 1, borderColor: 'divider'} }
                     >
-                        <Typography
-                            variant="subtitle1"
-                            sx={{
-                                color: '#344054',
-                            }}
-                            display="block"
-                        >
-                            Nome da industria
-                        </Typography>
-                        <TextField
-                            id="nome"
-                            name="nome"
-                            variant="outlined"
-                            placeholder="Nome"
-                            fullWidth
-                            value={industria?.nome}
-                            sx={Input.input}
-                            onChange={handleChange}
-                        />
+                        {contatoList.map((element, index) => {
+                           
+                            return <Tab icon={element.props.preenchido ? <CheckIcon sx={{ p: 0, height:1}} /> : ""} iconPosition="start" label={element.key} {...a11yProps(index)} sx={{
+                                pt: 0,
+                                pb:0
+                            }} />
+                        }) }
 
-                        {contatoList.map((element) => {
-                            return element;
-                        })}
-                    </Box>
-                    <Container>
-                        <Button variant="contained" sx={ButtonStyle.greenButton} onClick={onSubmit}>
-                            {props.updateIndustria == undefined ? 'Cadastrar' : 'Atualizar '}
-                        </Button>
-                        <Button onClick={ChangeModalState} variant="contained" sx={ButtonStyle.whiteButton}>
-                            Cancelar
-                        </Button>
-                    </Container>
+                    </Tabs>
+                    { contatoList.map((element, index) => {
+                        return <TabPanel value={ value } index={ index }>
+                            { element }
+                        </TabPanel>
+                    }) }
+
                 </Box>
-            </Dialog>
-        </Modal>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={ handleClose }>Cancel</Button>
+                <Button onClick={ onSubmit }>Salvar</Button>
+            </DialogActions>
+        </Dialog>
     );
 };
 export default RegisterModal;
