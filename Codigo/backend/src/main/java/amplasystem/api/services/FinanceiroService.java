@@ -42,7 +42,7 @@ public class FinanceiroService {
         Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria().getNome());
 
         Financeiro newFinanceiro = new Financeiro(null, financeiroDTO.getComissao(),
-                financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
+                financeiroDTO.getTipoPagamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
                 
         industriaDoFinanceiro.setFinanceiro(newFinanceiro);
         return financeiroRepository.save(newFinanceiro);
@@ -60,7 +60,7 @@ public class FinanceiroService {
             Industria industriaDoFinanceiro = industriaService.findByNome(financeiroDTO.getIndustria().getNome());
 
             Financeiro newFinanceiro = new Financeiro(id, financeiroDTO.getComissao(),
-                    financeiroDTO.getFaturamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
+                    financeiroDTO.getTipoPagamento(), financeiroDTO.getTipoFiscal(), industriaDoFinanceiro);
 
             financeiroRepository.save(newFinanceiro);
 

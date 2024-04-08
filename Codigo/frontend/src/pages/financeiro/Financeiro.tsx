@@ -1,23 +1,16 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef, ChangeEvent } from 'react';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { useState, useEffect, useCallback } from 'react';
+
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, IconButton, Typography, Select, MenuItem } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit } from '@mui/icons-material';
-import { SelectChangeEvent } from '@mui/material/Select';
 
 import apiFetch from '@/services/api';
 import { useNotification } from '@/hooks/useNotification';
 import { FinanceiroModel } from '@/models/FinanceiroModel';
 import { IndustriaModel } from '@/models/IndustriaModel';
-import { log } from 'console';
 import FinanceiroModal from './FinanceiroModal';
 
 const FinanceiroPage = () => {
@@ -27,8 +20,6 @@ const FinanceiroPage = () => {
     const [financeiros, setFinanceiros] = useState<FinanceiroModel[]>([]);
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = useState(false);
-    const dialogRef = useRef<HTMLFormElement>(null);
-    const [industrias, setIndustrias] = useState<IndustriaModel[]>([]);
     const [industriasSemCadastro, setIndustriasSemCadastro] = useState<IndustriaModel[]>([]);
 
     const handleClickOpen = () => {
@@ -40,19 +31,12 @@ const FinanceiroPage = () => {
         setFinanceiro(undefined);
     };
 
-    const getIndustrias = useCallback(async () => {
-        try {
-            const res = await apiFetch.get('/industria');
-            setIndustrias(res.data);
-        } catch (err) {
-            console.log(err);
-        }
-    }, []);
-
     useEffect(() => {
-        getIndustrias();
         getIndustriasWithOutFinanceiro()
-    }, [getIndustrias]);
+         getFinanceiros();
+        setTableLoading(false)
+        
+    }, [tableLoading]);
 
      const getIndustriasWithOutFinanceiro = useCallback(async () => {
         try {
@@ -75,45 +59,7 @@ const FinanceiroPage = () => {
         }
     }, []);
 
-    useEffect(() => {
-        getFinanceiros();
-    }, [getFinanceiros]);
-
-    const postFinanceiro = async (newFinanceiro: FinanceiroModel) => {
-        setTableLoading(true);
-        try {
-            const res = await apiFetch.post('/financeiro/', newFinanceiro);
-            showNotification({
-                message: res.data.message,
-                title: res.data.titulo,
-                type: 'success',
-            });
-            getFinanceiros();
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setTableLoading(false);
-        }
-    };
-
-    const updateFinanceiro = async () => {
-        setTableLoading(true);
-        try {
-            if (financeiro && financeiro.id) {
-                const res = await apiFetch.put(`/financeiro/${financeiro.id}`, financeiro);
-                showNotification({
-                    message: res.data.message,
-                    title: res.data.titulo,
-                    type: 'success',
-                });
-                getFinanceiros();
-            }
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setTableLoading(false);
-        }
-    };
+  
 
     const deleteFinanceiro = async (id: number) => {
         setTableLoading(true);
@@ -265,7 +211,7 @@ const FinanceiroPage = () => {
             </header>
             <MaterialReactTable table={table} />
            
-            <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} onSave={postFinanceiro} financeiro={financeiro}/>
+            <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} setTableLoading={setTableLoading} financeiro={financeiro}/>
         </React.Fragment>
     );
 };

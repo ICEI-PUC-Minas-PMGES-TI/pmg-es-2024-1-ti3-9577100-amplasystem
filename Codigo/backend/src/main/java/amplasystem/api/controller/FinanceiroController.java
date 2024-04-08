@@ -101,10 +101,8 @@ public class FinanceiroController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<FinanceiroDTO> createFinanceiro(@RequestBody Financeiro financeiro) {
-        System.out.println(financeiro);
-        System.out.println("asodmasdas");
-        FinanceiroDTO createdFinanceiro = financeiroService.save(financeiro);
+    public ResponseEntity<Financeiro> createFinanceiro(@RequestBody FinanceiroDTO financeiro) {
+        Financeiro createdFinanceiro = financeiroService.create(financeiro);
         return new ResponseEntity<>(createdFinanceiro, HttpStatus.CREATED);
     }
 

@@ -1,9 +1,6 @@
 /* eslint-disable */
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import {
-    Modal,
-    Box,
-    Typography,
     TextField,
     Button,
     CircularProgress,
@@ -16,57 +13,73 @@ import {
     DialogContent,
     DialogActions,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { FinanceiroModel } from 'models/FinanceiroModel';
 import { IndustriaModel } from '@/models/IndustriaModel';
-
+import apiFetch from '@/services/api';
+import { useNotification } from '@/hooks/useNotification';
 interface FinanceiroModalProps {
     open: boolean;
     onClose: () => void;
-    onSave: (data: FinanceiroModel) => void;
+    setTableLoading: Dispatch<SetStateAction<boolean>>;
     financeiro?: FinanceiroModel;
     industrias: IndustriaModel[];
 }
 
-const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave, financeiro, industrias }) => {
-    const [newFinanceiro, setNewFinanceiro] = useState<FinanceiroModel>()
+const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
+    open,
+    onClose,
+    setTableLoading,
+    financeiro,
+    industrias,
+}) => {
+    const [newFinanceiro, setNewFinanceiro] = useState<FinanceiroModel>();
     const [loading, setLoading] = useState(false);
+    const { showNotification } = useNotification();
 
-     function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (newFinanceiro != undefined) {
-            const {name, value} = e.target as HTMLInputElement;
-            if (name == "comissao") {
-                setNewFinanceiro({ ...newFinanceiro, [name]: parseFloat(value) })
+            const { name, value } = e.target as HTMLInputElement;
+            if (name == 'comissao') {
+                setNewFinanceiro({ ...newFinanceiro, [name]: parseFloat(value) });
             } else {
                 setNewFinanceiro({ ...newFinanceiro, [name]: value });
             }
-            console.log(newFinanceiro)
+            console.log(newFinanceiro);
         }
     }
     useEffect(() => {
         if (financeiro != undefined) {
-            setNewFinanceiro(financeiro)
-            console.log(industrias)
-            console.log(financeiro)
+            setNewFinanceiro(financeiro);
+            console.log(industrias);
+            console.log(financeiro);
         } else {
             setNewFinanceiro({
                 id: null,
-                comissao: 0.0,
-                tipoFiscal: "",
-                tipoPagamento: "",
-                industria:{}
-            })
+                comissao: '',
+                tipoFiscal: '',
+                tipoPagamento: '',
+                industria: {},
+            });
         }
-    },[financeiro])
+    }, [financeiro]);
     const handleSave = async () => {
-        if (!newFinanceiro.comissao || !newFinanceiro.tipoPagamento || !newFinanceiro.tipoFiscal || !newFinanceiro.industria) {
+        if (
+            !newFinanceiro.comissao ||
+            !newFinanceiro.tipoPagamento ||
+            !newFinanceiro.tipoFiscal ||
+            !newFinanceiro.industria
+        ) {
             alert('Por favor, preencha todos os campos obrigatórios.');
             return;
         }
 
         setLoading(true);
         try {
-            await onSave(newFinanceiro);
+            if (financeiro != undefined) {
+                await updateFinanceiro();
+            } else {
+                await postFinanceiro();
+            }
         } catch (error) {
             console.error('Erro ao salvar:', error);
         } finally {
@@ -75,49 +88,81 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
     };
 
     if (!open) return null;
+    const postFinanceiro = async () => {
+        try {
+            console.log(newFinanceiro)
+            const res = await apiFetch.post('/financeiro/', newFinanceiro);
+            showNotification({
+                message: res.data.message,
+                title: res.data.titulo,
+                type: 'success',
+            });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(true);
+        }
+    };
 
+    const updateFinanceiro = async () => {
+        try {
+            if (newFinanceiro && newFinanceiro.id) {
+                const res = await apiFetch.put(`/financeiro/${newFinanceiro.id}`, newFinanceiro);
+                showNotification({
+                    message: res.data.message,
+                    title: res.data.titulo,
+                    type: 'success',
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setTableLoading(true);
+        }
+    };
     return (
-         <Dialog
-            open={ open }
-            onClose={ onClose }
-            fullWidth={ true }
-            maxWidth={ "sm" }
-            PaperProps={ {
+        <Dialog
+            open={open}
+            onClose={onClose}
+            fullWidth={true}
+            maxWidth={'sm'}
+            PaperProps={{
                 component: 'form',
                 onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                     event.preventDefault();
                 },
-            } }
+            }}
         >
-
             <DialogTitle>{financeiro ? 'Editar Financeiro' : 'Novo Financeiro'} </DialogTitle>
             <DialogContent>
-                   <CircularProgress
-                    sx={ {
+                <CircularProgress
+                    sx={{
                         visibility: loading ? 'visible' : 'hidden',
                         position: 'absolute',
                         top: '40%',
                         left: '45%',
-                    } }
+                    }}
                 />
                 <TextField
                     fullWidth
                     margin="normal"
                     label="Comissão"
                     name="comissao"
-                    value={financeiro?.comissao}
+                    type='number'
+                    typeof='number' 
+                    value={newFinanceiro?.comissao}
                     onChange={handleChange}
                 />
-                 <FormControl fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                     <InputLabel>Tipo Pagamento</InputLabel>
-                    <Select value={financeiro?.tipoPagamento}name="tipoPagamento" onChange={handleChange}>
+                    <Select value={newFinanceiro?.tipoPagamento} name="tipoPagamento" onChange={handleChange}>
                         <MenuItem value="Faturamento">Faturamento</MenuItem>
                         <MenuItem value="Liquidez">liquidez</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Tipo Fiscal</InputLabel>
-                    <Select value={financeiro?.tipoFiscal} name='tipoFiscal' onChange={handleChange}>
+                    <Select value={newFinanceiro?.tipoFiscal} name="tipoFiscal" onChange={handleChange}>
                         <MenuItem value="REPRESENTACAO">Representação</MenuItem>
                         <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
                     </Select>
@@ -125,7 +170,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                 {industrias && (
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Indústria</InputLabel>
-                        <Select value={financeiro?.industria} name='industria' onChange={handleChange}>
+                        <Select value={newFinanceiro?.industria} name="industria" onChange={handleChange}>
                             {industrias.map((industria) => (
                                 <MenuItem key={industria.id} value={industria}>
                                     {industria.nome}
@@ -134,12 +179,12 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({ open, onClose, onSave
                         </Select>
                     </FormControl>
                 )}
- </DialogContent>
- <DialogActions>
-                <Button onClick={ onClose }>Cancel</Button>
-                <Button onClick={ handleSave }>Salvar</Button>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose}>Cancel</Button>
+                <Button onClick={handleSave}>Salvar</Button>
             </DialogActions>
-            </Dialog>
+        </Dialog>
     );
 };
 

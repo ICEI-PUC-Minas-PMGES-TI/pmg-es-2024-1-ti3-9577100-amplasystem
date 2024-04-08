@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class FinanceiroDTO {
         private Integer id;
         private Double comissao;
-        private Faturamento faturamento;
+        private Faturamento tipoPagamento;
         private TipoFiscal tipoFiscal;
         private IndustriaDTO industria;
 
