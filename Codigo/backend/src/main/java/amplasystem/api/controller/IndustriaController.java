@@ -1,7 +1,6 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.IndustriaService;
-import jakarta.mail.Multipart;
 import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.models.Industria;
@@ -89,7 +88,7 @@ public class IndustriaController {
     @PostMapping(value = "/tabela")
     @ResponseBody
     public ResponseEntity<?> saveTable(@RequestParam MultipartFile  file) {
-        industriaService.saveTable(file);
+        industriaService.createTable(file);
         return ResponseEntity.status(HttpStatus.CREATED).body("CREATED");
     }
 }

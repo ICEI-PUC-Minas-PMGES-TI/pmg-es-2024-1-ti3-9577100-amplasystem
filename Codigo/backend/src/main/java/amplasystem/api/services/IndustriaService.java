@@ -12,6 +12,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,13 +25,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional
+@Log4j2
 @Service
 public class IndustriaService {
     @Autowired
@@ -96,10 +97,9 @@ public class IndustriaService {
         }
     }
 
-    public List<IndustriaDTO> saveTable(MultipartFile file) {
+    public List<IndustriaDTO> createTable(MultipartFile file) {
 
         List<Industria> industrias = new ArrayList<>();
-
         try (InputStream inputStream = file.getInputStream()) {
             Workbook workbook = new XSSFWorkbook(inputStream);
 
@@ -111,7 +111,6 @@ public class IndustriaService {
             while (iterator.hasNext()) {
                 Row row = iterator.next();
                 Iterator<Cell> celIterator = row.cellIterator();
-
                 String nome = "";
                 List<Contato> contatos = new ArrayList<>();
 
@@ -152,7 +151,6 @@ public class IndustriaService {
                 }
 
                 Industria newIndustria = new Industria(null, nome, contatos, null, null);
-
                 for (Contato contato : contatos) {
                     contato.setIndustria(newIndustria);
                     contatoService.save(contato);
@@ -189,17 +187,15 @@ public class IndustriaService {
 
         String nomeContato = "";
         String email = "";
-        String telefone = String.valueOf(cell.getNumericCellValue());
-
+        String telefone = "";
         nomeContato = cell.getStringCellValue();
 
         cell = celIterator.next();
-
+        telefone = cell.getStringCellValue();
         cell = celIterator.next();
         email = cell.getStringCellValue();
 
         Contato newContato = new Contato(null, nomeContato, email, telefone, tipo, null);
-
         contatos.add(newContato);
     }
 

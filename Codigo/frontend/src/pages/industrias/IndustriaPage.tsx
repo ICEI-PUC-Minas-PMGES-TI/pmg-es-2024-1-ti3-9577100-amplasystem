@@ -6,7 +6,7 @@ import {Box} from '@mui/system';
 import {Button, IconButton, Typography, Menu, MenuItem, ButtonGroup} from '@mui/material';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {MRT_ColumnDef, MaterialReactTable, useMaterialReactTable} from 'material-react-table';
-import {Delete, Edit} from '@mui/icons-material';
+import {Delete, Edit, Tune} from '@mui/icons-material';
 
 import {useNotification} from '@/hooks/useNotification';
     import apiFetch from '@/services/api';
@@ -99,6 +99,8 @@ const IndustriaPage = () => {
                 })
                 .catch((e) => {
                     console.log(e);
+                }).finally(() => {
+                    setReload(true);
                 });
         }
     }, [file]);
