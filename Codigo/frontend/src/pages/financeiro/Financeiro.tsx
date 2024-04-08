@@ -17,6 +17,7 @@ import apiFetch from '@/services/api';
 import { useNotification } from '@/hooks/useNotification';
 import { FinanceiroModel } from '@/models/FinanceiroModel';
 import { IndustriaModel } from '@/models/IndustriaModel';
+import { log } from 'console';
 
 const FinanceiroPage = () => {
     const { showNotification } = useNotification();
@@ -129,22 +130,18 @@ const FinanceiroPage = () => {
 
     const handleTextFieldChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-        if (financeiro) {
-            setFinanceiro({
-                ...financeiro,
-                [name]: value,
-            });
-        }
+        setFinanceiro({
+            ...financeiro,
+            [name]: value,
+        });
     };
     
-    const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    const handleSelectChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-        if (financeiro) {
-            setFinanceiro({
-                ...financeiro,
-                [name]: value,
-            });
-        }
+        setFinanceiro({
+            ...financeiro,
+            [name]: value,
+        });
     };
 
     const columns = React.useMemo<MRT_ColumnDef<FinanceiroModel>[]>(
@@ -274,7 +271,6 @@ const FinanceiroPage = () => {
                         const formJson: any = {};
                         formData.forEach((value, key) => formJson[key as keyof FinanceiroModel] = value);
                         financeiro ? updateFinanceiro() : postFinanceiro(formJson as FinanceiroModel);
-                        handleClose();
                     },
                 }}
             >
@@ -294,19 +290,21 @@ const FinanceiroPage = () => {
                         onChange={handleTextFieldChange}
                     />
                     
-                    <Select
+                    <TextField
                         fullWidth
                         required
-                        value={financeiro?.Industrias_id !== null ? String(financeiro?.Industrias_id) : ''}
+                        value={financeiro?.Industrias_id ?? ''}
                         name="Industrias_id"
+                        label="Indústria"
                         onChange={handleSelectChange}
+                        select
                     >
                         {industriasSemCadastro.map((industria) => (
                             <MenuItem key={industria.id} value={String(industria.id)}>
                                 {industria.nome}
                             </MenuItem>
                         ))}
-                    </Select>
+                    </TextField>
                     <TextField
                         required
                         margin="dense"
