@@ -58,7 +58,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
                 comissao: '',
                 tipoFiscal: '',
                 tipoPagamento: '',
-                industria: {},
+                industria: '',
             });
         }
     }, [financeiro]);
