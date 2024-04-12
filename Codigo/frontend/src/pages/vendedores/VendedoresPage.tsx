@@ -11,7 +11,6 @@ import { Delete, Edit, Email } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 
-import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 const VendedoresPage = () => {
     const [vendedor, setVendedor] = useState<VendedorModel | undefined>(undefined);
     const [data, setData] = useState<VendedorModel[]>([]);
@@ -103,7 +102,7 @@ const VendedoresPage = () => {
                 <IconButton
                     onClick={() => {
                         setOpen(true);
-                        setVendedor((row.original));
+                        setVendedor(row.original);
                     }}
                 >
                     <Edit />
@@ -111,7 +110,13 @@ const VendedoresPage = () => {
                 <IconButton
                     color="error"
                     onClick={() => {
-                        if (row.original.id != null) {
+                        if (row.original.email == user.email) {
+                            showNotification({
+                                message: "Não e possivel deletar o seu usuario",
+                                title: "Ação Invalida",
+                                type: 'error',
+                            });
+                        } else if (row.original.id != null) {
                             deleteVendedor(row.original.id);
                         }
                     }}
