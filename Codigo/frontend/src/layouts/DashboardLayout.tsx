@@ -6,7 +6,7 @@ import Handshake from '@mui/icons-material/Handshake';
 import Factory from '@mui/icons-material/Factory';
 import Person from '@mui/icons-material/Person';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-
+import InventoryIcon from '@mui/icons-material/Inventory';
 import Sidebar, { SidebarItem } from '@/components/Sidebar';
 import Navbar from '@/components/Navbar';
 
@@ -22,6 +22,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         { id: 4, icon: <Person />, label: 'Cliente', location: '/clientes' },
         { id: 3, icon: <Factory />, label: 'Indústria', location: '/industrias' },
         { id: 5, icon: <AttachMoneyIcon />, label: 'Financeiro', location: '/financeiro' },
+        { id: 6, icon: <InventoryIcon />, label: 'Ordem de Compra', location: '/ordem' },
     ];
 
     return (

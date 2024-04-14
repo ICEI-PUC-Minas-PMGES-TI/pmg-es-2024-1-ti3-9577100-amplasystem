@@ -3,7 +3,8 @@ import { Navigate, Route, Routes, BrowserRouter as Router } from 'react-router-d
 import ProtectedRoute from '@/routes/ProtectedRoutes';
 import { DashboardLayout } from '@/layouts/DashboardLayout.tsx';
 import { Backdrop, CircularProgress } from '@mui/material';
-
+import OrdemDeCompraPage from '@/pages/ordemDeCompra/OrdemDeCompraPage.tsx';
+const OrdensDeCompraPage = React.lazy(() => import('@/pages/ordemDeCompra/OrdemDeCompraPage.tsx'));
 const FinanceiroPage = React.lazy(() => import('@/pages/financeiro/Financeiro.tsx'));
 const IndustriaPage = React.lazy(() => import('@/pages/industrias/IndustriaPage.tsx'));
 const DashboardPage = React.lazy(() => import('@/pages/dashboard/DashboardPage.tsx'));
@@ -62,6 +63,14 @@ const RouterRoutes = () => {
                             element={
                                 <DashboardLayout>
                                     <FinanceiroPage />
+                                </DashboardLayout>
+                            }
+                        />
+                        <Route
+                            path="/ordem"
+                            element={
+                                <DashboardLayout>
+                                    <OrdemDeCompraPage />
                                 </DashboardLayout>
                             }
                         />
