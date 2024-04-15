@@ -26,16 +26,16 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 - [Cadastrar/Atualizar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf)
 
-
 - [Tela Industria ](userInterface/InterfacedeusuarioTelaIndustria.pdf)
 
-- [Cadastrar/Atualizar  Industrias ](userInterface.pdf)
+- [Cadastrar/Atualizar Industrias ](userInterface.pdf)
 
 - [Tela Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioOrdensDeCompra.pdf)
 
-- [Cadastrar/Atualizar  Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
+- [Cadastrar/Atualizar Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
 
+- [Tela Cliente ](userInterface/InterfacedeusuárioTelaCliente.pdf)
 
 ### Diagrama de caso de uso
 
-- [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf) 
+- [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf)

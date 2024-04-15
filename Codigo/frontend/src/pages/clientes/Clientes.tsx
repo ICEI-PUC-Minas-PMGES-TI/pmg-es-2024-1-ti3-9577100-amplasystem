@@ -11,7 +11,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
-import { Button, FormControl, IconButton, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Button, ButtonGroup, FormControl, IconButton, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 
@@ -241,13 +242,26 @@ const ClientesPage = () => {
             },
         },
     });
+    
     return (
         <React.Fragment>
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
-                <Button onClick={handleClickOpen} endIcon={<AddIcon sx={{ fontSize: 5 }} />}>
-                    Adicionar cliente
-                </Button>
+                <ButtonGroup variant="contained" aria-label="Basic button group">
+                    <Button onClick={ handleClickOpen } startIcon={ <AddIcon sx={ {fontSize: 5} }/> }>
+                        Adicionar indústria
+                    </Button>
+                    <Button
+                        aria-controls={ true ? 'basic-menu' : undefined }
+                        aria-haspopup="true"
+                        aria-expanded={ true ? 'true' : undefined }
+                        onClick={ (handleClick) => {} }
+                        role={ undefined }
+                    >
+                        <ArrowDropDownIcon/>
+                    </Button>
+                </ButtonGroup>
+
             </header>
             <MaterialReactTable table={table} />
             <Dialog
