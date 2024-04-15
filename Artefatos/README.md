@@ -14,7 +14,7 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 ### Diagrama de Entidade e Relacionamento
 
-- [DER implementado ](./DER/bd.2.0.png)
+- [DER implementado ](./DER/DER.pdf)
 
 ### Interfaces de Usuário
 
