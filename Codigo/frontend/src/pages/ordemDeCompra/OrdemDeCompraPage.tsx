@@ -14,7 +14,7 @@ import { Cargo } from '@/enums/Cargo.ts';
 import { OrderStatus } from '@/enums/OrderStatus.ts';
 
 const OrdemDeCompraPage = () => {
-    const [vendedor, setOrdemDeCompra] = useState<OrdemDeCompraModel | undefined>(undefined);
+    const [ordemDeCompra, setOrdemDeCompra] = useState<OrdemDeCompraModel | undefined>(undefined);
     const [data, setData] = useState<OrdemDeCompraModel[]>([{
         id: 1,
         valor: 1000.0,
@@ -268,6 +268,12 @@ const OrdemDeCompraPage = () => {
 
             <Box display={'grid'} className="my-5">
                 <MaterialReactTable table={table} />
+                <RegisterModal
+                    setOpenModal={setOpen}
+                    openModal={open}
+                    setReload={setReload}
+                    updateOrdemDeCompra={ordemDeCompra}
+                />
             </Box>
         </>
     );

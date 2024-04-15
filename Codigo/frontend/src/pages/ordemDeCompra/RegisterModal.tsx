@@ -18,100 +18,74 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { Cargo } from '@/enums/Cargo';
 import { useNotification } from '@/hooks/useNotification';
-import { VendedorModel } from '@/models/VendedorModel';
+import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 import apiFetch from '@/services/api';
 import * as ButtonStyle from '@/styles/types/ButtonsStyles';
 import * as Input from '@/styles/types/InputStyles';
 import * as ModalStyle from '@/styles/types/ModalStyles';
 import Validade from '@/utils/Validate';
+import { IndustriaModel } from '@/models/IndustriaModel';
+import { Update } from '@mui/icons-material';
+import { ClienteModel } from '@/models/ClienteModel';
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
     setReload: Dispatch<SetStateAction<boolean>>;
-    updateVendedor: VendedorModel | undefined;
+    updateOrdemDeCompra: OrdemDeCompraModel | undefined;
 }
 const RegisterModal = (props: IRegisterModalProps) => {
-    const optionCargo = [Cargo.ADMINISTRADOR, Cargo.VENDEDOR];
-    const [refNome, setRefNome] = useState('');
-    const [refEmail, setRefEmail] = useState('');
-    const [refCargo, setRefCargo] = useState('');
-    const [loading, setLoading] = useState(false);
     const { showNotification } = useNotification();
     const validate = new Validade();
+    const [loading, setLoading] = useState(false);
+    const [industrias, setIndustrias] = useState<IndustriaModel[]>([])
+    const [industriasName, setIndustriasName] = useState<string[]>([])
+    const [clientes, setClientes] = useState<ClienteModel[]>([])
+    const [clientesName, setClientesName] = useState<string[]>([])
     const handleClose = () => {
         props.setOpenModal(false);
     };
-
+    const getIndustrias = () => {
+        apiFetch
+            .get('/industria/')
+            .then((data) => {
+                setIndustrias(data.data);
+                const aux:string[] = [];
+                industrias.forEach(element => {
+                    aux.push(element.nome)
+                    setIndustriasName(aux);
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
+    const getClientes = () => {
+        apiFetch
+            .get('/cliente/')
+            .then((data) => {
+                setClientes(data.data);
+                const aux:string[] = [];
+                clientes.forEach(element => {
+                    aux.push(element.nomeFantasia)
+                    setClientesName(aux);
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
     function onSubmit() {
-        const obj = {
-            id: props.updateVendedor?.id || null,
-            nome: refNome,
-            email: refEmail,
-            cargo: refCargo,
-        };
-
-        if (refEmail != '' && refNome != '' && refCargo != '') {
-            if (validate.validateEmail(refEmail)) {
-                if (props.updateVendedor == undefined) {
-                    setLoading(true);
-                    apiFetch
-                        .post('/vendedor/admin/save', obj)
-                        .then((data) => {
-                            props.setReload(true);
-                            showNotification({
-                                message: data.data.message,
-                                type: 'success',
-                                title: data.data.titulo,
-                            });
-                        })
-                        .catch((error) => {
-                            showNotification({
-                                message: error.response.data.message,
-                                type: 'error',
-                                title: error.response.data.titulo,
-                            });
-                        })
-                        .finally(() => {
-                            setLoading(false);
-                        });
-                } else {
-                    setLoading(true);
-                    apiFetch
-                        .put(`/vendedor/admin/update/${obj.id}`, obj)
-                        .then((data) => {
-                            props.setReload(true);
-                            showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                        })
-                        .catch((error) => {
-                            showNotification({
-                                message: error.response.data.message,
-                                type: 'error',
-                                title: error.response.data.titulo,
-                            });
-                        })
-                        .finally(() => {
-                            setLoading(false);
-                            props.setOpenModal(false);
-                        });
-                }
-                setRefCargo('');
-                setRefEmail('');
-                setRefNome('');
-            } else {
-                showNotification({ message: 'informe um email valido', type: 'error', title: 'Email invalido' });
-            }
-        } else {
-            showNotification({ message: 'preencha todos os campos', type: 'error' });
-        }
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
     }
     useEffect(() => {
-        setRefCargo(props.updateVendedor?.cargo || '');
-        setRefEmail(props.updateVendedor?.email || '');
-        setRefNome(props.updateVendedor?.nome || '');
-    }, [props.updateVendedor]);
+        getIndustrias()
+        getClientes()
+    }, [props.openModal]);
+    useEffect(() => {
+    
+    }, [props.updateOrdemDeCompra]);
     return (
         <Dialog
             fullWidth
@@ -123,7 +97,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             }}
         >
             <DialogTitle>
-                {props.updateVendedor == undefined ? 'Cadastrar vendedor' : 'Atualizar ' + props.updateVendedor.nome} 
+                {props.updateOrdemDeCompra == undefined ? 'Cadastrar Ordem de Compra' : 'Atualizar Ordem ' + props.updateOrdemDeCompra.codigoPedido} 
             </DialogTitle>
             <DialogContent>
                 <CircularProgress
@@ -150,75 +124,90 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     }}
                     display="block"
                 >
-                    Nome *
+                    Industria *
+                </Typography>
+                <Autocomplete
+                    disablePortal
+                    id="cargo"
+                    options={industriasName}
+                    fullWidth
+                    value={props.updateOrdemDeCompra?.industria.nome}
+                    renderInput={(params) => {
+                        return<TextField {...params}  placeholder="Industria" />
+                    }}
+                    onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
+                           console.log( industrias.find((element) => {
+                            return element.nome == event.target?.value
+                        }))
+                    }}
+                />
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: '#344054',
+                    }}
+                    display="block"
+                >
+                    Cliente *
+                </Typography>
+                <Autocomplete
+                    disablePortal
+                    id="cargo"
+                    options={clientesName}
+                    fullWidth
+                    value={props.updateOrdemDeCompra?.cliente.nomeFantasia}
+                    renderInput={(params) => <TextField {...params} placeholder="Cliente" />}
+                    onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
+                        console.log( clientes.find((element) => {
+                            return element.nome == event.target?.value
+                        }))
+                    }}
+                />
+                 <Typography
+                    variant="subtitle1"
+                    sx={{
+                        color: '#344054',
+                    }}
+                    display="block"
+                >
+                    Codigo da Ordem *
                 </Typography>
                 <TextField
                     id="nome"
                     variant="outlined"
                     placeholder="Nome"
                     fullWidth
-                    value={refNome}
-                    onChange={(event) => {
-                        setRefNome(event.target.value);
-                    }}
+                    value={props.updateOrdemDeCompra?.codigoPedido}
                 />
-                <Typography
+                 <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
                     }}
                     display="block"
                 >
-                    Email *
+                    Valor *
                 </Typography>
                 <TextField
-                    id="email"
+                    id="nome"
                     variant="outlined"
-                    placeholder="Email"
+                    placeholder="Nome"
                     fullWidth
-                    value={refEmail}
-                    onChange={(event) => {
-                        setRefEmail(event.target.value);
-                    }}
+                    value={props.updateOrdemDeCompra?.valor.toLocaleString?.('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      })}
+                    
                 />
-                <Typography
-                    variant="subtitle1"
-                    sx={{
-                        color: '#344054',
-                    }}
-                    display="block"
-                >
-                    Cargo *
-                </Typography>
-                <Autocomplete
-                    disablePortal
-                    id="cargo"
-                    options={optionCargo}
-                    fullWidth
-                    value={refCargo}
-                    renderInput={(params) => <TextField {...params} placeholder="Cargo" />}
-                    onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
-                        setRefCargo((event.target as HTMLInputElement).value || '');
-                    }}
-                />
-
-                <Typography
-                    variant="caption"
-                    display="block"
-                    gutterBottom
-                    sx={{
-                        color: '#344054',
-                    }}
-                >
-                    apenas administradores, podem cadastrar novos vendedores
-                </Typography>
             </DialogContent>
             <DialogActions>
                 <Button onClick={ChangeModalState} variant="contained">
                     Cancelar
                 </Button>
                 <Button onClick={onSubmit} variant="contained">
-                    {props.updateVendedor == undefined ? 'Cadastrar' : 'Atualizar '}
+                    {props.updateOrdemDeCompra == undefined ? 'Cadastrar' : 'Atualizar '}
                 </Button>
             </DialogActions>
         </Dialog>
