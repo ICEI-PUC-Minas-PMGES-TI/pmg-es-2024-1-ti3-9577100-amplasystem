@@ -12,32 +12,30 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 - [Ata da 3° reunião ](./atas/Ata3reuniao.pdf) Ata da terceira reunião com o cliente realizada no dia 28 de marco de 2025
 
-### DER
+### Diagrama de Entidade e Relacionamento
 
-- [Primeira versão do Der ](./DER/bd1.0.png) A versão que estava sendo utilizada no software legado
-
-- [Segunda versão do Der ](./DER/bd.2.0.png) A versão que será utilizada para o inicio do desenvolvimento
+- [DER implementado ](./DER/bd.2.0.png)
 
 ### Interfaces de Usuário
 
-A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
+A seguir estarão os documentos referentes as interfaces criadas
 
 - [Esqueci Minha Senha ](userInterface/InterfacedeusuarioEsqueciminhasenha.pdf)
 
 - [Tela Vendedor ](userInterface/InterfacedeusuarioTelaVendedor.pdf)
 
-- [Cadastrar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf)
+- [Cadastrar/Atualizar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf)
 
-- [Atualizar Vendedores ](userInterface/InterfacedeusuarioAtualizacaoVendedor.pdf)
 
 - [Tela Industria ](userInterface/InterfacedeusuarioTelaIndustria.pdf)
 
-- [Cadastrar Industrias ](userInterface/InterfacedeusuarioCadastroIndustria.pdf)
+- [Cadastrar/Atualizar  Industrias ](userInterface.pdf)
 
-- [Atualizar Industrias ](userInterface/InterfacedeusuarioAtualizarIndustria.pdf)
+- [Tela Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioOrdensDeCompra.pdf)
+
+- [Cadastrar/Atualizar  Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
+
 
 ### Diagrama de caso de uso
 
-- [Primeira versão](UserCaseDiagram/userCaseDiagram_v1_AmplaSystem.pdf) do diagrama de caso de uso
-
-- [Segunda versão](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf) do diagrama de caso de uso
+- [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf) 
