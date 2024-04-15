@@ -34,8 +34,13 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 - [Cadastrar/Atualizar Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
 
+- [Tela Financeiro ](userInterface/InterfacedeusuarioTelaFinanceiro.pdf)
+
+- [Cadastrar/Atualizar Financeiro ](userInterface/InterfacedeusuarioRegistroFinanceiro.pdf)
+
 - [Tela Cliente ](userInterface/InterfacedeusuárioTelaCliente.pdf)
 
 ### Diagrama de caso de uso
-
 - [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf)
+
+
