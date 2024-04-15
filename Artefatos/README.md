@@ -35,6 +35,10 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 - [Cadastrar/Atualizar  Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
 
+- [Tela Financeiro ](userInterface/InterfacedeusuarioTelaFinanceiro.pdf)
+
+- [Cadastrar/Atualizar Financeiro ](userInterface/InterfacedeusuarioRegistroFinanceiro.pdf)
+
 
 ### Diagrama de caso de uso
 
