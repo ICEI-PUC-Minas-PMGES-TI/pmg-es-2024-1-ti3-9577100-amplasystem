@@ -14,7 +14,6 @@ import { Cargo } from '@/enums/Cargo.ts';
 import { OrderStatus } from '@/enums/OrderStatus.ts';
 
 const OrdemDeCompraPage = () => {
-    const [ordemDeCompra, setOrdemDeCompra] = useState<OrdemDeCompraModel | undefined>(undefined);
     const [data, setData] = useState<OrdemDeCompraModel[]>([{
         id: 1,
         valor: 1000.0,
@@ -90,6 +89,8 @@ const OrdemDeCompraPage = () => {
             }
         }
     }]);
+
+    const [ordemDeCompra, setOrdemDeCompra] = useState<OrdemDeCompraModel | undefined>(undefined);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
     useEffect(() => {
@@ -102,31 +103,16 @@ const OrdemDeCompraPage = () => {
     };
 
     const getOrdensDeCompra = () => {
-        // apiFetch
-        //     .get('/vendedor')
-        //     .then((data) => {
-        //         setData(data.data);
-        //         setReload(false);
-        //     })
-        //     .catch((e) => {
-        //         console.log(e);
-        //     });
+   
     };
     const deleteOrdemDeCompra = (id: number) => {
-        // apiFetch
-        //     .delete(`/vendedor/${id}`)
-        //     .then((data) => {
-        //         setReload(true);
-        //         showNotification({
-        //             message: data.data.message,
-        //             title: data.data.titulo,
-        //             type: 'success',
-        //         });
-        //     })
-        //     .catch((e) => {
-        //         console.log(e);
-        //     });
+     
     };
+    useEffect(() => {
+        if(!open){
+            setOrdemDeCompra(undefined)
+        }
+    }, [open])
     const columns = useMemo<MRT_ColumnDef<OrdemDeCompraModel>[]>(
         () => [
             {
@@ -173,7 +159,6 @@ const OrdemDeCompraPage = () => {
                               :  cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ?theme.palette.warning.dark :theme.palette.error.dark,
                         borderRadius: '0.25rem',
                         color: '#fff',
-                        maxWidth: '9ch',
                         p: '0.25rem',
                       })}
                     >
