@@ -6,38 +6,42 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 ### Reuniões
 
-- [Ata da 1° reunião ](./atas/Ata1reuniao.pdf) Ata da primeira reunião com o cliente realizada no dia 25 de fevereiro de 2025
+- [Ata da 1° reunião ](./atas/Ata1reuniao.pdf) Ata da primeira reunião com o cliente realizada no dia 25 de fevereiro de 2024
 
-- [Ata da 2° reunião ](./atas/Ata2reuniao.pdf) Ata da segunda reunião com o cliente realizada no dia 28 de fevereiro de 2025
+- [Ata da 2° reunião ](./atas/Ata2reuniao.pdf) Ata da segunda reunião com o cliente realizada no dia 28 de fevereiro de 2024
 
-- [Ata da 3° reunião ](./atas/Ata3reuniao.pdf) Ata da terceira reunião com o cliente realizada no dia 28 de marco de 2025
+- [Ata da 3° reunião ](./atas/Ata3reuniao.pdf) Ata da terceira reunião com o cliente realizada no dia 28 de marco de 2024
 
-### DER
+- [Ata da 4° reunião ](./atas/Ata4reuniao.pdf) Ata da quarta reunião com o cliente realizada no dia 15 de abril de 2024
 
-- [Primeira versão do Der ](./DER/bd1.0.png) A versão que estava sendo utilizada no software legado
+### Diagrama de Entidade e Relacionamento
 
-- [Segunda versão do Der ](./DER/bd.2.0.png) A versão que será utilizada para o inicio do desenvolvimento
+- [DER implementado ](./DER/DER.pdf)
 
 ### Interfaces de Usuário
 
-A seguir estarão os documentos referentes as interfaces criadas para o usuário divididas em relação as sprints em que foram criadas.
+A seguir estarão os documentos referentes as interfaces criadas
 
 - [Esqueci Minha Senha ](userInterface/InterfacedeusuarioEsqueciminhasenha.pdf)
 
 - [Tela Vendedor ](userInterface/InterfacedeusuarioTelaVendedor.pdf)
 
-- [Cadastrar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf)
-
-- [Atualizar Vendedores ](userInterface/InterfacedeusuarioAtualizacaoVendedor.pdf)
+- [Cadastrar/Atualizar Vendedores ](userInterface/InterfacedeusuarioCadastroVendedor.pdf)
 
 - [Tela Industria ](userInterface/InterfacedeusuarioTelaIndustria.pdf)
 
-- [Cadastrar Industrias ](userInterface/InterfacedeusuarioCadastroIndustria.pdf)
+- [Cadastrar/Atualizar Industrias ](userInterface.pdf)
 
-- [Atualizar Industrias ](userInterface/InterfacedeusuarioAtualizarIndustria.pdf)
+- [Tela Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioOrdensDeCompra.pdf)
+
+- [Cadastrar/Atualizar Ordem de Compra ](userInterface/ordemDeCompra/InterfaceDeUsuárioCadastrar_EditarOrdemDeCompra.pdf)
+
+- [Tela Financeiro ](userInterface/InterfacedeusuarioTelaFinanceiro.pdf)
+
+- [Cadastrar/Atualizar Financeiro ](userInterface/InterfacedeusuarioRegistroFinanceiro.pdf)
+
+- [Tela Cliente ](userInterface/InterfacedeusuárioTelaCliente.pdf)
 
 ### Diagrama de caso de uso
 
-- [Primeira versão](UserCaseDiagram/userCaseDiagram_v1_AmplaSystem.pdf) do diagrama de caso de uso
-
-- [Segunda versão](UserCaseDiagram/userCaseDiagram_v2_AmplaSystem.pdf) do diagrama de caso de uso
+- [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram_v3_AmplaSystem.pdf)
