@@ -120,4 +120,8 @@ public class VendedorService {
 
         passwordTokenRepository.save(myToken);
     }
+
+    public Vendedor findByEmail(String email) {
+        return vendedorRepository.findByEmail(email)
+;    }
 }

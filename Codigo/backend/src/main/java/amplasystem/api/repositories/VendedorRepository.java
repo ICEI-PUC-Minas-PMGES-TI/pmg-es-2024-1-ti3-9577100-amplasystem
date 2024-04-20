@@ -14,5 +14,6 @@ public interface VendedorRepository extends JpaRepository<Vendedor, Integer> {
     boolean existsById(Integer id);
 
     Vendedor findByEmailAndSenha(String email, String senha);
+    
 }
  
