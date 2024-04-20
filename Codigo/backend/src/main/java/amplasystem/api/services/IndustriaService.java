@@ -2,7 +2,6 @@ package amplasystem.api.services;
 
 import amplasystem.api.models.Contato;
 import amplasystem.api.services.exceptions.ObjectNotFoundException;
-import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.enuns.TipoContato;
 import amplasystem.api.mappers.IndustriaMapper;
 import amplasystem.api.models.Industria;
@@ -41,23 +40,23 @@ public class IndustriaService {
     @Autowired
     private Validator validator;
 
-    public List<IndustriaDTO> getAllIndustrias() {
-        return industriaRepository.findAll().stream().map(IndustriaMapper::toDTO).collect(Collectors.toList());
+    public List<Industria> getAllIndustrias() {
+        return industriaRepository.findAll().stream().toList();
     }
 
-    public List<IndustriaDTO> getAllIndustriasWithOutFinanceiro() {
-        return industriaRepository.findByFinanceiroIsNull().stream().map(IndustriaMapper::toDTO).collect(Collectors.toList());
+    public List<Industria> getAllIndustriasWithOutFinanceiro() {
+        return industriaRepository.findByFinanceiroIsNull().stream().toList();
     }
-    public IndustriaDTO getIndustriaById(Integer id) throws NoSuchElementException {
+    public Industria getIndustriaById(Integer id) throws NoSuchElementException {
         Optional<Industria> industria = industriaRepository.findById(id);
         if (industria.isEmpty()) {
             throw new NoSuchElementException("Indústria não encontrada na base de dados");
         }
 
-        return IndustriaMapper.toDTO(industria.get());
+        return industria.get();
     }
 
-    public IndustriaDTO save(Industria industria) {
+    public Industria save(Industria industria) {
         Set<ConstraintViolation<Industria>> violations = validator.validate(industria);
         if (!violations.isEmpty()) {
             throw new ValidationException(violations.stream()
@@ -78,7 +77,7 @@ public class IndustriaService {
             contato.setIndustria(industriaSalva);
             contatoService.save(contato);
         });
-        return IndustriaMapper.toDTO(industriaSalva);
+        return industriaSalva;
     }
 
     public void delete(Integer id) {
@@ -97,7 +96,7 @@ public class IndustriaService {
         }
     }
 
-    public List<IndustriaDTO> createTable(MultipartFile file) {
+    public List<Industria> createTable(MultipartFile file) {
 
         List<Industria> industrias = new ArrayList<>();
         try (InputStream inputStream = file.getInputStream()) {
@@ -161,13 +160,13 @@ public class IndustriaService {
 
             industriaRepository.saveAll(industrias);
 
-            List<IndustriaDTO> industriaDTOs = new ArrayList<>();
+            List<Industria> Industrias = new ArrayList<>();
 
             for (Industria industria : industrias) {
-                industriaDTOs.add(IndustriaMapper.toDTO(industria));
+                Industrias.add(industria);
             }
 
-            return industriaDTOs;
+            return Industrias;
 
         } catch (EncryptedDocumentException e) {
             e.printStackTrace();

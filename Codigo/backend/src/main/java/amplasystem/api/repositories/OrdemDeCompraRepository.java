@@ -7,5 +7,5 @@ import amplasystem.api.models.OrdemDeCompra;
 
 @Repository
 public interface OrdemDeCompraRepository extends JpaRepository<OrdemDeCompra, Integer> {
-
+    boolean existsBycodigoPedido(String codigoPedido);
 }

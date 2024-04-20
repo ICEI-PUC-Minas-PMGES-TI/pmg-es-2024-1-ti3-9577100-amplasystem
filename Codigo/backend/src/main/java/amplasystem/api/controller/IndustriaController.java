@@ -1,7 +1,6 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.IndustriaService;
-import amplasystem.api.dtos.IndustriaDTO;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.models.Industria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +22,19 @@ public class IndustriaController {
 
     @GetMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<List<IndustriaDTO>> getAllIndustrias() {
+    public ResponseEntity<List<Industria>> getAllIndustrias() {
         return ResponseEntity.ok(industriaService.getAllIndustrias());
     }
     @GetMapping(value = "/withOutFinanceiro")
     @ResponseBody
-    public ResponseEntity<List<IndustriaDTO>> getAllIndustriasWithOutFinanceiro() {
+    public ResponseEntity<List<Industria>> getAllIndustriasWithOutFinanceiro() {
         return ResponseEntity.ok(industriaService.getAllIndustriasWithOutFinanceiro());
     }
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<?> getIndustriaById(@PathVariable Integer id) throws NoSuchElementException {
         try {
-            IndustriaDTO industria = industriaService.getIndustriaById(id);
+            Industria industria = industriaService.getIndustriaById(id);
             return ResponseEntity.ok(industria);
         } catch (NoSuchElementException e) {
             ResponseDTO errorResponse = new ResponseDTO("Indústria não encontrada.",

@@ -8,111 +8,57 @@ import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './RegisterModal.tsx';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
-import { Cargo } from '@/enums/Cargo.ts';
 import { OrderStatus } from '@/enums/OrderStatus.ts';
 
 const OrdemDeCompraPage = () => {
-    const [data, setData] = useState<OrdemDeCompraModel[]>([{
-        id: 1,
-        valor: 1000.0,
-        codigoPedido: '123809765',
-        totalmenteFaturado: OrderStatus.TOTALMENTEFATURADO,
-        industria: {
-            id: 1,
-            nome:"Baston",
-            contatos:[]
-        },
-        cliente: {
-            id: 1,
-            cnpj: '',
-            telefone: "(31) 97364-3098",
-            endereco: undefined,
-            nomeFantasia: 'Martins Atacadista',
-            vendedor: {
-                id: 0,
-                nome: 'Vitor',
-                email: 'vitor@amplavendas.com',
-                cargo: Cargo.ADMINISTRADOR,
-                token: undefined
-            }
-        }
-    },
-    {
-        id: 1,
-        valor: 1000.0,
-        codigoPedido: '123809765',
-        totalmenteFaturado: OrderStatus.NAOFATURADO,
-        industria: {
-            id: 1,
-            nome:"Baston",
-            contatos:[]
-        },
-        cliente: {
-            id: 1,
-            cnpj: '',
-            telefone: "(31) 97364-3098",
-            endereco: undefined,
-            nomeFantasia: 'Martins Atacadista',
-            vendedor: {
-                id: 0,
-                nome: 'Vitor',
-                email: 'vitor@amplavendas.com',
-                cargo: Cargo.ADMINISTRADOR,
-                token: undefined
-            }
-        }
-    },
-    {
-        id: 1,
-        valor: 1000.0,
-        codigoPedido: '123809765',
-        totalmenteFaturado: OrderStatus.PARCIALMENTEFATURADO,
-        industria: {
-            id: 1,
-            nome:"Baston",
-            contatos:[]
-        },
-        cliente: {
-            id: 1,
-            cnpj: '',
-            telefone: "(31) 97364-3098",
-            endereco: undefined,
-            nomeFantasia: 'Martins Atacadista',
-            vendedor: {
-                id: 0,
-                nome: 'Vitor',
-                email: 'vitor@amplavendas.com',
-                cargo: Cargo.ADMINISTRADOR,
-                token: undefined
-            }
-        }
-    }]);
+    const [data, setData] = useState<OrdemDeCompraModel[]>([]);
 
     const [ordemDeCompra, setOrdemDeCompra] = useState<OrdemDeCompraModel | undefined>(undefined);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
     useEffect(() => {
         getOrdensDeCompra();
+        setReload(false);
     }, [reload]);
-    const { user } = useAuth();
     const { showNotification } = useNotification();
     const ChangeModalState = () => {
         setOpen(!open);
     };
 
     const getOrdensDeCompra = () => {
-   
+        apiFetch
+        .get('/ordem/')
+        .then((data) => {
+            console.log(data.data)
+            setData(data.data);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
     };
     const deleteOrdemDeCompra = (id: number) => {
-     
+        apiFetch
+        .delete(`/ordem/${id}`)
+        .then((data) => {
+            setReload(true);
+            console.log(data)
+            showNotification({
+                message: data.data.message,
+                title: data.data.titulo,
+                type: 'success',
+            });
+        })
+        .catch((e) => {
+            console.log(e);
+        });
     };
     useEffect(() => {
         if(!open){
             setOrdemDeCompra(undefined)
         }
     }, [open])
+
     const columns = useMemo<MRT_ColumnDef<OrdemDeCompraModel>[]>(
         () => [
             {
@@ -141,8 +87,7 @@ const OrdemDeCompraPage = () => {
                       {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
                         style: 'currency',
                         currency: 'BRL',
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 0,
+                       
                       })}
                     </Box>)
             },
@@ -162,7 +107,10 @@ const OrdemDeCompraPage = () => {
                         p: '0.25rem',
                       })}
                     >
-                      {cell.getValue<OrderStatus>()}
+                    {   cell.getValue<OrderStatus>() == OrderStatus.TOTALMENTEFATURADO ? `Totalmente faturado` :  
+                        cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ? `Parcialmente faturado` : 
+                        `Nao faturado` 
+                    }
                     </Box>
                   ),
     

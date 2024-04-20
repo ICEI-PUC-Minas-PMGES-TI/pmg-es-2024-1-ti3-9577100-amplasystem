@@ -62,6 +62,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
             });
         }
     }, [financeiro]);
+    document.getElementById("sistema-organico")
     const handleSave = async () => {
         if (
             !newFinanceiro.comissao ||

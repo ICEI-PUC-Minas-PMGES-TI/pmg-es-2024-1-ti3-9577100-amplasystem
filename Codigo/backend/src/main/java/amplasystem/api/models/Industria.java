@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -25,8 +28,10 @@ public class Industria {
     private List<Contato> contatos;
 
     @OneToOne(mappedBy = "industria")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Financeiro financeiro;
 
     @OneToMany(mappedBy = "industria")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<OrdemDeCompra> ordemDeCompras;
 }

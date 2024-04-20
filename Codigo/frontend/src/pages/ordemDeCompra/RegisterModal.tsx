@@ -16,23 +16,21 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { Cargo } from '@/enums/Cargo';
+
 import { useNotification } from '@/hooks/useNotification';
 import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 import apiFetch from '@/services/api';
-import * as ButtonStyle from '@/styles/types/ButtonsStyles';
-import * as Input from '@/styles/types/InputStyles';
-import * as ModalStyle from '@/styles/types/ModalStyles';
 import Validade from '@/utils/Validate';
 import { IndustriaModel } from '@/models/IndustriaModel';
-import { Update } from '@mui/icons-material';
 import { ClienteModel } from '@/models/ClienteModel';
+import { OrderStatus } from '@/enums/OrderStatus';
+import CurrencyInput from '@/components/CurrencyInput';
 
 const emptyOrdemDeCompra:OrdemDeCompraModel =  {
     id: null,
     valor: '',
     codigoPedido: '',
-    totalmenteFaturado: '',
+    totalmenteFaturado: OrderStatus.NAOFATURADO,
     industria: {
         id: null,
         nome:"",
@@ -102,7 +100,55 @@ const RegisterModal = (props: IRegisterModalProps) => {
             });
     };
     function onSubmit() {
-        console.log(ordemDeCompra)
+        const aux = ordemDeCompra
+        const valueStringFormatter = ordemDeCompra?.valor.toString();
+        console.log(valueStringFormatter)
+        aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
+        console.log(aux.valor)
+        setOrdemDeCompra(aux)
+        if (props.updateOrdemDeCompra == undefined) {
+            setLoading(true);
+            apiFetch
+                .post('/ordem/', ordemDeCompra)
+                .then((data) => {
+                    props.setReload(true);
+                    showNotification({
+                        message: data.data.message,
+                        type: 'success',
+                        title: data.data.titulo,
+                    });
+                    setOrdemDeCompra(emptyOrdemDeCompra)
+                })
+                .catch((error) => {
+                    showNotification({
+                        message: error.response.data.message,
+                        type: 'error',
+                        title: error.response.data.titulo,
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else {
+            setLoading(true);
+            apiFetch
+                .put(`/ordem/`, ordemDeCompra)
+                .then((data) => {
+                    props.setReload(true);
+                    showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                })
+                .catch((error) => {
+                    showNotification({
+                        message: error.response.data.message,
+                        type: 'error',
+                        title: error.response.data.titulo,
+                    });
+                })
+                .finally(() => {
+                    setLoading(false);
+                    props.setOpenModal(false);
+                });
+        }
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
@@ -149,15 +195,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         left: '45%',
                     }}
                 />
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    onClick={handleClose}
-                    aria-label="close"
-                    sx={ButtonStyle.closeButton}
-                >
-                    <CloseIcon />
-                </IconButton>
+        
                 <Typography
                     variant="subtitle1"
                     sx={{
@@ -206,10 +244,10 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     fullWidth
                     value={ordemDeCompra?.cliente.nomeFantasia}
                     renderInput={(params) => <TextField {...params} name="cliente" placeholder="Cliente" />}
-                    onSelect={(event: SyntheticEvent<HTMLDivElement, Event>) => {
+                    onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
                         const {value} = e.target as HTMLInputElement;
                         const cliente:ClienteModel | undefined = clientes.find((element) => {
-                            return element.nome == value
+                            return element.nomeFantasia == value
                         })
                         if(cliente != undefined){
                             setOrdemDeCompra({...ordemDeCompra, [`cliente`]:cliente}); 
@@ -243,22 +281,15 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 >
                     Valor *
                 </Typography>
-                <TextField
-                    id="nome"
-                    variant="outlined"
-                    placeholder="Nome"
-                    name='valor'
-                    fullWidth
-                    value={ordemDeCompra?.valor}
-                   onChange={handleChange}
-                />
+            
+                <CurrencyInput placeholder="R$0.00"  type="text" value={ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined}/>
             </DialogContent>
             <DialogActions>
                 <Button onClick={ChangeModalState} variant="contained">
                     Cancelar
                 </Button>
                 <Button onClick={onSubmit} variant="contained">
-                    {ordemDeCompra == undefined ? 'Cadastrar' : 'Atualizar '}
+                    {props.updateOrdemDeCompra == undefined ? 'Cadastrar' : 'Atualizar '}
                 </Button>
             </DialogActions>
         </Dialog>
