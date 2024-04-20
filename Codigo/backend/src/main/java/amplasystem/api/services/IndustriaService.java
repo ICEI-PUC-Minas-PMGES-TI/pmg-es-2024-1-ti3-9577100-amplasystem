@@ -120,7 +120,7 @@ public class IndustriaService {
                     switch (columnIndex) {
                         case 0:
                             if (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null) {
-                                throw new NullPointerException("Celula obrigatoria vazia");
+                                throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
                             }
 
                             nome = cell.getStringCellValue();

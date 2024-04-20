@@ -3,7 +3,6 @@ package amplasystem.api.config;
 import amplasystem.api.config.auth.SecurityConfig;
 import amplasystem.api.enuns.Cargo;
 import amplasystem.api.enuns.Faturamento;
-import amplasystem.api.enuns.TipoContato;
 import amplasystem.api.enuns.TipoFiscal;
 import amplasystem.api.models.Financeiro;
 import amplasystem.api.models.Industria;
@@ -47,6 +46,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     }
 
     @Override
+    @Profile("test")
     public void run(String... args) {
         this.autoComplete();
     }
