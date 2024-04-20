@@ -2,6 +2,7 @@ package amplasystem.api.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import amplasystem.api.enuns.Cargo;
 import jakarta.persistence.Column;
@@ -42,6 +43,7 @@ public class Vendedor {
     private Cargo cargo;
 
     @OneToMany(mappedBy = "vendedor")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Cliente> clientes;
 
 }

@@ -2,6 +2,8 @@ package amplasystem.api.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class Cliente {
     private Vendedor vendedor;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<OrdemDeCompra> ordemDeCompras;
 
     @Column(name = "telefone", nullable = true, columnDefinition = "CHAR(15)")

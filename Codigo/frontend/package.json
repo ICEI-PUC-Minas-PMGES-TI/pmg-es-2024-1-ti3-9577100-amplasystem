@@ -29,12 +29,15 @@
     "react-imask": "^7.5.0",
     "react-input-mask": "^2.0.4",
     "react-router-dom": "^6.22.3",
-    "styled-components": "^6.1.8"
+    "react-text-mask": "^5.5.0",
+    "styled-components": "^6.1.8",
+    "text-mask-addons": "^3.8.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.27",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
+    "@types/react-text-mask": "^5.4.14",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",

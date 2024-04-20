@@ -62,6 +62,7 @@ const IndustriaContato = (props: IRegisterModalProps) => {
                         name="telefone"
                         label="Telefone"
                         fullWidth
+                        inputProps={{ maxLength: 15 }}
                         value={ contato.telefone }
                         onChange={ handleChange }
 

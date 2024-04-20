@@ -2,6 +2,7 @@ package amplasystem.api.models;
 
 import java.util.List;
 
+import amplasystem.api.enuns.StatusOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,14 +26,14 @@ public class OrdemDeCompra {
     private Integer id;
 
     @Column(name = "valor_ordem", nullable = false)
-    private Double valorOrdem;
+    private Double valor;
 
     @Column(name = "codigo_pedido", nullable = false, length = 45)
     @NotBlank(message = "Codigo pedido da Ordem de compra é obrigatória.")
     private String codigoPedido;
 
     @Column(name = "totalmente_faturada", nullable = false)
-    private Boolean totalmenteFaturada;
+    private StatusOrder totalmenteFaturado;
 
 
     @ManyToOne
