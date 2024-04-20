@@ -3,6 +3,9 @@ import { useEffect, useMemo, useState, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
 
 import * as React from 'react';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import * as Input from '@/styles/types/InputStyles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -12,7 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, ButtonGroup, FormControl, IconButton, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
+import { Button, ButtonGroup, FormControl, IconButton, InputLabel, Menu, MenuItem, Modal, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit, Email } from '@mui/icons-material';
 
@@ -21,6 +24,7 @@ import { ClienteFormModel, ClienteModel } from '@/models/ClienteModel';
 import { VendedorModel } from '@/models/VendedorModel';
 import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
+import { Link } from 'react-router-dom';
 
 const ClientesPage = () => {
     const { showNotification } = useNotification();
@@ -29,6 +33,8 @@ const ClientesPage = () => {
     const [clientes, setClientes] = useState<ClienteModel[]>([]);
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = React.useState(false);
+    const [file, setFile] = useState<File | null>(null);
+    const [reload, setReload] = useState(true);
 
     const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
 
@@ -53,9 +59,45 @@ const ClientesPage = () => {
         }
     }, []);
 
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const openMenuOption = Boolean(anchorEl);
+    const handleDropDownClose = () => {
+        setAnchorEl(null);
+    };
+    const handleDropDownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
     useEffect(() => {
         getVendedores();
     }, [getVendedores]);
+
+    useEffect(() => {
+        console.log(file);
+        if (file != undefined) {
+            apiFetch
+                .post(
+                    '/cliente/tabela',
+                    {
+                        file,
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                )
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                }).finally(() => {
+                    window.location.reload();
+                    //setReload(true);
+                });
+        }
+    }, [file]);
 
     const getClientes = useCallback(async () => {
         setTableLoading(true);
@@ -249,13 +291,13 @@ const ClientesPage = () => {
                 <Typography variant="h4">Clientes</Typography>
                 <ButtonGroup variant="contained" aria-label="Basic button group">
                     <Button onClick={ handleClickOpen } startIcon={ <AddIcon sx={ {fontSize: 5} }/> }>
-                        Adicionar indústria
+                        Adicionar cliente
                     </Button>
                     <Button
-                        aria-controls={ true ? 'basic-menu' : undefined }
+                        aria-controls={ openMenuOption ? 'basic-menu' : undefined }
                         aria-haspopup="true"
-                        aria-expanded={ true ? 'true' : undefined }
-                        onClick={ (handleClick) => {} }
+                        aria-expanded={ openMenuOption ? 'true' : undefined }
+                        onClick={ handleDropDownClick }
                         role={ undefined }
                     >
                         <ArrowDropDownIcon/>
@@ -263,7 +305,9 @@ const ClientesPage = () => {
                 </ButtonGroup>
 
             </header>
+
             <MaterialReactTable table={table} />
+
             <Dialog
                 open={dialogState}
                 onClose={handleClose}
@@ -360,6 +404,54 @@ const ClientesPage = () => {
                     <Button type="submit">Salvar</Button>
                 </DialogActions>
             </Dialog>
+
+            <Menu
+                id="basic-menu"
+                anchorEl={ anchorEl }
+                open={ openMenuOption }
+                onClose={ handleClose }
+                sx={ {
+                    margin: '5px',
+                    padding: 0,
+                    '& .css-6hp17o-MuiList-root-MuiMenu-list': {
+                        padding: 0,
+                    },
+                } }
+            >
+                <MenuItem
+                    sx={ {
+                        margin: 0,
+                        padding: 0,
+                    } }
+                >
+                    <Button component="label" variant="contained" fullWidth startIcon={ <CloudUploadIcon/> }>
+                        Importar cliente
+                        <Input.VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => {
+                                if (event.target.files[0] != null) {
+                                        setFile(event.target.files[0]);
+                                  }
+                            } }
+                        />
+                    </Button>
+                </MenuItem>
+                <MenuItem
+                    onClick={ handleClose }
+                    sx={ {
+                        margin: 0,
+                        padding: 0,
+                    } }
+                >
+                    <Button component="label" fullWidth variant="contained" startIcon={ <FileDownloadIcon/> }>
+                        <Link to="/files/clientes.xlsx" target="_blank" download>
+                            Baixar modelo
+                        </Link>
+                    </Button>
+
+                </MenuItem>
+            </Menu>
+            
         </React.Fragment>
     );
 };
