@@ -5,25 +5,26 @@ import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.services.ClienteService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import lombok.extern.log4j.Log4j2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController()
 @RequestMapping("/cliente")
+@Log4j2
 public class ClienteController {
 
-    private final ClienteService clienteService;
-
     @Autowired
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
+    private ClienteService clienteService;
 
     @GetMapping("/")
     public ResponseEntity<List<ResponseClienteDTO>> getAllClientes() {
@@ -62,5 +63,12 @@ public class ClienteController {
     public ResponseEntity<Void> deleteCliente(@PathVariable Integer id) {
         clienteService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/tabela")
+    public ResponseEntity<?> saveTable(@RequestParam MultipartFile file) {
+        clienteService.createTable(file);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("CREATED");
     }
 }
