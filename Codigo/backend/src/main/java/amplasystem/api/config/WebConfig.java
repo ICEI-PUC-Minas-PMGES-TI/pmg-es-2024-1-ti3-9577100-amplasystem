@@ -55,7 +55,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     private String activeProfiles;
 
     public void autoComplete() {    
-        if (activeProfiles.trim().equals("test")) {
+        if (activeProfiles.trim().equals("d1ev")) {
             Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"),
                     "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());
             Vendedor v2 = new Vendedor(null, "admin@admin", SecurityConfig.passwordEncoder().encode("admin"),
@@ -65,7 +65,6 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
             Industria i2 = new Industria(null, "Industria teste 2", new ArrayList<>(), null, new ArrayList<>());
             Industria i3 = new Industria(null, "Industria teste 3", new ArrayList<>(), null, new ArrayList<>());
             Industria i4 = new Industria(null, "Industria teste 4", new ArrayList<>(), null, new ArrayList<>());
-
             Financeiro f1 = new Financeiro(null, 10.0, Faturamento.Liquidez, TipoFiscal.REPRESENTACAO, i1);
 
             // i1.setFinanceiro(f1);

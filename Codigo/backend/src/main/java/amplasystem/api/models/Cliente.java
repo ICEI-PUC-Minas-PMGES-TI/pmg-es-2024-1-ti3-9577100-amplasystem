@@ -28,7 +28,7 @@ public class Cliente {
     private String cnpj;
 
     @ManyToOne
-    @JoinColumn(name = "vendedor_id")
+    @JoinColumn(name = "vendedor_id", nullable = false)
     private Vendedor vendedor;
 
     @OneToMany(mappedBy = "cliente")
