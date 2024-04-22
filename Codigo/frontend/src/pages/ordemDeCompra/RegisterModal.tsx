@@ -100,54 +100,62 @@ const RegisterModal = (props: IRegisterModalProps) => {
             });
     };
     function onSubmit() {
-        const aux = ordemDeCompra
-        const valueStringFormatter = ordemDeCompra?.valor.toString();
-        console.log(valueStringFormatter)
-        aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
-        console.log(aux.valor)
-        setOrdemDeCompra(aux)
-        if (props.updateOrdemDeCompra == undefined) {
-            setLoading(true);
-            apiFetch
-                .post('/ordem/', ordemDeCompra)
-                .then((data) => {
-                    props.setReload(true);
-                    showNotification({
-                        message: data.data.message,
-                        type: 'success',
-                        title: data.data.titulo,
+    
+        if(ordemDeCompra.cliente.nomeFantasia != '' && ordemDeCompra.industria.nome != '' && ordemDeCompra.codigoPedido != '' && ordemDeCompra.valor.toString() != null) {
+            const aux = ordemDeCompra
+            const valueStringFormatter = ordemDeCompra?.valor.toString();
+            aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
+            console.log(aux.valor)
+            setOrdemDeCompra(aux)
+            if (props.updateOrdemDeCompra == undefined) {
+                setLoading(true);
+                apiFetch
+                    .post('/ordem/', ordemDeCompra)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({
+                            message: data.data.message,
+                            type: 'success',
+                            title: data.data.titulo,
+                        });
+                        setOrdemDeCompra(emptyOrdemDeCompra)
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
                     });
-                    setOrdemDeCompra(emptyOrdemDeCompra)
-                })
-                .catch((error) => {
-                    showNotification({
-                        message: error.response.data.message,
-                        type: 'error',
-                        title: error.response.data.titulo,
+            } else {
+                setLoading(true);
+                apiFetch
+                    .put(`/ordem/`, ordemDeCompra)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                        props.setOpenModal(false);
                     });
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            }
         } else {
-            setLoading(true);
-            apiFetch
-                .put(`/ordem/`, ordemDeCompra)
-                .then((data) => {
-                    props.setReload(true);
-                    showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                })
-                .catch((error) => {
-                    showNotification({
-                        message: error.response.data.message,
-                        type: 'error',
-                        title: error.response.data.titulo,
-                    });
-                })
-                .finally(() => {
-                    setLoading(false);
-                    props.setOpenModal(false);
-                });
+            showNotification({
+                message: "Confira todos os campos ",
+                type: 'error',
+                title: "Campos nao preenchidos ",
+            });
         }
     }
     function ChangeModalState() {
