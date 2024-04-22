@@ -62,7 +62,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
             });
         }
     }, [financeiro]);
-    document.getElementById("sistema-organico")
+    document.getElementById('sistema-organico');
     const handleSave = async () => {
         if (
             !newFinanceiro.comissao ||
@@ -91,7 +91,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
     if (!open) return null;
     const postFinanceiro = async () => {
         try {
-            console.log(newFinanceiro)
+            console.log(newFinanceiro);
             const res = await apiFetch.post('/financeiro/', newFinanceiro);
             showNotification({
                 message: res.data.message,
@@ -145,41 +145,59 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
                     }}
                 />
                 <TextField
-                    fullWidth
-                    margin="normal"
-                    label="Comissão"
-                    name="comissao"
-                    type='number'
-                    typeof='number' 
-                    value={newFinanceiro?.comissao}
-                    onChange={handleChange}
-                />
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Tipo Pagamento</InputLabel>
-                    <Select value={newFinanceiro?.tipoPagamento} name="tipoPagamento" onChange={handleChange}>
-                        <MenuItem value="Faturamento">Faturamento</MenuItem>
-                        <MenuItem value="Liquidez">liquidez</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Tipo Fiscal</InputLabel>
-                    <Select value={newFinanceiro?.tipoFiscal} name="tipoFiscal" onChange={handleChange}>
-                        <MenuItem value="REPRESENTACAO">Representação</MenuItem>
-                        <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
-                    </Select>
-                </FormControl>
-                {industrias && (
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Indústria</InputLabel>
-                        <Select value={newFinanceiro?.industria} name="industria" onChange={handleChange}>
-                            {industrias.map((industria) => (
-                                <MenuItem key={industria.id} value={industria}>
-                                    {industria.nome}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                )}
+    fullWidth
+    margin="normal"
+    label="Comissão"
+    name="comissao"
+    type="number"
+    value={newFinanceiro?.comissao || ''}
+    onChange={handleChange}
+/>
+
+<FormControl fullWidth margin="normal">
+    <InputLabel id="tipo-pagamento-label">Tipo Pagamento</InputLabel>
+    <Select
+        labelId="tipo-pagamento-label"
+        value={newFinanceiro?.tipoPagamento || ''}
+        name="tipoPagamento"
+        onChange={handleChange}
+    >
+        <MenuItem value="Faturamento">Faturamento</MenuItem>
+        <MenuItem value="Liquidez">Liquidez</MenuItem>
+    </Select>
+</FormControl>
+
+<FormControl fullWidth margin="normal">
+    <InputLabel id="tipo-fiscal-label">Tipo Fiscal</InputLabel>
+    <Select
+        labelId="tipo-fiscal-label"
+        value={newFinanceiro?.tipoFiscal || ''}
+        name="tipoFiscal"
+        onChange={handleChange}
+    >
+        <MenuItem value="REPRESENTACAO">Representação</MenuItem>
+        <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
+    </Select>
+</FormControl>
+
+{industrias && (
+    <FormControl fullWidth margin="normal">
+        <InputLabel id="industria-label">Indústria</InputLabel>
+        <Select
+            labelId="industria-label"
+            value={newFinanceiro?.industria || ''}
+            name="industria"
+            onChange={handleChange}
+        >
+            {industrias.map((industria) => (
+                <MenuItem key={industria.id} value={industria.id}>
+                    {industria.nome}
+                </MenuItem>
+            ))}
+        </Select>
+    </FormControl>
+)}
+
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
