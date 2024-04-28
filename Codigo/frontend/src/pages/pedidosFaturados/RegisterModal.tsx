@@ -1,5 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 
+import { Box } from '@mui/system';
 import {
     Autocomplete,
     Button,
@@ -8,9 +9,13 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
+    Modal,
     TextField,
     Typography,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 import { useNotification } from '@/hooks/useNotification';
 import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';

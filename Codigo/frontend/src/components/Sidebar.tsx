@@ -185,7 +185,6 @@ export default function CustomSidebar({ children, openSideBar }: SidebarProps): 
                                 <h4 className="font-semibold text-white">Ampla System </h4>
                                 <span className="text-xs text-white">{user.email}</span>
                             </div>
-                            <MoreVertical size={20} onClick={() => {}} />
                         </div>
                     </div>
                 </StyledBox>

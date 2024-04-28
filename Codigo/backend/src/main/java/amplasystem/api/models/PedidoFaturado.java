@@ -29,14 +29,15 @@ public class PedidoFaturado {
     @Column(name = "valor_faturado", nullable = false)
     private Double valorFaturado;
 
-    @Column(name = "nome_fantasia", nullable = false, length = 45)
+    @Column(name = "notaFiscal", nullable = false, length = 45)
     @NotBlank(message = "Nota fiscal do Pedid faturado é obrigatora")
     private String notaFiscal;
 
     @Column(name = "data_vencimento", nullable = false)
     private LocalDate dataVencimento;
 
-
+    @Column(name ="valor_liquido", nullable = false)
+    private Double valorLiquido;
 
     @ManyToOne
     @JoinColumn(name = "ordemDeCompra_id")
