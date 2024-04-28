@@ -44,8 +44,8 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 ### Diagrama de caso de uso
 
-- [Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram.pdf)
+![Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram.svg)
 
 ### Diagrama de classes
 
-- [Diagrama de classes](DiagramaDeClasses/diagramaDeClassesUML.pdf)
+![Diagrama de classes](DiagramaDeClasses/diagramaDeClassesUML.svg)
