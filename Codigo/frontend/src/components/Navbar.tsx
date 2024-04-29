@@ -164,7 +164,7 @@ export default function PrimarySearchAppBar(props: INavBar) {
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
             <AppBar position="sticky" color="secondary">
                 <Toolbar>
                     <IconButton

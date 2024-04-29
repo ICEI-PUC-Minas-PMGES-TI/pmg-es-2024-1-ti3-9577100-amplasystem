@@ -26,15 +26,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
     ];
 
     return (
-        <Box>
+        <Box sx={{ minHeight: '100svh', display: 'flex', flexDirection: 'column' }}>
             <Navbar openSideBar={openNavBar} setOpenSideBar={setOpenNavBar} />
-            <Box display={'flex'} sx={{ height: '100vh' }}>
+            <Box display={'flex'} sx={{ backgroundColor: '#f3f4f6', flexGrow: 1 }}>
                 <Sidebar openSideBar={openNavBar} setOpenSideBar={setOpenNavBar}>
                     {data.map((item) => (
                         <SidebarItem key={item.id} icon={item.icon} text={item.label} location={item.location} />
                     ))}
                 </Sidebar>
-                <main style={{ width: '100%', margin: '20px', maxHeight: '100vh', overflow: 'auto' }}>{children}</main>
+                <main style={{ width: '100%', margin: '16px' }}>{children}</main>
             </Box>
         </Box>
     );

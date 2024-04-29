@@ -215,7 +215,6 @@ const ClientesPage = () => {
     const table = useMaterialReactTable({
         columns: columns,
         data: clientes,
-        //passing the static object variant if no dynamic logic is needed
         muiSelectCheckboxProps: {
             color: 'secondary', //makes all checkboxes use the secondary color
         },
@@ -291,21 +290,27 @@ const ClientesPage = () => {
         <React.Fragment>
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
-                <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={handleClickOpen} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+                <div className="flex gap-3">
+                    <Button color="success" onClick={handleClickOpen} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                         Adicionar cliente
                     </Button>
-                    <Button
-                        aria-controls={openMenuOption ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={openMenuOption ? 'true' : undefined}
-                        onClick={handleDropDownClick}
-                        role={undefined}
-                    >
-                        <ArrowDropDownIcon />
+                    <Button color="warning" startIcon={<CloudUploadIcon />}>
+                        Importar cliente
+                        <Input.VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => {
+                                if (event.target.files != null && event.target.files[0] != null) {
+                                    setFile(event.target.files[0]);
+                                }
+                            }}
+                        />
                     </Button>
-                </ButtonGroup>
-
+                    <Button startIcon={<FileDownloadIcon />}>
+                        <Link to="/files/clientes.xlsx" target="_blank" download>
+                            Baixar modelo
+                        </Link>
+                    </Button>
+                </div>
             </header>
 
             <MaterialReactTable table={table} />
@@ -341,7 +346,6 @@ const ClientesPage = () => {
             >
                 <DialogTitle>{cliente ? `Editar ${cliente.nomeFantasia}` : `Adicionar cliente`}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{cliente ? 'Edição' : 'Criação'} de cliente</DialogContentText>
                     <TextField
                         autoFocus
                         required
@@ -361,7 +365,7 @@ const ClientesPage = () => {
                         fullWidth
                         defaultValue={cliente?.cnpj}
                     />
-                    <FormControl fullWidth>
+                    <FormControl fullWidth margin="dense">
                         <InputLabel id="vendedorLabel">Vendedor</InputLabel>
                         <Select
                             labelId="vendedorLabel"
@@ -402,7 +406,7 @@ const ClientesPage = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button variant="outlined" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit">Salvar</Button>
                 </DialogActions>
             </Dialog>
@@ -450,10 +454,8 @@ const ClientesPage = () => {
                             Baixar modelo
                         </Link>
                     </Button>
-
                 </MenuItem>
             </Menu>
-
         </React.Fragment>
     );
 };
