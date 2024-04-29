@@ -71,6 +71,7 @@ const VendedoresPage = () => {
     );
     const table = useMaterialReactTable({
         columns,
+        enableDensityToggle: false,
         data,
         //passing the static object variant if no dynamic logic is needed
         muiSelectCheckboxProps: {

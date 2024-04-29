@@ -171,6 +171,7 @@ const FinanceiroPage = () => {
                 </IconButton>
             </Box>
         ),
+        enableDensityToggle: false,
 
         muiTableContainerProps: {
             sx: { maxWidth: '100%' },

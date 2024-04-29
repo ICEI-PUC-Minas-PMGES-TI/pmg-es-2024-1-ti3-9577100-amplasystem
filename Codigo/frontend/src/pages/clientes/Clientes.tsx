@@ -283,6 +283,8 @@ const ClientesPage = () => {
                 fontSize: '16px',
             },
         },
+        enableDensityToggle: false,
+
     });
     
     return (

@@ -157,6 +157,7 @@ const IndustriaPage = () => {
     const table = useMaterialReactTable({
         columns,
         data,
+        enableDensityToggle: false,
         //passing the static object variant if no dynamic logic is needed
         muiSelectCheckboxProps: {
             color: 'secondary', //makes all checkboxes use the secondary color
