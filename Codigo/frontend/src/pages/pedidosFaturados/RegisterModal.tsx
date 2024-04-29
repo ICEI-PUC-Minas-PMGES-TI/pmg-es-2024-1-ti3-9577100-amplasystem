@@ -14,58 +14,76 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-
 
 import { useNotification } from '@/hooks/useNotification';
-import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 import apiFetch from '@/services/api';
 import Validade from '@/utils/Validate';
 import { IndustriaModel } from '@/models/IndustriaModel';
 import { ClienteModel } from '@/models/ClienteModel';
 import { OrderStatus } from '@/enums/OrderStatus';
 import CurrencyInput from '@/components/CurrencyInput';
+import { PedidoFaturadoModel } from '@/models/PedidoFaturadoModel';
+import { Cargo } from '@/enums/Cargo';
+import { DateCalendar, DateField, DatePicker } from '@mui/x-date-pickers';
 
-const emptyOrdemDeCompra:OrdemDeCompraModel =  {
-    id: null,
-    valor: '',
-    codigoPedido: '',
-    totalmenteFaturado: OrderStatus.NAOFATURADO,
-    industria: {
+const emptyPedidoFaturado: PedidoFaturadoModel = {
+    id: 0,
+    dataFaturamento: new Date(),
+    dataVencimento: new Date(),
+    valorFaturado: 0,
+    valorLiquido: 0,
+    notaFiscal: '',
+    ordemDeCompra: {
         id: null,
-        nome:"",
-        contatos:[]
-    },
-    cliente: {
-        id: null,
-        cnpj: '',
-        telefone: "",
-        endereco: undefined,
-        nomeFantasia: '',
-        vendedor: {
+        valor: 0,
+        codigoPedido: '',
+        totalmenteFaturado: OrderStatus.TOTALMENTEFATURADO,
+        industria: {
             id: null,
             nome: '',
-            email: '',
-            cargo: '',
-            token: undefined
-        }
-    }
-}
+            contatos: [],
+        },
+        cliente: {
+            id: null,
+            cnpj: '',
+            telefone: undefined,
+            endereco: {
+                id: null,
+                cidade: '',
+                rua: '',
+            },
+            nomeFantasia: '',
+            vendedor: {
+                id: 0,
+                nome: '',
+                email: '',
+                cargo: Cargo.ADMINISTRADOR,
+                token: undefined,
+            },
+        },
+    },
+    financeiro: {
+        id: null,
+        comissao: 0,
+        tipoPagamento: '',
+        tipoFiscal: '',
+    },
+};
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     openModal: boolean;
     setReload: Dispatch<SetStateAction<boolean>>;
-    updateOrdemDeCompra: OrdemDeCompraModel | undefined;
+    updatePedidoFaturado: PedidoFaturadoModel | undefined;
 }
 const RegisterModal = (props: IRegisterModalProps) => {
     const { showNotification } = useNotification();
     const validate = new Validade();
     const [loading, setLoading] = useState(false);
-    const [industrias, setIndustrias] = useState<IndustriaModel[]>([])
-    const [industriasName, setIndustriasName] = useState<string[]>([])
-    const [clientes, setClientes] = useState<ClienteModel[]>([])
-    const [clientesName, setClientesName] = useState<string[]>([])
-    const [ordemDeCompra, setOrdemDeCompra] =  useState<OrdemDeCompraModel>(emptyOrdemDeCompra);
+    const [industrias, setIndustrias] = useState<IndustriaModel[]>([]);
+    const [industriasName, setIndustriasName] = useState<string[]>([]);
+    const [clientes, setClientes] = useState<ClienteModel[]>([]);
+    const [clientesName, setClientesName] = useState<string[]>([]);
+    const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>(emptyPedidoFaturado);
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -74,9 +92,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
             .get('/industria/')
             .then((data) => {
                 setIndustrias(data.data);
-                const aux:string[] = [];
-                industrias.forEach(element => {
-                    aux.push(element.nome)
+                const aux: string[] = [];
+                industrias.forEach((element) => {
+                    aux.push(element.nome);
                     setIndustriasName(aux);
                 });
             })
@@ -89,96 +107,94 @@ const RegisterModal = (props: IRegisterModalProps) => {
             .get('/cliente/')
             .then((data) => {
                 setClientes(data.data);
-                const aux:string[] = [];
-                clientes.forEach(element => {
-                    aux.push(element.nomeFantasia)
+                const aux: string[] = [];
+                clientes.forEach((element) => {
+                    aux.push(element.nomeFantasia);
                     setClientesName(aux);
                 });
             })
             .catch((e) => {
-                console.log(e); 
+                console.log(e);
             });
     };
-    function onSubmit() {
-    
-        if(ordemDeCompra.cliente.nomeFantasia != '' && ordemDeCompra.industria.nome != '' && ordemDeCompra.codigoPedido != '' && ordemDeCompra.valor.toString() != null) {
-            const aux = ordemDeCompra
-            const valueStringFormatter = ordemDeCompra?.valor.toString();
-            aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
-            console.log(aux.valor)
-            setOrdemDeCompra(aux)
-            if (props.updateOrdemDeCompra == undefined) {
-                setLoading(true);
-                apiFetch
-                    .post('/ordem/', ordemDeCompra)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({
-                            message: data.data.message,
-                            type: 'success',
-                            title: data.data.titulo,
-                        });
-                        setOrdemDeCompra(emptyOrdemDeCompra)
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            } else {
-                setLoading(true);
-                apiFetch
-                    .put(`/ordem/`, ordemDeCompra)
-                    .then((data) => {
-                        props.setReload(true);
-                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-                    })
-                    .catch((error) => {
-                        showNotification({
-                            message: error.response.data.message,
-                            type: 'error',
-                            title: error.response.data.titulo,
-                        });
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                        props.setOpenModal(false);
-                    });
-            }
-        } else {
-            showNotification({
-                message: "Confira todos os campos ",
-                type: 'error',
-                title: "Campos nao preenchidos ",
-            });
-        }
-    }
+    // function onSubmit() {
+
+    //     if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
+    //         const aux = pedidoFaturado
+    //         const valueStringFormatter = pedidoFaturado?.valor.toString();
+    //         aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
+    //         console.log(aux.valor)
+    //         setpedidoFaturado(aux)
+    //         if (props.updatePedidoFaturado == undefined) {
+    //             setLoading(true);
+    //             apiFetch
+    //                 .post('/ordem/', pedidoFaturado)
+    //                 .then((data) => {
+    //                     props.setReload(true);
+    //                     showNotification({
+    //                         message: data.data.message,
+    //                         type: 'success',
+    //                         title: data.data.titulo,
+    //                     });
+    //                     setpedidoFaturado(emptyPedidoFaturado)
+    //                 })
+    //                 .catch((error) => {
+    //                     showNotification({
+    //                         message: error.response.data.message,
+    //                         type: 'error',
+    //                         title: error.response.data.titulo,
+    //                     });
+    //                 })
+    //                 .finally(() => {
+    //                     setLoading(false);
+    //                 });
+    //         } else {
+    //             setLoading(true);
+    //             apiFetch
+    //                 .put(`/ordem/`, pedidoFaturado)
+    //                 .then((data) => {
+    //                     props.setReload(true);
+    //                     showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+    //                 })
+    //                 .catch((error) => {
+    //                     showNotification({
+    //                         message: error.response.data.message,
+    //                         type: 'error',
+    //                         title: error.response.data.titulo,
+    //                     });
+    //                 })
+    //                 .finally(() => {
+    //                     setLoading(false);
+    //                     props.setOpenModal(false);
+    //                 });
+    //         }
+    //     } else {
+    //         showNotification({
+    //             message: "Confira todos os campos ",
+    //             type: 'error',
+    //             title: "Campos nao preenchidos ",
+    //         });
+    //     }
+    // }
     function ChangeModalState() {
         props.setOpenModal(!open);
     }
     useEffect(() => {
-        getIndustrias()
-        getClientes()
-        if(props.updateOrdemDeCompra != undefined){
-            setOrdemDeCompra(props.updateOrdemDeCompra)
-        } else{
-            setOrdemDeCompra(emptyOrdemDeCompra)
+        getIndustrias();
+        getClientes();
+        if (props.updatePedidoFaturado != undefined) {
+            setpedidoFaturado(props.updatePedidoFaturado);
+        } else {
+            setpedidoFaturado(emptyPedidoFaturado);
         }
     }, [props.openModal]);
 
-    useEffect(() => {
-    }, [clientesName])
-
+    useEffect(() => {}, [clientesName]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        if (ordemDeCompra != undefined) {
-            const {name, value} = e.target as HTMLInputElement;
-            setOrdemDeCompra({...ordemDeCompra, [name]: value});
+        if (pedidoFaturado != undefined) {
+            const { name, value } = e.target as HTMLInputElement;
+            setpedidoFaturado({ ...pedidoFaturado, [name]: value });
         }
     }
     return (
@@ -192,7 +208,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
             }}
         >
             <DialogTitle>
-                {props.updateOrdemDeCompra == undefined ? 'Cadastrar Ordem de Compra' : 'Atualizar Ordem ' + ordemDeCompra.codigoPedido} 
+                {props.updatePedidoFaturado == undefined
+                    ? 'Cadastrar Pedido Faturado'
+                    : 'Atualizar Pedido ' + pedidoFaturado.notaFiscal}
             </DialogTitle>
             <DialogContent>
                 <CircularProgress
@@ -203,7 +221,82 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         left: '45%',
                     }}
                 />
-        
+                <div style={{border:"1px black solid", padding:"5px"}}>
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            color: '#344054',
+                        }}
+                        display="block"
+                    >
+                        Filtros
+                    </Typography>
+                    <div style={{ display: 'grid', gap: 20}}>
+                        <div
+                            style={{
+                                gridColumnStart: 1,
+                                gridColumnEnd: 6,
+                            }}
+                        >
+                            <Typography
+                                variant="subtitle2"
+                                sx={{
+                                    color: '#344054',
+                                }}
+                                display="block"
+                            >
+                                Industria
+                            </Typography>
+                            <Autocomplete
+                                disablePortal
+                                id="cargo"
+                                options={industriasName}
+                                 
+                                renderInput={(params) => {
+                                    return <TextField {...params} name="industria" placeholder="Selecione uma Industria" />;
+                                }}
+                                onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {}}
+                            />
+                        </div>
+                        <div
+                            style={{
+                                gridColumnStart: 6,
+                                gridColumnEnd: 12,
+                            }}
+                        >
+                            <Typography
+                                variant="subtitle2"
+                                sx={{
+                                    color: '#344054',
+                                }}
+                                display="block"
+                            >
+                                Cliente
+                            </Typography>
+                            <Autocomplete
+                                disablePortal
+                                id="cliente"
+                                options={clientesName}
+                                renderInput={(params) => <TextField {...params} name="cliente" placeholder="Selecione um Cliente" />}
+                                onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
+                                    const { value } = e.target as HTMLInputElement;
+                                    const cliente: ClienteModel | undefined = clientes.find((element) => {
+                                        return element.nomeFantasia == value;
+                                    });
+                                    if (cliente != undefined) {
+                                    }
+                                }}
+                            />
+                        </div>
+                        <div
+                            style={{
+                                gridColumnStart: 8,
+                                gridColumnEnd: 12,
+                            }}
+                        ></div>
+                    </div>
+                </div>
+
                 <Typography
                     variant="subtitle1"
                     sx={{
@@ -211,93 +304,125 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     }}
                     display="block"
                 >
-                    Industria *
-                </Typography>
-                <Autocomplete
-                    disablePortal
-                    id="cargo"
-                    options={industriasName}
-                    fullWidth
-                    value={ordemDeCompra?.industria.nome}
-                    renderInput={(params) => {
-                        return<TextField {...params} name='industria' placeholder="Industria" />
-                    }}
-                    onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
-                        const {value} = e.target as HTMLInputElement;
-                        const industria:IndustriaModel | undefined = industrias.find((element) => {
-                            return element.nome == value
-                        })
-                        if(industria != undefined){
-                            console.log(ordemDeCompra)
-                            setOrdemDeCompra({...ordemDeCompra, [`industria`]:industria}); 
-                            console.log(industria)
-                            console.log(ordemDeCompra)
-                        }  
-                    }}
-                
-                />
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                        color: '#344054',
-                    }}
-                    display="block"
-                >
-                    Cliente *
+                    Ordens cadastradas *
                 </Typography>
                 <Autocomplete
                     disablePortal
                     id="cliente"
                     options={clientesName}
                     fullWidth
-                    value={ordemDeCompra?.cliente.nomeFantasia}
-                    renderInput={(params) => <TextField {...params} name="cliente" placeholder="Cliente" />}
+                    renderInput={(params) => <TextField {...params} name="idOrdem" placeholder="Selecione uma ordem " />}
                     onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
-                        const {value} = e.target as HTMLInputElement;
-                        const cliente:ClienteModel | undefined = clientes.find((element) => {
-                            return element.nomeFantasia == value
-                        })
-                        if(cliente != undefined){
-                            setOrdemDeCompra({...ordemDeCompra, [`cliente`]:cliente}); 
-                        }  
+                        const { value } = e.target as HTMLInputElement;
+                        const cliente: ClienteModel | undefined = clientes.find((element) => {
+                            return element.nomeFantasia == value;
+                        });
+                        if (cliente != undefined) {
+                        }
                     }}
                 />
-                 <Typography
+                <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
                     }}
                     display="block"
                 >
-                    Codigo da Ordem *
+                    Nota fiscal*
                 </Typography>
                 <TextField
                     id="nome"
                     variant="outlined"
-                    placeholder="Nome"
+                    placeholder="Ex: 12311231134213"
                     fullWidth
-                    name='codigoPedido'
-                    value={ordemDeCompra?.codigoPedido}
+                    name="codigoPedido"
+                    value={pedidoFaturado?.notaFiscal}
                     onChange={handleChange}
                 />
-                 <Typography
+
+                <div style={{ display: 'grid', gap: 20 }}>
+                    <div
+                        style={{
+                            gridColumnStart: 1,
+                            gridColumnEnd: 8,
+                        }}
+                    >
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Data de Faturamento
+                        </Typography>
+                        <TextField
+                            id="nome"
+                            variant="outlined"
+                            placeholder="Ex: 25/02/2024"
+                            fullWidth
+                            name="codigoPedido"
+                            value={pedidoFaturado?.notaFiscal}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div
+                        style={{
+                            gridColumnStart: 8,
+                            gridColumnEnd: 12,
+                        }}
+                    >
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                color: '#344054',
+                            }}
+                            display="block"
+                        >
+                            Prazo em dias
+                        </Typography>
+                        <TextField
+                            id="nome"
+                            variant="outlined"
+                            placeholder="Ex: 45"
+                            fullWidth
+                            name="codigoPedido"
+                            value={pedidoFaturado?.notaFiscal}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div
+                        style={{
+                            gridColumnStart: 8,
+                            gridColumnEnd: 12,
+                        }}
+                    ></div>
+                </div>
+                <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
                     }}
                     display="block"
                 >
-                    Valor *
+                    Valor Faturado*
                 </Typography>
-            
-                <CurrencyInput placeholder="R$0.00"  type="text" value={ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined}/>
+
+                <CurrencyInput
+                    placeholder="R$0.00"
+                    type="text"
+                    value={pedidoFaturado?.valorFaturado}
+                    name="valor"
+                    onChange={handleChange}
+                    maskOptions={undefined}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={ChangeModalState} variant="contained">
                     Cancelar
                 </Button>
-                <Button onClick={onSubmit} variant="contained">
-                    {props.updateOrdemDeCompra == undefined ? 'Cadastrar' : 'Atualizar '}
+                <Button variant="contained">
+                    {props.updatePedidoFaturado == undefined ? 'Cadastrar' : 'Atualizar '}
                 </Button>
             </DialogActions>
         </Dialog>
