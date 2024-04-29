@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
-
-import axios, { AxiosError } from 'axios';
-
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import * as React from 'react';
+import InputMask from 'react-input-mask';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import * as Input from '@/styles/types/InputStyles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -15,14 +14,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, ButtonGroup, FormControl, IconButton, InputLabel, Menu, MenuItem, Modal, Select, Typography } from '@mui/material';
+import { Button, ButtonGroup, FormControl, IconButton, InputLabel, Menu, MenuItem, Select, Typography } from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-import { Delete, Edit, Email } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 
 import apiFetch from '@/services/api';
 import { ClienteFormModel, ClienteModel } from '@/models/ClienteModel';
 import { VendedorModel } from '@/models/VendedorModel';
-import { useAuth } from '@/hooks/useAuth';
 import { useNotification } from '@/hooks/useNotification';
 import { Link } from 'react-router-dom';
 
@@ -31,10 +29,10 @@ const ClientesPage = () => {
 
     const [cliente, setCliente] = useState<ClienteModel | null>(null);
     const [clientes, setClientes] = useState<ClienteModel[]>([]);
-    const [tableLoading, setTableLoading] = useState(true);
-    const [dialogState, setDialogState] = React.useState(false);
+    const [tableLoading, setTableLoading] = useState<boolean>(true);
+    const [dialogState, setDialogState] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
-    const [reload, setReload] = useState(true);
+    const [reload, setReload] = useState<boolean>(true);
 
     const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
 
@@ -46,15 +44,16 @@ const ClientesPage = () => {
         setDialogState(true);
         cleanFormData();
     };
+
     const handleClose = () => {
         setDialogState(false);
     };
 
     const getVendedores = useCallback(async () => {
         try {
-            const res = await apiFetch.get('/vendedor');
+            const res: AxiosResponse<VendedorModel[]> = await apiFetch.get('/vendedor');
             setVendedores(res.data);
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
         }
     }, []);
@@ -64,6 +63,7 @@ const ClientesPage = () => {
     const handleDropDownClose = () => {
         setAnchorEl(null);
     };
+
     const handleDropDownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -74,7 +74,7 @@ const ClientesPage = () => {
 
     useEffect(() => {
         console.log(file);
-        if (file != undefined) {
+        if (file !== undefined && file !== null) {
             apiFetch
                 .post(
                     '/cliente/tabela',
@@ -102,9 +102,9 @@ const ClientesPage = () => {
     const getClientes = useCallback(async () => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.get('/cliente/');
+            const res: AxiosResponse<ClienteModel[]> = await apiFetch.get('/cliente/');
             setClientes(res.data);
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
         } finally {
             setTableLoading(false);
@@ -118,23 +118,24 @@ const ClientesPage = () => {
     const postCliente = async (novoCliente: ClienteFormModel) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.post('/cliente/', novoCliente);
+            const res: AxiosResponse<any> = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
         } finally {
             setTableLoading(false);
         }
     };
+
     const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
+            const res: AxiosResponse<any> = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
@@ -156,22 +157,24 @@ const ClientesPage = () => {
             setTableLoading(false);
         }
     };
+
     const deleteCliente = async (id: number) => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.delete(`/cliente/${id}`);
+            const res: AxiosResponse<any> = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err) {
+        } catch (err: any) {
             console.log(err);
         } finally {
             setTableLoading(false);
         }
     };
+
     const columns = useMemo<MRT_ColumnDef<ClienteModel>[]>(
         () => [
             {
@@ -212,24 +215,25 @@ const ClientesPage = () => {
         ],
         [],
     );
+
     const table = useMaterialReactTable({
         columns: columns,
         data: clientes,
-        //passing the static object variant if no dynamic logic is needed
+        
         muiSelectCheckboxProps: {
-            color: 'secondary', //makes all checkboxes use the secondary color
+            color: 'secondary', 
         },
         enableRowActions: true,
         columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
-                size: 50, //adjust the size of the row select column
-                grow: false, //new in v2.8 (default is false for this column)
+                size: 50, 
+                grow: false, 
             },
             'mrt-row-numbers': {
                 size: 40,
-                grow: true, //new in v2.8 (allow this column to grow to fill in remaining space)
+                grow: true, 
             },
         },
         renderRowActions: ({ row }) => (
@@ -246,7 +250,7 @@ const ClientesPage = () => {
                 <IconButton
                     color="error"
                     onClick={() => {
-                        if (row.original.id != null) {
+                        if (row.original.id !== null) {
                             deleteCliente(row.original.id);
                         }
                     }}
@@ -284,8 +288,25 @@ const ClientesPage = () => {
             },
         },
         enableDensityToggle: false,
-
     });
+
+    const CNPJMask = ({ inputRef, ...props }: any) => (
+        <InputMask
+            {...props}
+            mask="99.999.999/9999-99"
+            placeholder="__.___.___/____-__"
+            ref={inputRef}
+        />
+    );
+
+    const PhoneMask = ({ inputRef, ...props }: any) => (
+        <InputMask
+            {...props}
+            mask="(99) 99999-9999"
+            placeholder="(__) _____-____"
+            ref={inputRef}
+        />
+    );
 
     return (
         <React.Fragment>
@@ -305,7 +326,6 @@ const ClientesPage = () => {
                         <ArrowDropDownIcon />
                     </Button>
                 </ButtonGroup>
-
             </header>
 
             <MaterialReactTable table={table} />
@@ -360,6 +380,9 @@ const ClientesPage = () => {
                         label="CNPJ"
                         fullWidth
                         defaultValue={cliente?.cnpj}
+                        InputProps={{
+                            inputComponent: CNPJMask,
+                        }}
                     />
                     <FormControl fullWidth>
                         <InputLabel id="vendedorLabel">Vendedor</InputLabel>
@@ -383,6 +406,9 @@ const ClientesPage = () => {
                         label="Telefone"
                         fullWidth
                         defaultValue={cliente?.telefone}
+                        InputProps={{
+                            inputComponent: PhoneMask,
+                        }}
                     />
                     <TextField
                         margin="dense"
