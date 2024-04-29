@@ -13,7 +13,7 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 - [Ata da 3° reunião ](./atas/Ata3reuniao.pdf) Ata da terceira reunião com o cliente realizada no dia 28 de marco de 2024
 
 - [Ata da 4° reunião ](./atas/Ata4reuniao.pdf) Ata da quarta reunião com o cliente realizada no dia 15 de abril de 2024
-- [Ata da 5° reunião ](./atas/Ata4reuniao.pdf) Ata da quinta reunião com o cliente realizada no dia 25 de abril de 2024
+- [Ata da 5° reunião ](./atas/Ata5reuniao.pdf) Ata da quinta reunião com o cliente realizada no dia 25 de abril de 2024
 
 ### Diagrama de Entidade e Relacionamento
 
