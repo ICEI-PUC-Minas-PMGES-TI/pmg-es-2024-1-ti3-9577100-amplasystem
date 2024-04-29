@@ -17,12 +17,11 @@ const RouterRoutes = () => {
     return (
         <Router>
             {/* TODO: Add a loader component */}
-            <Suspense fallback={<Backdrop
-  sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-  open={true}
->
-  <CircularProgress color="inherit" />
-</Backdrop>}>
+            <Suspense fallback={
+                <DashboardLayout>
+                    <CircularProgress color="inherit" />
+                </DashboardLayout>
+            }>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
                     <Route element={<ProtectedRoute />}>

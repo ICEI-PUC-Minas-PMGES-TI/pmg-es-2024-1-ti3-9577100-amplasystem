@@ -12,11 +12,6 @@ const theme = createTheme({
         secondary: {
             main: grey[900],
         },
-        third: {
-            main : blue[200],
-
-        },
-
         success: {
             main: green[500],
         },
@@ -39,19 +34,19 @@ const theme = createTheme({
                     },
                 },
                 iconSizeSmall: {
-                    '& > *:first-child': {
+                    '& > *:first-of-type': {
                         fontSize: 16,
                         opacity: 0.8,
                     },
                 },
                 iconSizeMedium: {
-                    '& > *:first-child': {
+                    '& > *:first-of-type': {
                         fontSize: 18,
                         opacity: 0.8,
                     },
                 },
                 iconSizeLarge: {
-                    '& > *:first-child': {
+                    '& > *:first-of-type': {
                         fontSize: 20,
                         opacity: 0.8,
                     },

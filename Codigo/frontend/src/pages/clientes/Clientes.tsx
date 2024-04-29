@@ -286,23 +286,23 @@ const ClientesPage = () => {
         enableDensityToggle: false,
 
     });
-    
+
     return (
         <React.Fragment>
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
                 <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={ handleClickOpen } startIcon={ <AddIcon sx={ {fontSize: 5} }/> }>
+                    <Button onClick={handleClickOpen} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                         Adicionar cliente
                     </Button>
                     <Button
-                        aria-controls={ openMenuOption ? 'basic-menu' : undefined }
+                        aria-controls={openMenuOption ? 'basic-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={ openMenuOption ? 'true' : undefined }
-                        onClick={ handleDropDownClick }
-                        role={ undefined }
+                        aria-expanded={openMenuOption ? 'true' : undefined}
+                        onClick={handleDropDownClick}
+                        role={undefined}
                     >
-                        <ArrowDropDownIcon/>
+                        <ArrowDropDownIcon />
                     </Button>
                 </ButtonGroup>
 
@@ -409,43 +409,43 @@ const ClientesPage = () => {
 
             <Menu
                 id="basic-menu"
-                anchorEl={ anchorEl }
-                open={ openMenuOption }
-                onClose={ handleClose }
-                sx={ {
+                anchorEl={anchorEl}
+                open={openMenuOption}
+                onClose={handleClose}
+                sx={{
                     margin: '5px',
                     padding: 0,
                     '& .css-6hp17o-MuiList-root-MuiMenu-list': {
                         padding: 0,
                     },
-                } }
+                }}
             >
                 <MenuItem
-                    sx={ {
+                    sx={{
                         margin: 0,
                         padding: 0,
-                    } }
+                    }}
                 >
-                    <Button component="label" variant="contained" fullWidth startIcon={ <CloudUploadIcon/> }>
+                    <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
                         Importar cliente
                         <Input.VisuallyHiddenInput
                             type="file"
                             onChange={(event) => {
-                                if (event.target.files[0] != null) {
-                                        setFile(event.target.files[0]);
-                                  }
-                            } }
+                                if (event.target.files != null && event.target.files[0] != null) {
+                                    setFile(event.target.files[0]);
+                                }
+                            }}
                         />
                     </Button>
                 </MenuItem>
                 <MenuItem
-                    onClick={ handleClose }
-                    sx={ {
+                    onClick={handleClose}
+                    sx={{
                         margin: 0,
                         padding: 0,
-                    } }
+                    }}
                 >
-                    <Button component="label" fullWidth variant="contained" startIcon={ <FileDownloadIcon/> }>
+                    <Button component="label" fullWidth variant="contained" startIcon={<FileDownloadIcon />}>
                         <Link to="/files/clientes.xlsx" target="_blank" download>
                             Baixar modelo
                         </Link>
@@ -453,7 +453,7 @@ const ClientesPage = () => {
 
                 </MenuItem>
             </Menu>
-            
+
         </React.Fragment>
     );
 };
