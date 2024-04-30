@@ -123,6 +123,7 @@ import logo from '../assets/logo.png';
 import { createContext, ReactNode, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { colors } from '@mui/material';
 
 type SidebarProps = {
     children: ReactNode;

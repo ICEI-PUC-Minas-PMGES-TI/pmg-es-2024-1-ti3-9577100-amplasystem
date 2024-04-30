@@ -14,7 +14,7 @@ const theme = createTheme({
         //     dark: orange[300],
         // },
         secondary: {
-            main: '#030303',
+            main: '#0f0f0f',
             light: grey[700],
             dark: grey[300],
         },
@@ -46,6 +46,13 @@ const theme = createTheme({
                 },
             },
         },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: {
+                    padding: 16,
+                },
+            },
+        },
         MuiDialogContent: {
             styleOverrides: {
                 root: {
@@ -65,10 +72,7 @@ const theme = createTheme({
                 root: {
                     textTransform: 'uppercase',
                     borderRadius: 2,
-                    padding: '10px 20px',
-                    // ':hover': {
-                    //     backgroundColor: blue[800],
-                    // },
+                    padding: '8px 16px',
                 },
                 iconSizeSmall: {
                     '& > *:first-of-type': {
@@ -129,6 +133,14 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     fontFamily: 'Inter, sans-serif',
+                },
+            },
+        },
+        MuiTable: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 2,
+                    boxShadow: '0 0 100px rgba(0, 0, 0, 0)',
                 },
             },
         },
