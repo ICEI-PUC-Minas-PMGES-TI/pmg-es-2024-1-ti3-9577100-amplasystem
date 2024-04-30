@@ -14,7 +14,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/system';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Button, ButtonGroup, FormControl, IconButton, InputLabel, Menu, MenuItem, Select, Typography } from '@mui/material';
+import {
+    Button,
+    ButtonGroup,
+    FormControl,
+    IconButton,
+    InputLabel,
+    Menu,
+    MenuItem,
+    Select,
+    Typography,
+} from '@mui/material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 import { Delete, Edit } from '@mui/icons-material';
 
@@ -22,6 +32,7 @@ import apiFetch from '@/services/api';
 import { ClienteFormModel, ClienteModel } from '@/models/ClienteModel';
 import { VendedorModel } from '@/models/VendedorModel';
 import { useNotification } from '@/hooks/useNotification';
+import DeleteConfirm from '@/components/DeleteConfirm';
 import { Link } from 'react-router-dom';
 
 const ClientesPage = () => {
@@ -33,6 +44,8 @@ const ClientesPage = () => {
     const [dialogState, setDialogState] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
     const [reload, setReload] = useState<boolean>(true);
+    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+    const [clientToDeleteId, setClientToDeleteId] = useState<number | null>(null);
 
     const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
 
@@ -57,6 +70,8 @@ const ClientesPage = () => {
             console.log(err);
         }
     }, []);
+
+    
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const openMenuOption = Boolean(anchorEl);
@@ -92,7 +107,8 @@ const ClientesPage = () => {
                 })
                 .catch((e) => {
                     console.log(e);
-                }).finally(() => {
+                })
+                .finally(() => {
                     window.location.reload();
                     //setReload(true);
                 });
@@ -175,6 +191,14 @@ const ClientesPage = () => {
         }
     };
 
+    const confirmDeleteCliente = () => {
+        if (clientToDeleteId !== null) {
+            deleteCliente(clientToDeleteId);
+            setClientToDeleteId(null);
+            setDeleteModalOpen(false);
+        }
+    };
+
     const columns = useMemo<MRT_ColumnDef<ClienteModel>[]>(
         () => [
             {
@@ -219,21 +243,21 @@ const ClientesPage = () => {
     const table = useMaterialReactTable({
         columns: columns,
         data: clientes,
-        
+
         muiSelectCheckboxProps: {
-            color: 'secondary', 
+            color: 'secondary',
         },
         enableRowActions: true,
         columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
-                size: 50, 
-                grow: false, 
+                size: 50,
+                grow: false,
             },
             'mrt-row-numbers': {
                 size: 40,
-                grow: true, 
+                grow: true,
             },
         },
         renderRowActions: ({ row }) => (
@@ -251,7 +275,8 @@ const ClientesPage = () => {
                     color="error"
                     onClick={() => {
                         if (row.original.id !== null) {
-                            deleteCliente(row.original.id);
+                            setClientToDeleteId(row.original.id);
+                            setDeleteModalOpen(true);
                         }
                     }}
                 >
@@ -291,21 +316,11 @@ const ClientesPage = () => {
     });
 
     const CNPJMask = ({ inputRef, ...props }: any) => (
-        <InputMask
-            {...props}
-            mask="99.999.999/9999-99"
-            placeholder="__.___.___/____-__"
-            ref={inputRef}
-        />
+        <InputMask {...props} mask="99.999.999/9999-99" placeholder="__.___.___/____-__" ref={inputRef} />
     );
 
     const PhoneMask = ({ inputRef, ...props }: any) => (
-        <InputMask
-            {...props}
-            mask="(99) 99999-9999"
-            placeholder="(__) _____-____"
-            ref={inputRef}
-        />
+        <InputMask {...props} mask="(99) 99999-9999" placeholder="(__) _____-____" ref={inputRef} />
     );
 
     return (
@@ -476,10 +491,14 @@ const ClientesPage = () => {
                             Baixar modelo
                         </Link>
                     </Button>
-
                 </MenuItem>
             </Menu>
 
+            <DeleteConfirm
+                open={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={confirmDeleteCliente}
+            />
         </React.Fragment>
     );
 };
