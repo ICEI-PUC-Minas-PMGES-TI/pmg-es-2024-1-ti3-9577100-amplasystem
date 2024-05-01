@@ -46,7 +46,6 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     }
 
     @Override
-    @Profile("test")
     public void run(String... args) {
         this.autoComplete();
     }

@@ -1,6 +1,6 @@
 package amplasystem.api.services;
 
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.OrdemDeCompra;
 import amplasystem.api.repositories.OrdemDeCompraRepository;
 import jakarta.transaction.Transactional;
@@ -12,6 +12,9 @@ import lombok.extern.log4j.Log4j2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,10 +52,10 @@ public class OrdemDeCompraService {
         if (ordemDeCompraRepository.existsBycodigoPedido(ordemDeCompra.getCodigoPedido())) {
             throw new IllegalStateException("Já existe uma ordem de compra  cadastrada com o mesmo numero.");
         }
-        
-        OrdemDeCompra ordemDeCompraSalva = ordemDeCompraRepository.save(ordemDeCompra);
-        
-        return ordemDeCompraSalva;
+        LocalDate date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        ordemDeCompra.setDataCadastro(date.format(formatter));
+        return ordemDeCompraRepository.save(ordemDeCompra);
     }
 
     public void delete(Integer id) {
@@ -66,6 +69,5 @@ public class OrdemDeCompraService {
             throw new ObjectNotFoundException("Ordem de compra não encontrada na base de dados");
         }
     }
-
 
 }

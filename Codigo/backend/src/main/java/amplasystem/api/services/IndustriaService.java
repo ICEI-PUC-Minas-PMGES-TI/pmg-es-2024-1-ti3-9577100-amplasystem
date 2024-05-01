@@ -1,8 +1,8 @@
 package amplasystem.api.services;
 
 import amplasystem.api.models.Contato;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.enuns.TipoContato;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.mappers.IndustriaMapper;
 import amplasystem.api.models.Industria;
 import amplasystem.api.repositories.IndustriaRepository;
@@ -24,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +44,9 @@ public class IndustriaService {
 
     public List<Industria> getAllIndustriasWithOutFinanceiro() {
         return industriaRepository.findByFinanceiroIsNull().stream().toList();
+    }
+    public List<Industria> getAllIndustriasWithFinanceiro() {
+        return industriaRepository.findByFinanceiroIsNotNull().stream().toList();
     }
     public Industria getIndustriaById(Integer id) throws NoSuchElementException {
         Optional<Industria> industria = industriaRepository.findById(id);

@@ -66,7 +66,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     const getIndustrias = () => {
         apiFetch
-            .get('/industria/')
+            .get('/industria/withFinanceiro')
             .then((data) => {
                 setIndustrias(data.data);
                 const aux:string[] = [];
@@ -269,7 +269,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 <TextField
                     id="nome"
                     variant="outlined"
-                    placeholder="Nome"
+                    placeholder="Codigo"
                     fullWidth
                     name='codigoPedido'
                     value={ordemDeCompra?.codigoPedido}

@@ -4,6 +4,7 @@ import amplasystem.api.dtos.cliente.ResponseClienteDTO;
 import amplasystem.api.dtos.cliente.ClienteTableDTO;
 import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.exceptions.EntityAlreadyExistsException;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.mappers.ClienteMapper;
 import amplasystem.api.mappers.VendedorMapper;
 import amplasystem.api.models.Cliente;
@@ -11,7 +12,6 @@ import amplasystem.api.models.Endereco;
 import amplasystem.api.models.Vendedor;
 import amplasystem.api.repositories.ClienteRepository;
 import amplasystem.api.repositories.VendedorRepository;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 

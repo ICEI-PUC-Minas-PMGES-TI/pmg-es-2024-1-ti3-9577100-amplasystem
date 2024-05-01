@@ -9,9 +9,9 @@ import amplasystem.api.dtos.auth.LoginRequest;
 import amplasystem.api.dtos.auth.LoginResponse;
 import amplasystem.api.exceptions.ChangePasswordException;
 import amplasystem.api.exceptions.InvalidInformationException;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.services.EmailSenderService;
 import amplasystem.api.services.VendedorService;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 
 import java.util.UUID;
 

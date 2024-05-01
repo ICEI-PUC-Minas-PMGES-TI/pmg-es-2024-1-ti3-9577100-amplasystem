@@ -1,5 +1,6 @@
 package amplasystem.api.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import amplasystem.api.enuns.StatusOrder;
@@ -35,6 +36,8 @@ public class OrdemDeCompra {
     @Column(name = "totalmente_faturada", nullable = false)
     private StatusOrder totalmenteFaturado;
 
+    @Column(name = "data_cadastro", nullable = false)
+    private String dataCadastro;
 
     @ManyToOne
     @JoinColumn(name = "industria_id")

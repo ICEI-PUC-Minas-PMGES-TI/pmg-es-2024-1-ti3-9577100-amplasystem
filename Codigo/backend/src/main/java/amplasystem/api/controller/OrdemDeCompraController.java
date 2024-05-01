@@ -1,8 +1,8 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.OrdemDeCompraService;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.dtos.ResponseDTO;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.OrdemDeCompra;
 
 import org.springframework.beans.factory.annotation.Autowired;

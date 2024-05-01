@@ -62,6 +62,11 @@ const OrdemDeCompraPage = () => {
     const columns = useMemo<MRT_ColumnDef<OrdemDeCompraModel>[]>(
         () => [
             {
+                accessorKey: 'dataCadastro',
+                header: 'Data do Cadastro',
+                
+            },
+            {
                 accessorKey: 'industria.nome',
                 header: 'Industria',
             },
