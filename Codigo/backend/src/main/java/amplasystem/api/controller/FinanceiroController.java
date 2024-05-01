@@ -76,7 +76,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("Financeiro")
+@RestController()
 @RequestMapping("/financeiro")
 @CrossOrigin(origins = "*")
 public class FinanceiroController {
