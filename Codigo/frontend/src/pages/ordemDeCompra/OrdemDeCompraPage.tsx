@@ -51,6 +51,11 @@ const OrdemDeCompraPage = () => {
         })
         .catch((e) => {
             console.log(e);
+            showNotification({
+                message: e.response.data.message,
+                title: e.response.data.titulo,
+                type: 'error',
+            });
         });
     };
     useEffect(() => {

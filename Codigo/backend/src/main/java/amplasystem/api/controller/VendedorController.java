@@ -1,11 +1,7 @@
 package amplasystem.api.controller;
 
-import amplasystem.api.dtos.ChangePasswordDTO;
-import amplasystem.api.dtos.ForgetPasswordDTO;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.dtos.VendedorDTO;
-import amplasystem.api.exceptions.ChangePasswordException;
-import amplasystem.api.exceptions.InvalidInformationException;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.mappers.VendedorMapper;
 import amplasystem.api.models.Vendedor;

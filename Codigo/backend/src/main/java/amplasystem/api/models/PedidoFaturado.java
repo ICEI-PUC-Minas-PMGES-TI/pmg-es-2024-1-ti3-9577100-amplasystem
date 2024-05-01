@@ -2,6 +2,8 @@ package amplasystem.api.models;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class PedidoFaturado {
     @Column(name = "data_faturamento", nullable = false)
     private LocalDate dataFaturamento;
 
+    
     @Column(name = "valor_faturado", nullable = false)
     private Double valorFaturado;
 
@@ -35,7 +38,7 @@ public class PedidoFaturado {
 
     @Column(name = "data_vencimento", nullable = false)
     private LocalDate dataVencimento;
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name ="valor_liquido", nullable = false)
     private Double valorLiquido;
 

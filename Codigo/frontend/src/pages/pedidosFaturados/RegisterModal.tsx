@@ -117,65 +117,65 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 console.log(e);
             });
     };
-    // function onSubmit() {
+    function onSubmit() {
 
-    //     if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
-    //         const aux = pedidoFaturado
-    //         const valueStringFormatter = pedidoFaturado?.valor.toString();
-    //         aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
-    //         console.log(aux.valor)
-    //         setpedidoFaturado(aux)
-    //         if (props.updatePedidoFaturado == undefined) {
-    //             setLoading(true);
-    //             apiFetch
-    //                 .post('/ordem/', pedidoFaturado)
-    //                 .then((data) => {
-    //                     props.setReload(true);
-    //                     showNotification({
-    //                         message: data.data.message,
-    //                         type: 'success',
-    //                         title: data.data.titulo,
-    //                     });
-    //                     setpedidoFaturado(emptyPedidoFaturado)
-    //                 })
-    //                 .catch((error) => {
-    //                     showNotification({
-    //                         message: error.response.data.message,
-    //                         type: 'error',
-    //                         title: error.response.data.titulo,
-    //                     });
-    //                 })
-    //                 .finally(() => {
-    //                     setLoading(false);
-    //                 });
-    //         } else {
-    //             setLoading(true);
-    //             apiFetch
-    //                 .put(`/ordem/`, pedidoFaturado)
-    //                 .then((data) => {
-    //                     props.setReload(true);
-    //                     showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-    //                 })
-    //                 .catch((error) => {
-    //                     showNotification({
-    //                         message: error.response.data.message,
-    //                         type: 'error',
-    //                         title: error.response.data.titulo,
-    //                     });
-    //                 })
-    //                 .finally(() => {
-    //                     setLoading(false);
-    //                     props.setOpenModal(false);
-    //                 });
-    //         }
-    //     } else {
-    //         showNotification({
-    //             message: "Confira todos os campos ",
-    //             type: 'error',
-    //             title: "Campos nao preenchidos ",
-    //         });
-    //     }
-    // }
+    //    if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
+            const aux = pedidoFaturado
+            const valueStringFormatter = pedidoFaturado?.valorFaturado.toString();
+            aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
+            console.log(aux.valorFaturado)
+            setpedidoFaturado(aux)
+            // if (props.updatePedidoFaturado == undefined) {
+                setLoading(true);
+                apiFetch
+                    .post('/pedido/', pedidoFaturado)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({
+                            message: data.data.message,
+                            type: 'success',
+                            title: data.data.titulo,
+                        });
+                        setpedidoFaturado(emptyPedidoFaturado)
+                    })
+                    .catch((error) => {
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            // } else {
+            //     setLoading(true);
+            //     apiFetch
+            //         .put(`/ordem/`, pedidoFaturado)
+            //         .then((data) => {
+            //             props.setReload(true);
+            //             showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
+            //         })
+            //         .catch((error) => {
+            //             showNotification({
+            //                 message: error.response.data.message,
+            //                 type: 'error',
+            //                 title: error.response.data.titulo,
+            //             });
+            //         })
+            //         .finally(() => {
+            //             setLoading(false);
+            //             props.setOpenModal(false);
+            //         });
+            // }
+        // } else {
+        //     showNotification({
+        //         message: "Confira todos os campos ",
+        //         type: 'error',
+        //         title: "Campos nao preenchidos ",
+        //     });
+        // }
+    }
     function ChangeModalState() {
         props.setOpenModal(!open);
     }

@@ -2,6 +2,8 @@ package amplasystem.api.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import amplasystem.api.enuns.StatusOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,6 +48,7 @@ public class OrdemDeCompra {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "ordemDeCompra")
     private List<PedidoFaturado> pedidoFaturados;
 

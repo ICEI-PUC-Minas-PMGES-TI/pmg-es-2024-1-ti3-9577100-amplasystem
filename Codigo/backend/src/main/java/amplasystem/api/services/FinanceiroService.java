@@ -78,4 +78,9 @@ public class FinanceiroService {
     public FinanceiroDTO save(Financeiro financeiro) {
         return FinanceiroMapper.toDTO(financeiroRepository.save(financeiro));
     }
+
+    public Financeiro getByIndustria(Industria industria) {
+        Financeiro financeiro = financeiroRepository.findByIndustria(industria);
+        return financeiro;
+    }
 }

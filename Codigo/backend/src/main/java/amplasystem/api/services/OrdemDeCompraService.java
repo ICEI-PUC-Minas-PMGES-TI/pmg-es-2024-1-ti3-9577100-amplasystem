@@ -69,4 +69,8 @@ public class OrdemDeCompraService {
         }
     }
 
+    public boolean checkIfOrderNotExist(OrdemDeCompra order) {
+        OrdemDeCompra aux = getOrdemDeCompraById(order.getId());
+        return aux == null;
+    }
 }
