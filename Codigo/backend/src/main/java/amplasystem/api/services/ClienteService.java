@@ -1,7 +1,6 @@
 package amplasystem.api.services;
 
 import amplasystem.api.dtos.cliente.ResponseClienteDTO;
-import amplasystem.api.dtos.cliente.ClienteTableDTO;
 import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.exceptions.EntityAlreadyExistsException;
 import amplasystem.api.exceptions.ObjectNotFoundException;
@@ -13,7 +12,6 @@ import amplasystem.api.models.Vendedor;
 import amplasystem.api.repositories.ClienteRepository;
 import amplasystem.api.repositories.VendedorRepository;
 import jakarta.transaction.Transactional;
-import lombok.extern.log4j.Log4j2;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -34,7 +32,6 @@ import java.util.stream.Collectors;
 
 @Transactional
 @Service
-@Log4j2
 public class ClienteService {
     
     @Autowired

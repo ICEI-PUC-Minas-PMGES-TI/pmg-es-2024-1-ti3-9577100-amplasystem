@@ -5,7 +5,6 @@ import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.services.ClienteService;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import lombok.extern.log4j.Log4j2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -15,12 +14,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController()
 @RequestMapping("/cliente")
-@Log4j2
 public class ClienteController {
 
     @Autowired

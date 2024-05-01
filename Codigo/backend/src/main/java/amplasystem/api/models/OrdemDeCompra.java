@@ -1,6 +1,5 @@
 package amplasystem.api.models;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import amplasystem.api.enuns.StatusOrder;

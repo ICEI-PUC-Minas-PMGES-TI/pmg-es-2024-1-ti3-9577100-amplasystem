@@ -81,12 +81,10 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class FinanceiroController {
 
-    private final FinanceiroService financeiroService;
-
     @Autowired
-    public FinanceiroController(FinanceiroService financeiroService) {
-        this.financeiroService = financeiroService;
-    }
+    private FinanceiroService financeiroService;
+
+    
 
     @GetMapping("/")
     public ResponseEntity<List<FinanceiroDTO>> getAll() {

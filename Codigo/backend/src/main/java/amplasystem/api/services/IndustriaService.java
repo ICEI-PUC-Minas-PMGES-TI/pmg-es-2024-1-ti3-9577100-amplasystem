@@ -3,7 +3,6 @@ package amplasystem.api.services;
 import amplasystem.api.models.Contato;
 import amplasystem.api.enuns.TipoContato;
 import amplasystem.api.exceptions.ObjectNotFoundException;
-import amplasystem.api.mappers.IndustriaMapper;
 import amplasystem.api.models.Industria;
 import amplasystem.api.repositories.IndustriaRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
-import lombok.extern.log4j.Log4j2;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -28,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional
-@Log4j2
 @Service
 public class IndustriaService {
     @Autowired
@@ -167,8 +164,9 @@ public class IndustriaService {
                 Industrias.add(industria);
             }
 
+              
+            workbook.close();
             return Industrias;
-
         } catch (EncryptedDocumentException e) {
             e.printStackTrace();
         } catch (IOException e) {
