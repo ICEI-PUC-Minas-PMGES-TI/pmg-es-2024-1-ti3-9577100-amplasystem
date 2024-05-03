@@ -201,4 +201,8 @@ public class IndustriaService {
         return industriaRepository.findByNome(nome);
     }
 
+    public Industria getById(Integer industriaId) {
+        return industriaRepository.findById(industriaId).get();
+    }
+
 }

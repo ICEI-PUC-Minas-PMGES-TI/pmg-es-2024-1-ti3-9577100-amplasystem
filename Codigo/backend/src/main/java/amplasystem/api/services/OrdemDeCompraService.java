@@ -1,6 +1,10 @@
 package amplasystem.api.services;
 
+import amplasystem.api.dtos.OrderFilterDto;
+import amplasystem.api.enuns.StatusOrder;
 import amplasystem.api.exceptions.ObjectNotFoundException;
+import amplasystem.api.models.Cliente;
+import amplasystem.api.models.Industria;
 import amplasystem.api.models.OrdemDeCompra;
 import amplasystem.api.repositories.OrdemDeCompraRepository;
 import jakarta.transaction.Transactional;
@@ -23,6 +27,10 @@ import java.util.stream.Collectors;
 public class OrdemDeCompraService {
     @Autowired
     private OrdemDeCompraRepository ordemDeCompraRepository;
+
+    @Autowired
+    private ClienteService clienteService;
+    @Autowired IndustriaService industriaService;
     @Autowired
     private Validator validator;
 
@@ -72,5 +80,26 @@ public class OrdemDeCompraService {
     public boolean checkIfOrderNotExist(OrdemDeCompra order) {
         OrdemDeCompra aux = getOrdemDeCompraById(order.getId());
         return aux == null;
+    }
+
+    public List<OrdemDeCompra> getAllOrdemDeComprasByIndustriaIdAndClient(OrderFilterDto param) {
+        Cliente cliente = clienteService.getById(param.clienteId());
+        Industria industria = industriaService.getById(param.industriaId());
+        return ordemDeCompraRepository.findAllByClienteAndIndustriaAndTotalmenteFaturadoIsNot(cliente, industria,StatusOrder.TOTALMENTEFATURADO);
+
+    }
+
+    public List<OrdemDeCompra> getAllOrdemDeComprasByClientaId(Integer clienteId) {
+        Cliente cliente = clienteService.getById(clienteId);
+        return ordemDeCompraRepository.findAllByClienteAndTotalmenteFaturadoIsNot(cliente,StatusOrder.TOTALMENTEFATURADO);
+    }
+
+    public List<OrdemDeCompra> getAllOrdemDeComprasByIndustriaId(Integer industriaId) {
+        Industria industria = industriaService.getById(industriaId);
+        return ordemDeCompraRepository.findAllByIndustriaAndTotalmenteFaturadoIsNot(industria,StatusOrder.TOTALMENTEFATURADO);
+    }
+    public List<OrdemDeCompra> getAllOrdemDeComprasWithWasNotFullPayment() {
+        return ordemDeCompraRepository.findAllByTotalmenteFaturadoIsNot(StatusOrder.TOTALMENTEFATURADO);
+
     }
 }

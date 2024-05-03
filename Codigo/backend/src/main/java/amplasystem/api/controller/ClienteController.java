@@ -1,6 +1,7 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.dtos.cliente.ResponseClienteDTO;
+import amplasystem.api.models.Cliente;
 import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.services.ClienteService;
 import jakarta.validation.Valid;
@@ -30,8 +31,8 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseClienteDTO> getClienteById(@PathVariable Integer id) {
-        ResponseClienteDTO cliente = clienteService.getById(id);
+    public ResponseEntity<Cliente> getClienteById(@PathVariable Integer id) {
+        Cliente cliente = clienteService.getById(id);
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 

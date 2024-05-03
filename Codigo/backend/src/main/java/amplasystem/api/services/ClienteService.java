@@ -64,9 +64,8 @@ public class ClienteService {
         return responseClienteDTO;
     }
 
-    public ResponseClienteDTO getById(Integer id) throws ObjectNotFoundException {
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
-        return ClienteMapper.toDTO(cliente);
+    public Cliente getById(Integer id) throws ObjectNotFoundException {
+        return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
     }
 
     public ResponseClienteDTO save(RequestClientDTO requestClienteDTO) throws ObjectNotFoundException {

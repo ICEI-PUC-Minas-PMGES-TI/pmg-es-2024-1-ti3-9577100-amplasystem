@@ -33,11 +33,11 @@ public class Vendedor {
 
     @Column(name = "senha", nullable = false)
     @NotBlank(message = "Senha do vendedor obrigatorio")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
 
     @Column(name = "nome", nullable = false, length = 80)
     @NotBlank(message = "Nome do vendedor obrigatorio")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String nome;
 
     @Column(name = "cargo", nullable = false)
