@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -110,7 +109,7 @@ public class OrdemDeCompraController {
         }
     }
 
-    @GetMapping("/filtered")
+    @PostMapping("/filtered")
     public ResponseEntity<List<OrdemDeCompra>> getMethodName(@RequestBody OrderFilterDto param) {
 
         if(param.clienteId() != null && param.industriaId() != null) {

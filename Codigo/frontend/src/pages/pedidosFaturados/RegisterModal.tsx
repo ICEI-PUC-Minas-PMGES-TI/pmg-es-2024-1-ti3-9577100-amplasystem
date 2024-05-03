@@ -24,14 +24,14 @@ import { OrderStatus } from '@/enums/OrderStatus';
 import CurrencyInput from '@/components/CurrencyInput';
 import { PedidoFaturadoModel } from '@/models/PedidoFaturadoModel';
 import { Cargo } from '@/enums/Cargo';
-import { DateCalendar, DateField, DatePicker } from '@mui/x-date-pickers';
+import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 
 const emptyPedidoFaturado: PedidoFaturadoModel = {
     id: 0,
-    dataFaturamento: new Date(),
+    dataFaturamento: '',
     dataVencimento: new Date(),
-    valorFaturado: 0,
-    valorLiquido: 0,
+    valorFaturado: "",
+    valorLiquido: "",
     notaFiscal: '',
     ordemDeCompra: {
         id: null,
@@ -83,9 +83,18 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [industriasName, setIndustriasName] = useState<string[]>([]);
     const [clientes, setClientes] = useState<ClienteModel[]>([]);
     const [clientesName, setClientesName] = useState<string[]>([]);
+    const [ordens, setOrdens] = useState<OrdemDeCompraModel[]>([]);
+    const [ordensCodigo, setOrdensCodigo] = useState<string[]>([]);
+
+    //filtro
+    const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
+    const [cliente, setCliente] = useState<ClienteModel | undefined>(undefined);
+
     const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>(emptyPedidoFaturado);
     const handleClose = () => {
         props.setOpenModal(false);
+        setIndustria(undefined)
+            setCliente(undefined)
     };
     const getIndustrias = () => {
         apiFetch
@@ -117,6 +126,29 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 console.log(e);
             });
     };
+    const getOrdens = () => {
+        const filter = {
+            'clienteId':cliente?.id || null,
+            'industriaId':industria?.id || null
+        }
+        console.log(filter)
+        apiFetch
+        .post('/ordem/filtered',filter)
+        .then((data) => {
+            setOrdens(data.data);
+            setOrdensCodigo([])
+            console.log(data.data)
+            const aux: string[] = [];
+            data.data.forEach((element) => {
+                aux.push(element.codigoPedido);
+            });
+            console.log(aux)
+            setOrdensCodigo(aux);
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+    }
     function onSubmit() {
 
     //    if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
@@ -125,7 +157,6 @@ const RegisterModal = (props: IRegisterModalProps) => {
             aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
             console.log(aux.valorFaturado)
             setpedidoFaturado(aux)
-            // if (props.updatePedidoFaturado == undefined) {
                 setLoading(true);
                 apiFetch
                     .post('/pedido/', pedidoFaturado)
@@ -139,6 +170,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         setpedidoFaturado(emptyPedidoFaturado)
                     })
                     .catch((error) => {
+                        console.log(error)
                         showNotification({
                             message: error.response.data.message,
                             type: 'error',
@@ -148,26 +180,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     .finally(() => {
                         setLoading(false);
                     });
-            // } else {
-            //     setLoading(true);
-            //     apiFetch
-            //         .put(`/ordem/`, pedidoFaturado)
-            //         .then((data) => {
-            //             props.setReload(true);
-            //             showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
-            //         })
-            //         .catch((error) => {
-            //             showNotification({
-            //                 message: error.response.data.message,
-            //                 type: 'error',
-            //                 title: error.response.data.titulo,
-            //             });
-            //         })
-            //         .finally(() => {
-            //             setLoading(false);
-            //             props.setOpenModal(false);
-            //         });
-            // }
+
         // } else {
         //     showNotification({
         //         message: "Confira todos os campos ",
@@ -178,10 +191,12 @@ const RegisterModal = (props: IRegisterModalProps) => {
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
+
     }
     useEffect(() => {
         getIndustrias();
         getClientes();
+        getOrdens();
         if (props.updatePedidoFaturado != undefined) {
             setpedidoFaturado(props.updatePedidoFaturado);
         } else {
@@ -189,11 +204,16 @@ const RegisterModal = (props: IRegisterModalProps) => {
         }
     }, [props.openModal]);
 
+    useEffect(() => {
+       getOrdens()
+    }, [cliente,industria]);
+
     useEffect(() => {}, [clientesName]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (pedidoFaturado != undefined) {
             const { name, value } = e.target as HTMLInputElement;
+            console.log(name,value)
             setpedidoFaturado({ ...pedidoFaturado, [name]: value });
         }
     }
@@ -251,11 +271,17 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 disablePortal
                                 id="cargo"
                                 options={industriasName}
-                                 
+                                value={pedidoFaturado?.ordemDeCompra.industria.nome  || industria?.nome}
                                 renderInput={(params) => {
                                     return <TextField {...params} name="industria" placeholder="Selecione uma Industria" />;
                                 }}
-                                onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {}}
+                                onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
+                                    const { value } = e.target as HTMLInputElement;
+                                    const industria: IndustriaModel | undefined = industrias.find((element) => {
+                                        return element.nome == value;
+                                    });
+                                    setIndustria(industria)
+                                }}
                             />
                         </div>
                         <div
@@ -277,23 +303,18 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 disablePortal
                                 id="cliente"
                                 options={clientesName}
+                                value={pedidoFaturado.ordemDeCompra.cliente.nomeFantasia || cliente?.nomeFantasia} 
                                 renderInput={(params) => <TextField {...params} name="cliente" placeholder="Selecione um Cliente" />}
                                 onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
                                     const { value } = e.target as HTMLInputElement;
                                     const cliente: ClienteModel | undefined = clientes.find((element) => {
                                         return element.nomeFantasia == value;
                                     });
-                                    if (cliente != undefined) {
-                                    }
+                                    setCliente(cliente)
                                 }}
                             />
                         </div>
-                        <div
-                            style={{
-                                gridColumnStart: 8,
-                                gridColumnEnd: 12,
-                            }}
-                        ></div>
+                       
                     </div>
                 </div>
 
@@ -309,15 +330,18 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 <Autocomplete
                     disablePortal
                     id="cliente"
-                    options={clientesName}
+                    options={ordensCodigo}
+                    value={pedidoFaturado.ordemDeCompra.codigoPedido}
                     fullWidth
                     renderInput={(params) => <TextField {...params} name="idOrdem" placeholder="Selecione uma ordem " />}
                     onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
                         const { value } = e.target as HTMLInputElement;
-                        const cliente: ClienteModel | undefined = clientes.find((element) => {
-                            return element.nomeFantasia == value;
+                        const ordem: OrdemDeCompraModel | undefined = ordens.find((element) => {
+                            return element.codigoPedido == value;
                         });
-                        if (cliente != undefined) {
+                        if (ordem != undefined) {
+                           console.log(pedidoFaturado)
+                            setpedidoFaturado({...pedidoFaturado, [`ordemDeCompra`]:ordem}); 
                         }
                     }}
                 />
@@ -335,7 +359,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     variant="outlined"
                     placeholder="Ex: 12311231134213"
                     fullWidth
-                    name="codigoPedido"
+                    name="notaFiscal"
                     value={pedidoFaturado?.notaFiscal}
                     onChange={handleChange}
                 />
@@ -361,8 +385,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             variant="outlined"
                             placeholder="Ex: 25/02/2024"
                             fullWidth
-                            name="codigoPedido"
-                            value={pedidoFaturado?.notaFiscal}
+                            name="dataFaturamento"
+                            value={pedidoFaturado?.dataFaturamento}
                             onChange={handleChange}
                         />
                     </div>
@@ -387,7 +411,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             placeholder="Ex: 45"
                             fullWidth
                             name="codigoPedido"
-                            value={pedidoFaturado?.notaFiscal}
+                            value={"pedir ajuda para trabalhar com string"}
                             onChange={handleChange}
                         />
                     </div>
@@ -412,7 +436,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     placeholder="R$0.00"
                     type="text"
                     value={pedidoFaturado?.valorFaturado}
-                    name="valor"
+                    name="valorFaturado"
                     onChange={handleChange}
                     maskOptions={undefined}
                 />
@@ -421,7 +445,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 <Button onClick={ChangeModalState} variant="contained">
                     Cancelar
                 </Button>
-                <Button variant="contained">
+                <Button variant="contained" onClick={onSubmit}>
                     {props.updatePedidoFaturado == undefined ? 'Cadastrar' : 'Atualizar '}
                 </Button>
             </DialogActions>
