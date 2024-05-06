@@ -29,7 +29,7 @@ import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 const emptyPedidoFaturado: PedidoFaturadoModel = {
     id: 0,
     dataFaturamento: '',
-    dataVencimento: new Date(),
+    dataVencimento: '',
     valorFaturado: "",
     valorLiquido: "",
     notaFiscal: '',
@@ -85,6 +85,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [clientesName, setClientesName] = useState<string[]>([]);
     const [ordens, setOrdens] = useState<OrdemDeCompraModel[]>([]);
     const [ordensCodigo, setOrdensCodigo] = useState<string[]>([]);
+
+    const [prazoEmDias, setPrazoEmDias] = useState<string>('');
 
     //filtro
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
@@ -153,7 +155,27 @@ const RegisterModal = (props: IRegisterModalProps) => {
 
     //    if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
             const aux = pedidoFaturado
-            const valueStringFormatter = pedidoFaturado?.valorFaturado.toString();
+            const prazo = parseInt(prazoEmDias)
+            console.log("AUX")
+            console.log(aux)
+
+            var partes = String(aux.dataFaturamento).split('/');
+            var dia = partes[0];
+            var mes = partes[1];
+            var ano = partes[2];
+        
+            // Formatar a data no formato ISO (yyyy-MM-dd)
+            var dataISO = ano + '-' + mes + '-' + dia;
+        
+
+            aux.dataFaturamento = new Date(dataISO)
+
+            aux.dataVencimento = new Date(dataISO)
+
+            aux.dataVencimento.setDate(aux.dataFaturamento.getDate() + (prazo == undefined ? 0 : prazo));
+            console.log("Data vencimento")
+            console.log(aux.dataVencimento)
+            const valueStringFormatter = aux?.valorFaturado.toString();
             aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
             console.log(aux.valorFaturado)
             setpedidoFaturado(aux)
@@ -411,8 +433,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             placeholder="Ex: 45"
                             fullWidth
                             name="codigoPedido"
-                            value={"pedir ajuda para trabalhar com string"}
-                            onChange={handleChange}
+                            value={prazoEmDias}
+                            onChange={(e) => setPrazoEmDias(e.target.value)}
                         />
                     </div>
                     <div
