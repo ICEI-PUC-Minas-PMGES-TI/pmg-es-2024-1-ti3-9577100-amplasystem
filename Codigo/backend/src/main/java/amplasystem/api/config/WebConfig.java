@@ -8,27 +8,22 @@ import amplasystem.api.models.Financeiro;
 import amplasystem.api.models.Industria;
 import amplasystem.api.models.Vendedor;
 import amplasystem.api.repositories.*;
-import lombok.extern.log4j.Log4j2;
 
-import org.apache.commons.math3.analysis.function.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @Configuration
 @EnableWebMvc
 @Component
-@Log4j2
 public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
 
     @Autowired
@@ -46,7 +41,6 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     }
 
     @Override
-    @Profile("test")
     public void run(String... args) {
         this.autoComplete();
     }
@@ -55,7 +49,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     private String activeProfiles;
 
     public void autoComplete() {    
-        if (activeProfiles.trim().equals("d1ev")) {
+        if (activeProfiles.trim().equals("test")) {
             Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"),
                     "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());
             Vendedor v2 = new Vendedor(null, "admin@admin", SecurityConfig.passwordEncoder().encode("admin"),

@@ -1,7 +1,5 @@
 package amplasystem.api.models;
 
-import java.util.Calendar;
-import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

@@ -76,17 +76,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("Financeiro")
+@RestController()
 @RequestMapping("/financeiro")
 @CrossOrigin(origins = "*")
 public class FinanceiroController {
 
-    private final FinanceiroService financeiroService;
-
     @Autowired
-    public FinanceiroController(FinanceiroService financeiroService) {
-        this.financeiroService = financeiroService;
-    }
+    private FinanceiroService financeiroService;
+
+    
 
     @GetMapping("/")
     public ResponseEntity<List<FinanceiroDTO>> getAll() {

@@ -13,4 +13,6 @@ public interface IndustriaRepository extends JpaRepository<Industria, Integer> {
     Industria findByNome(String nome);
 
     List<Industria> findByFinanceiroIsNull();
+
+    List<Industria> findByFinanceiroIsNotNull();
 }

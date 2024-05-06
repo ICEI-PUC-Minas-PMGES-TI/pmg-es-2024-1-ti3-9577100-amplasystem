@@ -3,7 +3,6 @@ package amplasystem.api.dtos.cliente;
 import amplasystem.api.models.Endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
