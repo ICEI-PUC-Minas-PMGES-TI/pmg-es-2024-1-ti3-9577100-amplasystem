@@ -2,7 +2,13 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import {
     Box,
+    Box,
     Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     Dialog,
     DialogActions,
     DialogContent,
@@ -11,9 +17,9 @@ import {
     FormControl,
     IconButton,
     InputLabel,
-    Menu,
     MenuItem,
     Select,
+    TextField,
     TextField,
     Typography,
 } from '@mui/material';
@@ -74,7 +80,9 @@ const ClientesPage = () => {
     const getVendedores = useCallback(async () => {
         try {
             const res = await apiFetch.get('/vendedor');
+            const res = await apiFetch.get('/vendedor');
             setVendedores(res.data);
+        } catch (err) {
         } catch (err) {
             console.log(err);
         }
@@ -103,14 +111,13 @@ const ClientesPage = () => {
     };
 
     const getClientes = useCallback(async () => {
-        setTableLoading(true);
         try {
+            const res = await apiFetch.get('/cliente/');
             const res = await apiFetch.get('/cliente/');
             setClientes(res.data);
         } catch (err) {
+        } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     }, []);
 
@@ -119,8 +126,8 @@ const ClientesPage = () => {
     }, [getClientes]);
 
     const postCliente = async (novoCliente: ClienteFormModel) => {
-        setTableLoading(true);
         try {
+            const res = await apiFetch.post('/cliente/', novoCliente);
             const res = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
                 message: res.data.message,
@@ -129,15 +136,14 @@ const ClientesPage = () => {
             });
             getClientes();
         } catch (err) {
+        } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     };
 
     const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
-        setTableLoading(true);
         try {
+            const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
                 message: res.data.message,
@@ -153,8 +159,8 @@ const ClientesPage = () => {
     };
 
     const deleteCliente = async (id: number) => {
-        setTableLoading(true);
         try {
+            const res = await apiFetch.delete(`/cliente/${id}`);
             const res = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
                 message: res.data.message,
@@ -162,6 +168,7 @@ const ClientesPage = () => {
                 type: 'success',
             });
             getClientes();
+        } catch (err) {
         } catch (err) {
             console.log(err);
         } finally {
@@ -218,28 +225,19 @@ const ClientesPage = () => {
             },
         ],
         []
+        []
     );
 
     const table = useMaterialReactTable({
+        columns,
         columns,
         data: clientes,
         muiSelectCheckboxProps: {
             color: 'secondary',
         },
         enableRowActions: true,
-        columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
-        displayColumnDefOptions: {
-            'mrt-row-select': {
-                size: 50,
-                grow: false,
-            },
-            'mrt-row-numbers': {
-                size: 40,
-                grow: true,
-            },
-        },
-        renderRowActions: ({ row }) => (
+        renderRowActions: ({ row }: { row: MRT_Row<ClienteModel> }) => (
             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
                 <IconButton
                     onClick={() => {
@@ -340,7 +338,7 @@ const ClientesPage = () => {
                         const formJson = Object.fromEntries(formData.entries());
                         let _cliente: ClienteFormModel = {
                             id: cliente?.id ?? null,
-                            nomeFantasia: String(formJson?.nomeFantasia),
+                            nomeFantasia: String(formJson.nomeFantasia),
                             cnpj: String(formJson.cnpj),
                             idVendedor: formJson.idVendedor ? Number(formJson.idVendedor) : 0,
                             telefone: formJson.telefone
@@ -360,7 +358,6 @@ const ClientesPage = () => {
                             },
                         };
 
-                        console.log('FormJson', formJson);
                         _cliente.id ? updateCliente(_cliente) : postCliente(_cliente);
                         handleClose();
                     },
