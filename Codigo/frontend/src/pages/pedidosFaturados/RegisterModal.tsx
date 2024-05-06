@@ -168,7 +168,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             console.log(aux)
 
             var partes = String(aux.dataFaturamento).split('/');
-            var dia:number = Number(partes[0]);
+            var dia:number = Number(partes[0]) + 1;
             var mes:number = Number(partes[1])- 1;
             var ano:number = Number(partes[2]);
         
