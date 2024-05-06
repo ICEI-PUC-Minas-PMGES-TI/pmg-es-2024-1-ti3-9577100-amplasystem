@@ -319,7 +319,7 @@ const ClientesPage = () => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
-
+                        // TODO: Validar campos
                         let _cliente: ClienteFormModel = {
                             id: cliente?.id ?? null,
                             nomeFantasia: String(formJson?.nomeFantasia),
@@ -328,8 +328,13 @@ const ClientesPage = () => {
                             telefone: formJson.telefone ? String(formJson.telefone) : undefined,
                             endereco: {
                                 id: formJson.enderecoId ? Number(formJson.enderecoId) : null,
-                                cidade: formJson.cidade ? String(formJson.cidade) : undefined,
-                                rua: formJson.rua ? String(formJson.rua) : undefined,
+                                cep: String(formJson.cep),
+                                estado: String(formJson.estado),
+                                cidade: String(formJson.cidade),
+                                bairro: String(formJson.bairro),
+                                rua: String(formJson.rua),
+                                numero: Number(formJson.numero),
+                                complemento: formJson.complemento ? String(formJson.complemento) : null,
                             },
                         };
 
@@ -386,6 +391,22 @@ const ClientesPage = () => {
                     />
                     <TextField
                         margin="dense"
+                        id="clienteCep"
+                        name="cep"
+                        label="CEP"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.cep}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="clienteEstado"
+                        name="estado"
+                        label="Estado"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.estado}
+                    />
+                    <TextField
+                        margin="dense"
                         id="clienteCidade"
                         name="cidade"
                         label="Cidade"
@@ -394,11 +415,35 @@ const ClientesPage = () => {
                     />
                     <TextField
                         margin="dense"
+                        id="clienteBairro"
+                        name="bairro"
+                        label="Bairro"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.bairro}
+                    />
+                    <TextField
+                        margin="dense"
                         id="clienteEndereco"
                         name="rua"
                         label="Rua"
                         fullWidth
                         defaultValue={cliente?.endereco?.rua}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="clienteNumero"
+                        name="numero"
+                        label="Número"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.numero}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="clienteComplemento"
+                        name="complemento"
+                        label="Complemento"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.complemento}
                     />
                 </DialogContent>
                 <DialogActions>

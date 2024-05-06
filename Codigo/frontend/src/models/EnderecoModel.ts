@@ -7,5 +7,5 @@ export type EnderecoModel = {
     bairro: string;
     rua: string;
     numero: number;
-    complemento: string;
+    complemento: string | null;
 }
