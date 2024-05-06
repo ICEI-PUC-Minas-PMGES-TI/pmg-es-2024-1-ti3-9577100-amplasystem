@@ -1,6 +1,11 @@
 
 export type EnderecoModel = {
     id: number | null;
-    cidade: string; 
-    rua: string; 
+    cep: string;
+    estado: string;
+    cidade: string;
+    bairro: string;
+    rua: string;
+    numero: number;
+    complemento: string | null;
 }
