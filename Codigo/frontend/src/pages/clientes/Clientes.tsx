@@ -1,52 +1,38 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import * as React from 'react';
-import InputMask from 'react-input-mask';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import * as Input from '@/styles/types/InputStyles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import AddIcon from '@mui/icons-material/Add';
-import { Box } from '@mui/system';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
+    Box,
     Button,
-    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     FormControl,
     IconButton,
     InputLabel,
-    Menu,
     MenuItem,
     Select,
+    TextField,
     Typography,
 } from '@mui/material';
-import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
+import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef, type MRT_Row } from 'material-react-table';
 import { Delete, Edit } from '@mui/icons-material';
-
-import apiFetch from '@/services/api';
-import { ClienteFormModel, ClienteModel } from '@/models/ClienteModel';
-import { VendedorModel } from '@/models/VendedorModel';
-import { useNotification } from '@/hooks/useNotification';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DeleteConfirm from '@/components/DeleteConfirm';
-import { Link } from 'react-router-dom';
+import { ClienteModel, ClienteFormModel } from '@/models/ClienteModel';
+import { VendedorModel } from '@/models/VendedorModel';
+import apiFetch from '@/services/api';
+import { useNotification } from '@/hooks/useNotification';
 
 const ClientesPage = () => {
     const { showNotification } = useNotification();
 
     const [cliente, setCliente] = useState<ClienteModel | null>(null);
     const [clientes, setClientes] = useState<ClienteModel[]>([]);
-    const [tableLoading, setTableLoading] = useState<boolean>(true);
-    const [dialogState, setDialogState] = useState<boolean>(false);
-    const [file, setFile] = useState<File | null>(null);
-    const [reload, setReload] = useState<boolean>(true);
-    const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+    const [dialogState, setDialogState] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [clientToDeleteId, setClientToDeleteId] = useState<number | null>(null);
-
     const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
 
     const cleanFormData = () => {
@@ -64,66 +50,23 @@ const ClientesPage = () => {
 
     const getVendedores = useCallback(async () => {
         try {
-            const res: AxiosResponse<VendedorModel[]> = await apiFetch.get('/vendedor');
+            const res = await apiFetch.get('/vendedor');
             setVendedores(res.data);
-        } catch (err: any) {
+        } catch (err) {
             console.log(err);
         }
     }, []);
-
-    
-
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const openMenuOption = Boolean(anchorEl);
-    const handleDropDownClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleDropDownClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     useEffect(() => {
         getVendedores();
     }, [getVendedores]);
 
-    useEffect(() => {
-        console.log(file);
-        if (file !== undefined && file !== null) {
-            apiFetch
-                .post(
-                    '/cliente/tabela',
-                    {
-                        file,
-                    },
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                )
-                .then((data) => {
-                    console.log(data);
-                })
-                .catch((e) => {
-                    console.log(e);
-                })
-                .finally(() => {
-                    window.location.reload();
-                    //setReload(true);
-                });
-        }
-    }, [file]);
-
     const getClientes = useCallback(async () => {
-        setTableLoading(true);
         try {
-            const res: AxiosResponse<ClienteModel[]> = await apiFetch.get('/cliente/');
+            const res = await apiFetch.get('/cliente/');
             setClientes(res.data);
-        } catch (err: any) {
+        } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     }, []);
 
@@ -132,62 +75,44 @@ const ClientesPage = () => {
     }, [getClientes]);
 
     const postCliente = async (novoCliente: ClienteFormModel) => {
-        setTableLoading(true);
         try {
-            const res: AxiosResponse<any> = await apiFetch.post('/cliente/', novoCliente);
+            const res = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err: any) {
+        } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     };
 
     const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
-        setTableLoading(true);
         try {
-            const res: AxiosResponse<any> = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
+            const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err: any | AxiosError) {
-            console.log('Update err', err);
-            if (axios.isAxiosError(err)) {
-                showNotification({
-                    message: err ? err.message : 'Erro não especificado',
-                    title: 'Erro ao atualizar cliente',
-                    type: 'error',
-                });
-            } else {
-                console.log('Update err', err);
-            }
-        } finally {
-            setTableLoading(false);
+        } catch (err) {
+            console.log(err);
         }
     };
 
     const deleteCliente = async (id: number) => {
-        setTableLoading(true);
         try {
-            const res: AxiosResponse<any> = await apiFetch.delete(`/cliente/${id}`);
+            const res = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err: any) {
+        } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     };
 
@@ -237,35 +162,19 @@ const ClientesPage = () => {
                 ),
             },
         ],
-        [],
+        []
     );
 
     const table = useMaterialReactTable({
-        columns: columns,
+        columns,
         data: clientes,
-
-        muiSelectCheckboxProps: {
-            color: 'secondary',
-        },
         enableRowActions: true,
-        columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
-        displayColumnDefOptions: {
-            'mrt-row-select': {
-                size: 50,
-                grow: false,
-            },
-            'mrt-row-numbers': {
-                size: 40,
-                grow: true,
-            },
-        },
-        renderRowActions: ({ row }) => (
+        renderRowActions: ({ row }: { row: MRT_Row<ClienteModel> }) => (
             <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
                 <IconButton
                     onClick={() => {
                         setDialogState(true);
-                        console.log('Row', row.original);
                         setCliente(row.original);
                     }}
                 >
@@ -284,63 +193,15 @@ const ClientesPage = () => {
                 </IconButton>
             </Box>
         ),
-
-        muiTableContainerProps: {
-            sx: { maxWidth: '100%' },
-        },
-        muiTopToolbarProps: {
-            sx: {
-                fontWeight: 'bold',
-                fontSize: '16px',
-            },
-        },
-        muiBottomToolbarProps: {
-            sx: {
-                fontWeight: 'bold',
-                fontSize: '16px',
-            },
-        },
-        muiTableHeadCellProps: {
-            sx: {
-                fontWeight: 'bold',
-                fontSize: '16px',
-            },
-        },
-        muiTableBodyCellProps: {
-            sx: {
-                fontWeight: 'normal',
-                fontSize: '16px',
-            },
-        },
-        enableDensityToggle: false,
     });
-
-    const CNPJMask = ({ inputRef, ...props }: any) => (
-        <InputMask {...props} mask="99.999.999/9999-99" placeholder="__.___.___/____-__" ref={inputRef} />
-    );
-
-    const PhoneMask = ({ inputRef, ...props }: any) => (
-        <InputMask {...props} mask="(99) 99999-9999" placeholder="(__) _____-____" ref={inputRef} />
-    );
 
     return (
         <React.Fragment>
             <header className="flex justify-between mb-5">
                 <Typography variant="h4">Clientes</Typography>
-                <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={handleClickOpen} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
-                        Adicionar cliente
-                    </Button>
-                    <Button
-                        aria-controls={openMenuOption ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={openMenuOption ? 'true' : undefined}
-                        onClick={handleDropDownClick}
-                        role={undefined}
-                    >
-                        <ArrowDropDownIcon />
-                    </Button>
-                </ButtonGroup>
+                <Button onClick={handleClickOpen} startIcon={<AddIcon />}>
+                    Adicionar cliente
+                </Button>
             </header>
 
             <MaterialReactTable table={table} />
@@ -357,18 +218,16 @@ const ClientesPage = () => {
 
                         let _cliente: ClienteFormModel = {
                             id: cliente?.id ?? null,
-                            nomeFantasia: String(formJson?.nomeFantasia),
+                            nomeFantasia: String(formJson.nomeFantasia),
                             cnpj: String(formJson.cnpj),
                             idVendedor: formJson.idVendedor ? Number(formJson.idVendedor) : 0,
                             telefone: formJson.telefone ? String(formJson.telefone) : undefined,
                             endereco: {
-                                id: formJson.enderecoId ? Number(formJson.enderecoId) : null,
-                                cidade: formJson.cidade ? String(formJson.cidade) : undefined,
-                                rua: formJson.rua ? String(formJson.rua) : undefined,
+                                cidade: String(formJson.cidade),
+                                rua: String(formJson.rua),
                             },
                         };
 
-                        console.log('FormJson', formJson);
                         _cliente.id ? updateCliente(_cliente) : postCliente(_cliente);
                         handleClose();
                     },
@@ -395,9 +254,6 @@ const ClientesPage = () => {
                         label="CNPJ"
                         fullWidth
                         defaultValue={cliente?.cnpj}
-                        InputProps={{
-                            inputComponent: CNPJMask,
-                        }}
                     />
                     <FormControl fullWidth>
                         <InputLabel id="vendedorLabel">Vendedor</InputLabel>
@@ -421,9 +277,6 @@ const ClientesPage = () => {
                         label="Telefone"
                         fullWidth
                         defaultValue={cliente?.telefone}
-                        InputProps={{
-                            inputComponent: PhoneMask,
-                        }}
                     />
                     <TextField
                         margin="dense"
@@ -435,7 +288,7 @@ const ClientesPage = () => {
                     />
                     <TextField
                         margin="dense"
-                        id="clienteEndereco"
+                        id="clienteRua"
                         name="rua"
                         label="Rua"
                         fullWidth
@@ -443,56 +296,10 @@ const ClientesPage = () => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Cancelar</Button>
                     <Button type="submit">Salvar</Button>
                 </DialogActions>
             </Dialog>
-
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={openMenuOption}
-                onClose={handleClose}
-                sx={{
-                    margin: '5px',
-                    padding: 0,
-                    '& .css-6hp17o-MuiList-root-MuiMenu-list': {
-                        padding: 0,
-                    },
-                }}
-            >
-                <MenuItem
-                    sx={{
-                        margin: 0,
-                        padding: 0,
-                    }}
-                >
-                    <Button component="label" variant="contained" fullWidth startIcon={<CloudUploadIcon />}>
-                        Importar cliente
-                        <Input.VisuallyHiddenInput
-                            type="file"
-                            onChange={(event) => {
-                                if (event.target.files != null && event.target.files[0] != null) {
-                                    setFile(event.target.files[0]);
-                                }
-                            }}
-                        />
-                    </Button>
-                </MenuItem>
-                <MenuItem
-                    onClick={handleClose}
-                    sx={{
-                        margin: 0,
-                        padding: 0,
-                    }}
-                >
-                    <Button component="label" fullWidth variant="contained" startIcon={<FileDownloadIcon />}>
-                        <Link to="/files/clientes.xlsx" target="_blank" download>
-                            Baixar modelo
-                        </Link>
-                    </Button>
-                </MenuItem>
-            </Menu>
 
             <DeleteConfirm
                 open={deleteModalOpen}
