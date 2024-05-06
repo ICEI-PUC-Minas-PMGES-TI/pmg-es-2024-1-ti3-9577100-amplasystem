@@ -187,10 +187,10 @@ export function SidebarItem({ icon, text, active, alert, location }: SidebarItem
             onClick={() => {
                 navigate(location);
             }}
-            className={`relative flex items-center py-2 px-3 my-1 font-medium rounded cursor-pointer group hover:outline outline-2 outline-neutral-500
+            className={`relative flex items-center py-2 px-3 my-1 font-medium rounded cursor-pointer group hover:outline outline-2 outline-neutral-500 hover:text-white
         ${active ?
-                    'bg-gradient-to-tr text-neutral-50 bg-neutral-800 hover:bg-neutral-700 hover:text-white' :
-                    'hover:bg-neutral-900 text-neutral-300 hover:text-neutral-100  '
+                    'bg-gradient-to-tr text-neutral-100 bg-neutral-800 hover:bg-neutral-700 ' :
+                    'hover:bg-neutral-900 text-neutral-200   '
                 }`}
         >
             {icon}
@@ -202,11 +202,11 @@ export function SidebarItem({ icon, text, active, alert, location }: SidebarItem
                 }}>
                 {text}
             </span>
-            {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? '' : 'top-2 '}`} />}
+            {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-neutral-400 ${expanded ? '' : 'top-2 '}`} />}
 
             {!expanded && (
                 <div
-                    className={`absolute left-full rounded px-2 py-1 ml-6 bg-indigo-100 z-50 text-indigo-800 text-sm invisible opacity-20
+                    className={`absolute left-full rounded px-2 py-1 ml-6 bg-neutral-900 z-50 text-white text-sm invisible opacity-20
                     -translate-x-3 group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
                 >
                     {text}
