@@ -85,11 +85,12 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
     const [cliente, setCliente] = useState<ClienteModel | undefined>(undefined);
 
-    const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>(emptyPedidoFaturado);
+    const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>({...emptyPedidoFaturado});
     const handleClose = () => {
         props.setOpenModal(false);
         setIndustria(undefined)
         setCliente(undefined)
+        setpedidoFaturado({...emptyPedidoFaturado})
         setPrazoEmDias("")
     };
     const getIndustrias = () => {
@@ -172,7 +173,6 @@ const RegisterModal = (props: IRegisterModalProps) => {
             var mes:number = Number(partes[1])- 1;
             var ano:number = Number(partes[2]);
         
-            // Formatar a data no formato ISO (yyyy-MM-dd)
         
 
             aux.dataFaturamento = new Date(ano,mes,dia)
@@ -197,7 +197,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             type: 'success',
                             title: data.data.titulo,
                         });
-                        setpedidoFaturado(emptyPedidoFaturado)
+                        setpedidoFaturado({...emptyPedidoFaturado})
                         setPrazoEmDias('')
                                         })
                     .catch((error) => {
@@ -224,12 +224,19 @@ const RegisterModal = (props: IRegisterModalProps) => {
     }
     function ChangeModalState() {
         props.setOpenModal(!open);
-
+        props.setOpenModal(false);
+        setIndustria(undefined)
+        setCliente(undefined)
+        setpedidoFaturado({...emptyPedidoFaturado})
+        setPrazoEmDias("")
+        props.updatePedidoFaturado = undefined
     }
     useEffect(() => {
         getIndustrias();
         getClientes();
         getOrdens();
+        console.log(props.updatePedidoFaturado)
+        console.log(pedidoFaturado)
         if (props.updatePedidoFaturado != undefined) {
             var aux:PedidoFaturadoModel = {...pedidoFaturado}
             pedidoFaturado.dataFaturamento =props.updatePedidoFaturado.dataFaturamento;
@@ -241,7 +248,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             getDays()
 
         } else {
-            setpedidoFaturado(emptyPedidoFaturado);
+            setpedidoFaturado({...emptyPedidoFaturado});
             setPrazoEmDias('')
         }
     }, [props.openModal]);
