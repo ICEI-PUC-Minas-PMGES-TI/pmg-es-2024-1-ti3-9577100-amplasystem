@@ -237,23 +237,31 @@ const IndustriaPage = () => {
 
     return (
         <Box display={ 'grid' } sx={ {maxHeight: '100vh'} }>
-            <header className="flex justify-between mb-5">
-                <Typography variant="h4">Indústrias</Typography>
-                <ButtonGroup variant="contained" aria-label="Basic button group">
-                    <Button onClick={ ChangeModalState } startIcon={ <AddIcon sx={ {fontSize: 5} }/> }>
-                        Adicionar indústria
-                    </Button>
-                    <Button
-                        aria-controls={ openMenuOption ? 'basic-menu' : undefined }
-                        aria-haspopup="true"
-                        aria-expanded={ openMenuOption ? 'true' : undefined }
-                        onClick={ handleClick }
-                        role={ undefined }
-                    >
-                        <ArrowDropDownIcon/>
-                    </Button>
-                </ButtonGroup>
-            </header>
+           
+           <header className="flex justify-between mb-5">
+        <Typography variant="h4">Industrias</Typography>
+        <div className="flex gap-3">
+          <Button color="warning" component="label" variant="outlined" startIcon={<CloudUploadIcon />}>
+            Importar industria 
+            <Input.VisuallyHiddenInput
+                            type="file"
+                            onChange={(event) => {
+                                if (event.target.files[0] != null) {
+                                        setFile(event.target.files[0]);
+                                  }
+                            } }
+                        />
+          </Button>
+          <Button startIcon={<FileDownloadIcon />} color="warning">
+            <Link to="/files/modelo.xlsx" target="_blank" download>
+              Baixar modelo
+            </Link>
+          </Button>
+          <Button onClick={ChangeModalState} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
+            Adicionar industria
+          </Button>
+        </div>
+      </header>
             <MaterialReactTable table={ table }/>
             { open ? (
                 <RegisterModal

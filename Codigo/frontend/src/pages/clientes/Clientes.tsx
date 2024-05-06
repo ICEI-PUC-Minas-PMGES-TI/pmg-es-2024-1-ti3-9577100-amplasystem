@@ -291,7 +291,7 @@ const ClientesPage = () => {
       <header className="flex justify-between mb-5">
         <Typography variant="h4">Clientes</Typography>
         <div className="flex gap-3">
-          <Button color="warning" variant="outlined" startIcon={<CloudUploadIcon />}>
+          <Button color="warning" component="label" variant="outlined" startIcon={<CloudUploadIcon />}>
             Importar cliente
             <Input.VisuallyHiddenInput
               type="file"
