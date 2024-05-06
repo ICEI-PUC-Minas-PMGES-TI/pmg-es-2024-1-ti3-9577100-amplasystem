@@ -5,5 +5,5 @@ export interface FinanceiroModel {
     comissao: number;
     tipoPagamento: string;
     tipoFiscal: string;
-    industria: IndustriaModel;
+    industria: IndustriaModel ;
 }

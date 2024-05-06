@@ -55,7 +55,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
         } else {
             setNewFinanceiro({
                 id: null,
-                comissao: '',
+                comissao: 0,
                 tipoFiscal: '',
                 tipoPagamento: '',
                 industria: '',
