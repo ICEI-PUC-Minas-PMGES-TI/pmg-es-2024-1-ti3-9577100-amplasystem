@@ -69,7 +69,15 @@ const OrdemDeCompraPage = () => {
             {
                 accessorKey: 'dataCadastro',
                 header: 'Data do Cadastro',
-                
+                Cell: ({ cell }) => {
+                    const date = new Date(cell.getValue<string>())
+                    console.log(date)
+                    return <Box
+                    component="span"
+                                       >
+                    {date.toLocaleDateString()}
+                  </Box>
+                }
             },
             {
                 accessorKey: 'industria.nome',

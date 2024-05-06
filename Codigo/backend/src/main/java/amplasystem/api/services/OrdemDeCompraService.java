@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,9 +58,7 @@ public class OrdemDeCompraService {
         if (ordemDeCompraRepository.existsBycodigoPedido(ordemDeCompra.getCodigoPedido())) {
             throw new IllegalStateException("Já existe uma ordem de compra  cadastrada com o mesmo numero.");
         }
-        LocalDate date = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        ordemDeCompra.setDataCadastro(date.format(formatter));
+        ordemDeCompra.setDataCadastro(LocalDate.now());
         return ordemDeCompraRepository.save(ordemDeCompra);
     }
 

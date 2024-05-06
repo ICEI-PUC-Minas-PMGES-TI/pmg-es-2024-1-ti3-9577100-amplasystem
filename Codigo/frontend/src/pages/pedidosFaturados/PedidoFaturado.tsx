@@ -78,12 +78,14 @@ const PedidoFaturado = () => {
             {
                 accessorKey: 'dataFaturamento', 
                 header: 'data Faturamento',
-                // Cell: ({ cell }) => (
-                //     <Box
-                //       component="span"
-                //                          >
-                //       {cell.getValue<Date>().toLocaleDateString()}
-                //     </Box>)
+                Cell: ({ cell }) => {
+                    const date = new Date(cell.getValue<string>())
+                    return <Box
+                    component="span"
+                                       >
+                    {date.toLocaleDateString()}
+                  </Box>
+                }
             },
             {
                 accessorKey: 'financeiro.tipoPagamento', 
@@ -92,12 +94,14 @@ const PedidoFaturado = () => {
             {
                 accessorKey: 'dataVencimento', 
                 header: 'data Vencimento',
-                // Cell: ({ cell }) => (
-                //     <Box
-                //       component="span"
-                //                          >
-                //       {cell.getValue<Date>().toLocaleDateString()}
-                //     </Box>)
+                Cell: ({ cell }) => {
+                    const date = new Date(cell.getValue<string>())
+                    return <Box
+                    component="span"
+                                       >
+                    {date.toLocaleDateString()}
+                  </Box>
+                }
             },
             {
                 accessorKey: 'valorFaturado',
@@ -116,6 +120,12 @@ const PedidoFaturado = () => {
             {
                 accessorKey:'financeiro.comissao', 
                 header: 'Porcentagem de comissão ',
+                Cell: ({ cell }) => (
+                    <Box
+                      component="span"
+                                         >
+                      {cell.getValue<string>()}%
+                    </Box>)
             },
             {
                 accessorKey: 'valorLiquido',
