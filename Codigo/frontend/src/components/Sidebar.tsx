@@ -192,7 +192,7 @@ export function SidebarItem({ icon, text, active, alert, location }: SidebarItem
         >
             {icon}
             <span className={`overflow-hidden transition-all ${expanded ? 'w-52 ml-3' : 'w-0'}`}>{text}</span>
-            {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-slate-400 ${expanded ? '' : 'top-2 '}`} />}
+            {alert && <div className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${expanded ? '' : 'top-2 '}`} />}
 
             {!expanded && (
                 <div
