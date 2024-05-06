@@ -4,11 +4,11 @@ import { OrdemDeCompraModel } from "./OrdemDeCompraModel";
 
 export interface PedidoFaturadoModel {
     id:number
-    dataFaturamento:Date,
-    dataVencimento:Date,
+    dataFaturamento:Date | string,
+    dataVencimento:Date | string,
     valorFaturado:number,
-    valorLiquido:number,//calculado baseado no valor faturado * a porcentagem de comissão da industria 
+    valorLiquido:number | null | undefined,//calculado baseado no valor faturado * a porcentagem de comissão da industria 
     notaFiscal:string,
     ordemDeCompra:OrdemDeCompraModel,
-    financeiro:FinanceiroModel
+    financeiro:FinanceiroModel | null | undefined
 }

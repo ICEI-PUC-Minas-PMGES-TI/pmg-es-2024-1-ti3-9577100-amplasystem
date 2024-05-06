@@ -27,11 +27,10 @@ import { Cargo } from '@/enums/Cargo';
 import { OrdemDeCompraModel } from '@/models/OrdemDeCompraModel';
 
 const emptyPedidoFaturado: PedidoFaturadoModel = {
-    id: 0,
+    id: null,
     dataFaturamento: '',
     dataVencimento: '',
     valorFaturado: "",
-    valorLiquido: "",
     notaFiscal: '',
     ordemDeCompra: {
         id: null,
@@ -62,12 +61,6 @@ const emptyPedidoFaturado: PedidoFaturadoModel = {
             },
         },
     },
-    financeiro: {
-        id: null,
-        comissao: 0,
-        tipoPagamento: '',
-        tipoFiscal: '',
-    },
 };
 interface IRegisterModalProps {
     setOpenModal: Dispatch<SetStateAction<boolean>>;
@@ -96,7 +89,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const handleClose = () => {
         props.setOpenModal(false);
         setIndustria(undefined)
-            setCliente(undefined)
+        setCliente(undefined)
+        setPrazoEmDias("")
     };
     const getIndustrias = () => {
         apiFetch
@@ -151,37 +145,51 @@ const RegisterModal = (props: IRegisterModalProps) => {
             console.log(e);
         });
     }
+    const getDays = () => {
+        if(props.updatePedidoFaturado !== undefined){
+            const aux = {...pedidoFaturado}
+            const dataVencimento = new Date(props.updatePedidoFaturado.dataVencimento);
+            const dataFaturamento = new Date(props.updatePedidoFaturado.dataFaturamento);
+            var diferencaEmMilissegundos = Math.abs(dataVencimento - dataFaturamento);
+            var diferencaEmDias = Math.ceil(diferencaEmMilissegundos / (1000 * 60 * 60 * 24));
+            setPrazoEmDias(String(diferencaEmDias))
+    
+           
+             aux.dataFaturamento = dataFaturamento.toLocaleDateString()
+             setpedidoFaturado(aux)
+        }
+    }
     function onSubmit() {
 
     //    if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
-            const aux = pedidoFaturado
+            const aux = {...pedidoFaturado}
             const prazo = parseInt(prazoEmDias)
             console.log("AUX")
             console.log(aux)
 
             var partes = String(aux.dataFaturamento).split('/');
-            var dia = partes[0];
-            var mes = partes[1];
-            var ano = partes[2];
+            var dia:number = Number(partes[0]);
+            var mes:number = Number(partes[1])- 1;
+            var ano:number = Number(partes[2]);
         
             // Formatar a data no formato ISO (yyyy-MM-dd)
-            var dataISO = ano + '-' + mes + '-' + dia;
         
 
-            aux.dataFaturamento = new Date(dataISO)
+            aux.dataFaturamento = new Date(ano,mes,dia)
 
-            aux.dataVencimento = new Date(dataISO)
+            aux.dataVencimento = new Date(ano,mes,dia)
 
             aux.dataVencimento.setDate(aux.dataFaturamento.getDate() + (prazo == undefined ? 0 : prazo));
-            console.log("Data vencimento")
-            console.log(aux.dataVencimento)
+
+            aux.dataFaturamento = aux.dataFaturamento.getFullYear() +"-"+(aux.dataFaturamento.getMonth() + 1)+"-"+aux.dataFaturamento.getDate()
+            aux.dataVencimento = aux.dataVencimento.getFullYear() +"-"+(aux.dataVencimento.getMonth()+1)+"-"+aux.dataVencimento.getDate()
+
             const valueStringFormatter = aux?.valorFaturado.toString();
             aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
-            console.log(aux.valorFaturado)
-            setpedidoFaturado(aux)
+
                 setLoading(true);
                 apiFetch
-                    .post('/pedido/', pedidoFaturado)
+                    .post('/pedido/', aux)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -190,7 +198,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             title: data.data.titulo,
                         });
                         setpedidoFaturado(emptyPedidoFaturado)
-                    })
+                        setPrazoEmDias('')
+                                        })
                     .catch((error) => {
                         console.log(error)
                         showNotification({
@@ -201,6 +210,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     })
                     .finally(() => {
                         setLoading(false);
+                       
+                        
                     });
 
         // } else {
@@ -220,17 +231,24 @@ const RegisterModal = (props: IRegisterModalProps) => {
         getClientes();
         getOrdens();
         if (props.updatePedidoFaturado != undefined) {
-            setpedidoFaturado(props.updatePedidoFaturado);
+            var aux:PedidoFaturadoModel = {...pedidoFaturado}
+            pedidoFaturado.dataFaturamento =props.updatePedidoFaturado.dataFaturamento;
+            pedidoFaturado.dataVencimento = props.updatePedidoFaturado.dataVencimento;
+            pedidoFaturado.id =props.updatePedidoFaturado.id
+            pedidoFaturado.notaFiscal =props.updatePedidoFaturado.notaFiscal
+            pedidoFaturado.ordemDeCompra =props.updatePedidoFaturado.ordemDeCompra
+            pedidoFaturado.valorFaturado =props.updatePedidoFaturado.valorFaturado
+            getDays()
+
         } else {
             setpedidoFaturado(emptyPedidoFaturado);
+            setPrazoEmDias('')
         }
     }, [props.openModal]);
 
     useEffect(() => {
        getOrdens()
     }, [cliente,industria]);
-
-    useEffect(() => {}, [clientesName]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (pedidoFaturado != undefined) {
