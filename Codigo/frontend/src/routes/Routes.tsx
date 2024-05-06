@@ -4,6 +4,7 @@ import ProtectedRoute from '@/routes/ProtectedRoutes';
 import { DashboardLayout } from '@/layouts/DashboardLayout.tsx';
 import { Backdrop, CircularProgress } from '@mui/material';
 import OrdemDeCompraPage from '@/pages/ordemDeCompra/OrdemDeCompraPage.tsx';
+import PedidoFaturado from '@/pages/pedidosFaturados/PedidoFaturado';
 const OrdensDeCompraPage = React.lazy(() => import('@/pages/ordemDeCompra/OrdemDeCompraPage.tsx'));
 const FinanceiroPage = React.lazy(() => import('@/pages/financeiro/Financeiro.tsx'));
 const IndustriaPage = React.lazy(() => import('@/pages/industrias/IndustriaPage.tsx'));
@@ -65,11 +66,20 @@ const RouterRoutes = () => {
                                 </DashboardLayout>
                             }
                         />
-                        <Route
+                       
+                       <Route
                             path="/ordem"
                             element={
                                 <DashboardLayout>
                                     <OrdemDeCompraPage />
+                                </DashboardLayout>
+                            }
+                        />
+                         <Route
+                            path="/pedido"
+                            element={
+                                <DashboardLayout>
+                                    <PedidoFaturado />
                                 </DashboardLayout>
                             }
                         />

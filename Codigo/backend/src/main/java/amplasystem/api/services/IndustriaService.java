@@ -1,9 +1,8 @@
 package amplasystem.api.services;
 
 import amplasystem.api.models.Contato;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
 import amplasystem.api.enuns.TipoContato;
-import amplasystem.api.mappers.IndustriaMapper;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.Industria;
 import amplasystem.api.repositories.IndustriaRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
-import lombok.extern.log4j.Log4j2;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,13 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional
-@Log4j2
 @Service
 public class IndustriaService {
     @Autowired
@@ -46,6 +41,9 @@ public class IndustriaService {
 
     public List<Industria> getAllIndustriasWithOutFinanceiro() {
         return industriaRepository.findByFinanceiroIsNull().stream().toList();
+    }
+    public List<Industria> getAllIndustriasWithFinanceiro() {
+        return industriaRepository.findByFinanceiroIsNotNull().stream().toList();
     }
     public Industria getIndustriaById(Integer id) throws NoSuchElementException {
         Optional<Industria> industria = industriaRepository.findById(id);
@@ -166,8 +164,9 @@ public class IndustriaService {
                 Industrias.add(industria);
             }
 
+              
+            workbook.close();
             return Industrias;
-
         } catch (EncryptedDocumentException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -200,6 +199,10 @@ public class IndustriaService {
 
     public Industria findByNome(String nome) {
         return industriaRepository.findByNome(nome);
+    }
+
+    public Industria getById(Integer industriaId) {
+        return industriaRepository.findById(industriaId).get();
     }
 
 }

@@ -1,6 +1,10 @@
 package amplasystem.api.models;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import amplasystem.api.enuns.StatusOrder;
 import jakarta.persistence.Column;
@@ -35,6 +39,9 @@ public class OrdemDeCompra {
     @Column(name = "totalmente_faturada", nullable = false)
     private StatusOrder totalmenteFaturado;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "data_cadastro", nullable = false)
+    private LocalDate dataCadastro;
 
     @ManyToOne
     @JoinColumn(name = "industria_id")
@@ -44,6 +51,7 @@ public class OrdemDeCompra {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany(mappedBy = "ordemDeCompra")
     private List<PedidoFaturado> pedidoFaturados;
 
