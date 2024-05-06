@@ -9,4 +9,5 @@ export interface OrdemDeCompraModel {
     totalmenteFaturado: OrderStatus;
     industria: IndustriaModel;
     cliente: ClienteModel
+    dataCadastro:string
 }

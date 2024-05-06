@@ -108,7 +108,7 @@ const FinanceiroPage = () => {
                 accessorKey: 'comissao',
                 header: 'Comissão',
                 Cell: ({ cell }) => (
-                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}%</Typography> 
                 ),
             },
             {

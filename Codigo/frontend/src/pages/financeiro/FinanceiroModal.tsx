@@ -41,6 +41,10 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
             const { name, value } = e.target as HTMLInputElement;
             if (name == 'comissao') {
                 setNewFinanceiro({ ...newFinanceiro, [name]: parseFloat(value) });
+            }else if(name == 'industria') {
+                setNewFinanceiro({ ...newFinanceiro, [name]: industrias.find((element) => {
+                    return element.id = value
+                }) });
             } else {
                 setNewFinanceiro({ ...newFinanceiro, [name]: value });
             }
@@ -185,7 +189,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
         <InputLabel id="industria-label">Indústria</InputLabel>
         <Select
             labelId="industria-label"
-            value={newFinanceiro?.industria || ''}
+            value={newFinanceiro?.industria.id || ''}
             name="industria"
             onChange={handleChange}
         >

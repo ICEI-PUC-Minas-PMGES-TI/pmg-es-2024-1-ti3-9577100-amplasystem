@@ -132,22 +132,6 @@ export default function PrimarySearchAppBar(props: INavBar) {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                    <Badge badgeContent={mailQuantity} color="error">
-                        <MailIcon />
-                    </Badge>
-                </IconButton>
-                <p>Messages</p>
-            </MenuItem>
-            <MenuItem>
-                <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                    <Badge badgeContent={notificationQuantity} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                </IconButton>
-                <p>Notifications</p>
-            </MenuItem>
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     size="large"
@@ -164,7 +148,7 @@ export default function PrimarySearchAppBar(props: INavBar) {
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
             <AppBar position="sticky" color="secondary">
                 <Toolbar>
                     <IconButton
@@ -183,24 +167,11 @@ export default function PrimarySearchAppBar(props: INavBar) {
                         <span className="font-base font-sans">Ampla</span>
                         <span className="font-light font-sans tracking-tight">System</span>
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
-                    </Search>
+                   
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={mailQuantity} color="error">
-                                <MailIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                            <Badge badgeContent={notificationQuantity} color="error">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
+       
+
                         <IconButton
                             size="large"
                             edge="end"

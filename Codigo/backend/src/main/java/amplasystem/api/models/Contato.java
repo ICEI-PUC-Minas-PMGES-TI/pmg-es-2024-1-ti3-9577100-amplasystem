@@ -1,5 +1,7 @@
 package amplasystem.api.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import amplasystem.api.enuns.TipoContato;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -7,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class Contato {
     TipoContato tipoContato;
 
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "industria_id")
     private Industria industria;
 

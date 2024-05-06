@@ -1,10 +1,12 @@
 package amplasystem.api.controller;
 
 import amplasystem.api.services.OrdemDeCompraService;
-import amplasystem.api.services.exceptions.ObjectNotFoundException;
+import amplasystem.api.dtos.OrderFilterDto;
 import amplasystem.api.dtos.ResponseDTO;
+import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.OrdemDeCompra;
 
+import org.apache.poi.hpsf.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/ordem")
@@ -105,4 +108,23 @@ public class OrdemDeCompraController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
         }
     }
+
+    @PostMapping("/filtered")
+    public ResponseEntity<List<OrdemDeCompra>> getMethodName(@RequestBody OrderFilterDto param) {
+
+        if(param.clienteId() != null && param.industriaId() != null) {
+        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaIdAndClient(param));
+
+        } else if( param.clienteId() != null) {
+        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByClientaId(param.clienteId()));
+
+        }else if(param.industriaId() != null) {
+        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaId(param.industriaId()));
+
+        } 
+
+        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasWithWasNotFullPayment());
+
+    }
+    
 }

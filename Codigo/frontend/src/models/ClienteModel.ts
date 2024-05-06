@@ -5,7 +5,7 @@ export type ClienteModel = {
     id: number | null;
     cnpj: string;
     telefone?: string;
-    endereco?: EnderecoModel;
+    endereco: EnderecoModel;
     nomeFantasia: string;
     vendedor: VendedorModel;
 };

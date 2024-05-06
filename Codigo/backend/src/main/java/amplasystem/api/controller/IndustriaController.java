@@ -30,6 +30,12 @@ public class IndustriaController {
     public ResponseEntity<List<Industria>> getAllIndustriasWithOutFinanceiro() {
         return ResponseEntity.ok(industriaService.getAllIndustriasWithOutFinanceiro());
     }
+
+    @GetMapping(value = "/withFinanceiro")
+    @ResponseBody
+    public ResponseEntity<List<Industria>> getAllIndustriasWithFinanceiro() {
+        return ResponseEntity.ok(industriaService.getAllIndustriasWithFinanceiro());
+    }
     @GetMapping(value = "/{id}")
     @ResponseBody
     public ResponseEntity<?> getIndustriaById(@PathVariable Integer id) throws NoSuchElementException {
