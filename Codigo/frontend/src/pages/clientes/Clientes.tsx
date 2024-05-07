@@ -257,10 +257,7 @@ const ClientesPage = () => {
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
 
-    console.log("AQUIIIIIIIII")
-
     if (!validateForm(formJson)) {
-      console.log("GGGGGGGGGGGGGGGGGGGGGGGGGG")
       return;
     }
 
