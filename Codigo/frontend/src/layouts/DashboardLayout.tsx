@@ -23,7 +23,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         { id: 3, icon: <Factory />, label: 'Indústria', location: '/industrias' },
         { id: 5, icon: <AttachMoneyIcon />, label: 'Financeiro', location: '/financeiro' },
         { id: 6, icon: <NoteAddIcon />, label: 'Ordens', location: '/ordem' },
-        { id: 6, icon: <FactCheckIcon />, label: 'Pedido', location: '/pedido' },
+        { id: 7, icon: <FactCheckIcon />, label: 'Pedido', location: '/pedido' },
     ];
 
     return (
