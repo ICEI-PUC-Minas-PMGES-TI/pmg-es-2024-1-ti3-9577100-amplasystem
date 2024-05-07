@@ -54,6 +54,7 @@ const ClientesPage = () => {
   const [cnpjError, setCnpjError] = useState('');
   const [vendedorError, setVendedorError] = useState('');
   const [telefoneError, setTelefoneError] = useState('');
+  const [cepError, setCepError] = useState('');
 
   const cleanFormData = () => {
     setCliente(null);
@@ -68,6 +69,7 @@ const ClientesPage = () => {
     setCnpjError('');
     setVendedorError('');
     setTelefoneError('');
+    setCepError('');
   };
 
   const handleClickOpen = () => {
@@ -225,6 +227,26 @@ const ClientesPage = () => {
       hasError = true;
     } else {
       setVendedorError('');
+    }
+
+    if (!formJson.telefone) {
+      setTelefoneError('Telefone é obrigatório');
+      hasError = true;
+    } else if (formJson.telefone.length < 10) {
+      setTelefoneError('Telefone inválido');
+      hasError = true;
+    } else {
+      setTelefoneError('');
+    }
+
+    if (!formJson.cep) {
+      setCepError('CEP é obrigatório');
+      hasError = true;
+    } else if (formJson.cep.length < 8 || cepData.estado === '' || cepData.cidade === '' || cepData.bairro === '' || cepData.rua === '') {
+      setCepError('CEP inválido');
+      hasError = true;
+    } else {
+      setCepError('');
     }
 
     return !hasError;
@@ -483,7 +505,9 @@ const ClientesPage = () => {
             label="CEP"
             fullWidth
             defaultValue={cliente?.endereco?.cep}
-            onBlur={handleCepChange}
+            onChange={handleCepChange}
+            error={!!cepError}
+            helperText={cepError}
           />
           <TextField
             margin="normal"
@@ -533,7 +557,7 @@ const ClientesPage = () => {
             margin="normal"
             id="clienteComplemento"
             name="complemento"
-            label="Complemento"
+            label="Complemento (Opcional)"
             fullWidth
             defaultValue={cliente?.endereco?.complemento}
           />
