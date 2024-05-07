@@ -2,13 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import {
     Box,
-    Box,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
     Dialog,
     DialogActions,
     DialogContent,
@@ -20,10 +14,10 @@ import {
     MenuItem,
     Select,
     TextField,
-    TextField,
     Typography,
 } from '@mui/material';
 import {
+    MRT_Row,
     MaterialReactTable,
     useMaterialReactTable,
     type MRT_ColumnDef,
@@ -80,9 +74,7 @@ const ClientesPage = () => {
     const getVendedores = useCallback(async () => {
         try {
             const res = await apiFetch.get('/vendedor');
-            const res = await apiFetch.get('/vendedor');
             setVendedores(res.data);
-        } catch (err) {
         } catch (err) {
             console.log(err);
         }
@@ -113,9 +105,7 @@ const ClientesPage = () => {
     const getClientes = useCallback(async () => {
         try {
             const res = await apiFetch.get('/cliente/');
-            const res = await apiFetch.get('/cliente/');
             setClientes(res.data);
-        } catch (err) {
         } catch (err) {
             console.log(err);
         }
@@ -128,7 +118,6 @@ const ClientesPage = () => {
     const postCliente = async (novoCliente: ClienteFormModel) => {
         try {
             const res = await apiFetch.post('/cliente/', novoCliente);
-            const res = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
@@ -136,14 +125,12 @@ const ClientesPage = () => {
             });
             getClientes();
         } catch (err) {
-        } catch (err) {
             console.log(err);
         }
     };
 
     const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
         try {
-            const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
                 message: res.data.message,
@@ -161,14 +148,12 @@ const ClientesPage = () => {
     const deleteCliente = async (id: number) => {
         try {
             const res = await apiFetch.delete(`/cliente/${id}`);
-            const res = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,
                 type: 'success',
             });
             getClientes();
-        } catch (err) {
         } catch (err) {
             console.log(err);
         } finally {
@@ -225,11 +210,9 @@ const ClientesPage = () => {
             },
         ],
         []
-        []
     );
 
     const table = useMaterialReactTable({
-        columns,
         columns,
         data: clientes,
         muiSelectCheckboxProps: {

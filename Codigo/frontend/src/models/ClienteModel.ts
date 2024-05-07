@@ -20,5 +20,10 @@ export type ClienteFormModel = {
         id?: number | null;
         cidade?: string;
         rua?: string;
+        // cep?: string;
+        // estado?: string;
+        // bairro?: string;
+        // numero?: number;
+        // complemento?: string | null;
     };
 };
