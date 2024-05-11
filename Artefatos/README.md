@@ -46,6 +46,7 @@ A seguir estarão os documentos referentes as interfaces criadas
 - [Tela Pedido Faturado ](userInterface/pedidoFaturado/InterfaceDeUsuárioPedidoFaturado.pdf)
 
 - [Cadastrar/Atualizar Pedido Faturado ](userInterface/pedidoFaturado/InterfaceDeUsuárioCadastrar_EditarPedidoFaturado.pdf)
+
 ### Diagrama de caso de uso
 
 ![Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram.svg)
@@ -53,3 +54,7 @@ A seguir estarão os documentos referentes as interfaces criadas
 ### Diagrama de classes
 
 ![Diagrama de classes](DiagramaDeClasses/diagramaDeClassesUML.svg)
+
+### Caso de Uso descritivo
+
+[Importação de clientes](CasoDeUsoDescritivo/CasoDeUsoDescritivo_ImportDeCliente.pdf)
