@@ -58,3 +58,5 @@ A seguir estarão os documentos referentes as interfaces criadas
 ### Caso de Uso descritivo
 
 [Importação de clientes](CasoDeUsoDescritivo/CasoDeUsoDescritivo_ImportDeCliente.pdf)
+
+[Gerenciar Ordens de compra](CasoDeUsoDescritivo/CasoDeUsoDescritivo-GerenciarOrdemDeCompra.pdf)
