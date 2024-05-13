@@ -47,6 +47,8 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 - [Cadastrar/Atualizar Pedido Faturado ](userInterface/pedidoFaturado/InterfaceDeUsuárioCadastrar_EditarPedidoFaturado.pdf)
 
+- [Graficos ](userInterface/UI-Graficos.pdf)
+
 ### Diagrama de caso de uso
 
 ![Diagrama de caso de uso](UserCaseDiagram/userCaseDiagram.svg)
