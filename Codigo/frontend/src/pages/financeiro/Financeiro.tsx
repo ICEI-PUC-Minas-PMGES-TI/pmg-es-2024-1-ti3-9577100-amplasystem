@@ -211,7 +211,6 @@ const FinanceiroPage = () => {
                 </Button>
             </header>
             <MaterialReactTable table={table} />
-           
             <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} setTableLoading={setTableLoading} financeiro={financeiro}/>
         </React.Fragment>
     );

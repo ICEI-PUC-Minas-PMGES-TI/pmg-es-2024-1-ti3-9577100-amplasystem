@@ -41,8 +41,16 @@ const ClientesPage = () => {
     const [clientes, setClientes] = useState<ClienteModel[]>([]);
     const [tableLoading, setTableLoading] = useState(true);
     const [dialogState, setDialogState] = useState(false);
+    const [dialogState, setDialogState] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [vendedores, setVendedores] = useState<VendedorModel[]>([]);
+    const [cepData, setCepData] = useState({
+        cep: '',
+        estado: '',
+        cidade: '',
+        bairro: '',
+        rua: '',
+    });
     const [cepData, setCepData] = useState({
         cep: '',
         estado: '',
@@ -60,12 +68,20 @@ const ClientesPage = () => {
             bairro: '',
             rua: '',
         });
+        setCepData({
+            cep: '',
+            estado: '',
+            cidade: '',
+            bairro: '',
+            rua: '',
+        });
     };
 
     const handleClickOpen = () => {
         setDialogState(true);
         cleanFormData();
     };
+
 
     const handleClose = () => {
         setDialogState(false);
@@ -99,18 +115,31 @@ const ClientesPage = () => {
             } catch (error) {
                 console.error('Erro ao buscar o CEP', error);
             }
+    const handleCepChange = async (event: any) => {
+        const cepValue = event.target.value;
+        if (cepValue.length === 8) {
+            try {
+                const res = await axios.get(`https://viacep.com.br/ws/${cepValue}/json/`);
+                setCepData({
+                    cep: res.data.cep || '',
+                    estado: res.data.uf || '',
+                    cidade: res.data.localidade || '',
+                    bairro: res.data.bairro || '',
+                    rua: res.data.logradouro || '',
+                });
+            } catch (error) {
+                console.error('Erro ao buscar o CEP', error);
+            }
         }
+    };
     };
 
     const getClientes = useCallback(async () => {
-        setTableLoading(true);
         try {
             const res = await apiFetch.get('/cliente/');
             setClientes(res.data);
         } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     }, []);
 
@@ -119,7 +148,6 @@ const ClientesPage = () => {
     }, [getClientes]);
 
     const postCliente = async (novoCliente: ClienteFormModel) => {
-        setTableLoading(true);
         try {
             const res = await apiFetch.post('/cliente/', novoCliente);
             showNotification({
@@ -130,13 +158,11 @@ const ClientesPage = () => {
             getClientes();
         } catch (err) {
             console.log(err);
-        } finally {
-            setTableLoading(false);
         }
     };
 
+
     const updateCliente = async (clienteAtualizado: ClienteFormModel) => {
-        setTableLoading(true);
         try {
             const res = await apiFetch.put(`/cliente/${cliente?.id}`, clienteAtualizado);
             showNotification({
@@ -147,13 +173,15 @@ const ClientesPage = () => {
             getClientes();
         } catch (err) {
             console.log('Erro ao atualizar cliente', err);
+        } catch (err) {
+            console.log('Erro ao atualizar cliente', err);
         } finally {
             setTableLoading(false);
         }
     };
 
+
     const deleteCliente = async (id: number) => {
-        setTableLoading(true);
         try {
             const res = await apiFetch.delete(`/cliente/${id}`);
             showNotification({
@@ -169,12 +197,16 @@ const ClientesPage = () => {
         }
     };
 
+
     const columns = useMemo<MRT_ColumnDef<ClienteModel>[]>(
         () => [
             {
                 accessorKey: 'nomeFantasia',
                 header: 'Nome fantasia',
                 Cell: ({ cell }) => (
+                    <Typography variant="body1">
+                        {cell.getValue<string>() ?? 'Não informado'}
+                    </Typography>
                     <Typography variant="body1">
                         {cell.getValue<string>() ?? 'Não informado'}
                     </Typography>
@@ -187,12 +219,18 @@ const ClientesPage = () => {
                     <Typography variant="body1">
                         {cell.getValue<string>() ?? 'Não informado'}
                     </Typography>
+                    <Typography variant="body1">
+                        {cell.getValue<string>() ?? 'Não informado'}
+                    </Typography>
                 ),
             },
             {
                 accessorKey: 'telefone',
                 header: 'Telefone',
                 Cell: ({ cell }) => (
+                    <Typography variant="body1">
+                        {cell.getValue<string>() ?? 'Não informado'}
+                    </Typography>
                     <Typography variant="body1">
                         {cell.getValue<string>() ?? 'Não informado'}
                     </Typography>
@@ -205,6 +243,9 @@ const ClientesPage = () => {
                     <Typography variant="body1">
                         {cell.getValue<string>() ?? 'Não informado'}
                     </Typography>
+                    <Typography variant="body1">
+                        {cell.getValue<string>() ?? 'Não informado'}
+                    </Typography>
                 ),
             },
             {
@@ -214,20 +255,26 @@ const ClientesPage = () => {
                     <Typography variant="body1">
                         {cell.getValue<string>() ?? 'Não informado'}
                     </Typography>
+                    <Typography variant="body1">
+                        {cell.getValue<string>() ?? 'Não informado'}
+                    </Typography>
                 ),
             },
         ],
         []
+        []
     );
 
+
     const table = useMaterialReactTable({
+        columns,
         columns,
         data: clientes,
         muiSelectCheckboxProps: {
             color: 'secondary',
+            color: 'secondary',
         },
         enableRowActions: true,
-        columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
@@ -248,6 +295,7 @@ const ClientesPage = () => {
                     }}
                 >
                     <EditIcon />
+                    <EditIcon />
                 </IconButton>
                 <IconButton
                     color="error"
@@ -257,6 +305,7 @@ const ClientesPage = () => {
                         }
                     }}
                 >
+                    <DeleteIcon />
                     <DeleteIcon />
                 </IconButton>
             </Box>
@@ -321,9 +370,36 @@ const ClientesPage = () => {
                             Baixar modelo
                         </Link>
                     </Button>
+                <div className="flex gap-3">
+                    <Button
+                        color="warning"
+                        component="label"
+                        variant="outlined"
+                        startIcon={<CloudUploadIcon />}
+                    >
+                        Importar cliente
+                        <input
+                            type="file"
+                            hidden
+                            onChange={(event) => {
+                                if (
+                                    event.target.files != null &&
+                                    event.target.files[0] != null
+                                ) {
+                                    setFile(event.target.files[0]);
+                                }
+                            }}
+                        />
+                    </Button>
+                    <Button startIcon={<FileDownloadIcon />} color="warning">
+                        <Link to="/files/clientes.xlsx" target="_blank" download>
+                            Baixar modelo
+                        </Link>
+                    </Button>
                     <Button onClick={handleClickOpen} startIcon={<AddIcon sx={{ fontSize: 5 }} />}>
                         Adicionar cliente
                     </Button>
+                </div>
                 </div>
             </header>
 
@@ -340,9 +416,12 @@ const ClientesPage = () => {
                         const formJson = Object.fromEntries(formData.entries());
                         let _cliente: ClienteFormModel = {
                             id: cliente?.id ?? null,
-                            nomeFantasia: String(formJson?.nomeFantasia),
+                            nomeFantasia: String(formJson.nomeFantasia),
                             cnpj: String(formJson.cnpj),
                             idVendedor: formJson.idVendedor ? Number(formJson.idVendedor) : 0,
+                            telefone: formJson.telefone
+                                ? String(formJson.telefone)
+                                : undefined,
                             telefone: formJson.telefone
                                 ? String(formJson.telefone)
                                 : undefined,
@@ -369,13 +448,20 @@ const ClientesPage = () => {
                 <DialogTitle>
                     {cliente ? `Editar ${cliente.nomeFantasia}` : `Adicionar cliente`}
                 </DialogTitle>
+                <DialogTitle>
+                    {cliente ? `Editar ${cliente.nomeFantasia}` : `Adicionar cliente`}
+                </DialogTitle>
                 <DialogContent>
+                    <DialogContentText>
+                        {cliente ? 'Edição' : 'Criação'} de cliente
+                    </DialogContentText>
                     <DialogContentText>
                         {cliente ? 'Edição' : 'Criação'} de cliente
                     </DialogContentText>
                     <TextField
                         autoFocus
                         required
+                        margin="normal"
                         margin="normal"
                         id="clienteNomeFantasia"
                         name="nomeFantasia"
@@ -386,12 +472,14 @@ const ClientesPage = () => {
                     <TextField
                         required
                         margin="normal"
+                        margin="normal"
                         id="clienteCnpj"
                         name="cnpj"
                         label="CNPJ"
                         fullWidth
                         defaultValue={cliente?.cnpj}
                     />
+                    <FormControl fullWidth margin="normal">
                     <FormControl fullWidth margin="normal">
                         <InputLabel id="vendedorLabel">Vendedor</InputLabel>
                         <Select
@@ -409,6 +497,7 @@ const ClientesPage = () => {
                     </FormControl>
                     <TextField
                         margin="normal"
+                        margin="normal"
                         id="clienteTelefone"
                         name="telefone"
                         label="Telefone"
@@ -416,6 +505,25 @@ const ClientesPage = () => {
                         defaultValue={cliente?.telefone}
                     />
                     <TextField
+                        margin="normal"
+                        id="clienteCep"
+                        name="cep"
+                        label="CEP"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.cep}
+                        onBlur={handleCepChange}
+                    />
+                    <TextField
+                        margin="normal"
+                        id="clienteEstado"
+                        name="estado"
+                        label="Estado"
+                        fullWidth
+                        value={cepData.estado}
+                        InputProps={{ readOnly: true }}
+                    />
+                    <TextField
+                        margin="normal"
                         margin="normal"
                         id="clienteCep"
                         name="cep"
@@ -450,8 +558,21 @@ const ClientesPage = () => {
                         fullWidth
                         value={cepData.bairro}
                         InputProps={{ readOnly: true }}
+                        value={cepData.cidade}
+                        InputProps={{ readOnly: true }}
                     />
                     <TextField
+                        margin="normal"
+                        id="clienteBairro"
+                        name="bairro"
+                        label="Bairro"
+                        fullWidth
+                        value={cepData.bairro}
+                        InputProps={{ readOnly: true }}
+                    />
+                    <TextField
+                        margin="normal"
+                        id="clienteRua"
                         margin="normal"
                         id="clienteRua"
                         name="rua"
@@ -475,9 +596,30 @@ const ClientesPage = () => {
                         label="Complemento"
                         fullWidth
                         defaultValue={cliente?.endereco?.complemento}
+                        value={cepData.rua}
+                        InputProps={{ readOnly: true }}
+                    />
+                    <TextField
+                        margin="normal"
+                        id="clienteNumero"
+                        name="numero"
+                        label="Número"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.numero}
+                    />
+                    <TextField
+                        margin="normal"
+                        id="clienteComplemento"
+                        name="complemento"
+                        label="Complemento"
+                        fullWidth
+                        defaultValue={cliente?.endereco?.complemento}
                     />
                 </DialogContent>
                 <DialogActions>
+                    <Button variant="outlined" onClick={handleClose}>
+                        Cancelar
+                    </Button>
                     <Button variant="outlined" onClick={handleClose}>
                         Cancelar
                     </Button>

@@ -59,7 +59,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
         } else {
             setNewFinanceiro({
                 id: null,
-                comissao: '',
+                comissao: 0,
                 tipoFiscal: '',
                 tipoPagamento: '',
                 industria: '',
@@ -164,6 +164,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
         labelId="tipo-pagamento-label"
         value={newFinanceiro?.tipoPagamento || ''}
         name="tipoPagamento"
+        label="Tipo Pagamento"
         onChange={handleChange}
     >
         <MenuItem value="Faturamento">Faturamento</MenuItem>
@@ -177,6 +178,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
         labelId="tipo-fiscal-label"
         value={newFinanceiro?.tipoFiscal || ''}
         name="tipoFiscal"
+        label="Tipo Fiscal"
         onChange={handleChange}
     >
         <MenuItem value="REPRESENTACAO">Representação</MenuItem>
@@ -191,6 +193,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
             labelId="industria-label"
             value={newFinanceiro?.industria.id || ''}
             name="industria"
+            label="Indústria"
             onChange={handleChange}
         >
             {industrias.map((industria) => (
