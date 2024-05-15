@@ -157,7 +157,7 @@ public class ClienteService {
                     }
                 }
 
-                Endereco newEnderecoCliente = new Endereco(null, cidade, rua);
+                Endereco newEnderecoCliente = new Endereco();
                 Vendedor vendedor = vendedorService.findByEmail(email);
                 
                 Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone, newEnderecoCliente);
