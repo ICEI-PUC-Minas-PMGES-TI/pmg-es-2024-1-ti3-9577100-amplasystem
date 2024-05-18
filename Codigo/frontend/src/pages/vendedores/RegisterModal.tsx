@@ -123,7 +123,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             }}
         >
             <DialogTitle>
-                {props.updateVendedor == undefined ? 'Cadastrar vendedor' : 'Atualizar ' + props.updateVendedor.nome} 
+                {props.updateVendedor == undefined ? 'Cadastrar vendedor' : 'Atualizar ' + props.updateVendedor.nome}
             </DialogTitle>
             <DialogContent>
                 <CircularProgress
@@ -214,7 +214,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button onClick={ChangeModalState} variant="contained">
+                <Button onClick={ChangeModalState} variant="outlined">
                     Cancelar
                 </Button>
                 <Button onClick={onSubmit} variant="contained">

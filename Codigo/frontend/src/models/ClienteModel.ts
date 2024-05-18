@@ -16,14 +16,5 @@ export type ClienteFormModel = {
     cnpj: string;
     idVendedor: number;
     telefone?: string;
-    endereco?: {
-        id?: number | null;
-        cidade?: string;
-        rua?: string;
-        // cep?: string;
-        // estado?: string;
-        // bairro?: string;
-        // numero?: number;
-        // complemento?: string | null;
-    };
+    endereco?: EnderecoModel;
 };
