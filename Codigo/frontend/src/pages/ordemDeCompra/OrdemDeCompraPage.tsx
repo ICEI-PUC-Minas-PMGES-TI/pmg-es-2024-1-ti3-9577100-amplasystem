@@ -7,10 +7,10 @@ import { Box } from '@mui/system';
 import { Button, IconButton, Typography } from '@mui/material';
 import RegisterModal from './RegisterModal.tsx';
 import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-import { Delete, Edit, Email } from '@mui/icons-material';
+import { Delete, Edit, } from '@mui/icons-material';
 import { useNotification } from '@/hooks/useNotification';
 import { OrderStatus } from '@/enums/OrderStatus.ts';
-
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 const OrdemDeCompraPage = () => {
     const [data, setData] = useState<OrdemDeCompraModel[]>([]);
 
@@ -213,9 +213,18 @@ const OrdemDeCompraPage = () => {
         <>
             <header className="flex justify-between">
                 <Typography variant="h4">Ordens de Compra</Typography>
-                <Button variant="contained" onClick={ChangeModalState} endIcon={<AddIcon />}>
-                    Adicionar ordem de compra
-                </Button>
+               
+                <div className="flex gap-3">
+          <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
+                  window.location.href = 'http://localhost:8084/ordem/exportAll';
+          }}>
+            Exportar Ordens de Compra
+          </Button>
+        
+          <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
+            Adicionar ordem de compra
+          </Button>
+        </div>
             </header>
 
             <Box display={'grid'} className="my-5">

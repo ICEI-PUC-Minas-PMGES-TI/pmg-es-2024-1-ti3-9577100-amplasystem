@@ -19,7 +19,7 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "cep", nullable = false, length = 8)
+    @Column(name = "cep", nullable = false, length = 9)
     @NotBlank(message = "CEP no endereço é obrigatorio")
     private String cep;
 

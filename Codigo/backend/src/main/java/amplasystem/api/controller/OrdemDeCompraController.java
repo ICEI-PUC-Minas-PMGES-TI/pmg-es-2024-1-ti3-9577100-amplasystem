@@ -1,21 +1,27 @@
 package amplasystem.api.controller;
 
+import amplasystem.api.services.CreateExcelFileService;
 import amplasystem.api.services.OrdemDeCompraService;
+import amplasystem.api.dtos.ExportData;
 import amplasystem.api.dtos.OrderFilterDto;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.OrdemDeCompra;
 
-import org.apache.poi.hpsf.Array;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 
 @RestController
 @RequestMapping("/ordem")
@@ -23,6 +29,9 @@ public class OrdemDeCompraController {
 
     @Autowired
     OrdemDeCompraService ordemDeCompraService;
+
+    @Autowired
+    CreateExcelFileService excelFileService;
 
     @GetMapping(value = "/")
     @ResponseBody
@@ -112,19 +121,63 @@ public class OrdemDeCompraController {
     @PostMapping("/filtered")
     public ResponseEntity<List<OrdemDeCompra>> getMethodName(@RequestBody OrderFilterDto param) {
 
-        if(param.clienteId() != null && param.industriaId() != null) {
-        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaIdAndClient(param));
+        if (param.clienteId() != null && param.industriaId() != null) {
+            return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaIdAndClient(param));
 
-        } else if( param.clienteId() != null) {
-        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByClientaId(param.clienteId()));
+        } else if (param.clienteId() != null) {
+            return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByClientaId(param.clienteId()));
 
-        }else if(param.industriaId() != null) {
-        return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaId(param.industriaId()));
+        } else if (param.industriaId() != null) {
+            return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasByIndustriaId(param.industriaId()));
 
-        } 
+        }
 
         return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeComprasWithWasNotFullPayment());
 
     }
-    
+
+    @GetMapping("/exportByDate")
+    public ResponseEntity<FileSystemResource> getMethodName(@RequestBody ExportData body) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        LocalDate initialDate = LocalDate.parse(body.initialDate(), formatter);
+        LocalDate finalDate = LocalDate.parse(body.finalDate(), formatter);
+        excelFileService.createPurchaseOrderReport(ordemDeCompraService.getAllBettwoenDate(initialDate, finalDate));
+        File fileXlsx = new File("src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
+
+        if (!fileXlsx.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = fileXlsx.getName();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new FileSystemResource(fileXlsx));
+    }
+
+    @GetMapping("/exportAll")
+    public ResponseEntity<FileSystemResource> downloadArquivoXML() {
+        excelFileService.createPurchaseOrderReport(ordemDeCompraService.getAllOrdemDeCompras());
+        File fileXlsx = new File("src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
+
+        if (!fileXlsx.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = fileXlsx.getName();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new FileSystemResource(fileXlsx));
+    }
 }

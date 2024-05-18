@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Service
 public class ClienteService {
-    
+
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -44,7 +44,8 @@ public class ClienteService {
     private VendedorService vendedorService;
 
     public ResponseClienteDTO update(RequestClientDTO cliente) {
-        Vendedor vendedor = vendedorRepository.findById(cliente.getId()).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
+        Vendedor vendedor = vendedorRepository.findById(cliente.getId())
+                .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
         if (clienteRepository.existsByCnpj(cliente.getCnpj()))
             throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
 
@@ -53,8 +54,8 @@ public class ClienteService {
         if (!clienteRepository.existsById(cliente.getId()))
             throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
 
-
-        ResponseClienteDTO responseClienteDTO = ClienteMapper.toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
+        ResponseClienteDTO responseClienteDTO = ClienteMapper
+                .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
 
         // add vendedor
         responseClienteDTO.setVendedor(VendedorMapper.toDTO(vendedor));
@@ -65,23 +66,23 @@ public class ClienteService {
     }
 
     public Cliente getById(Integer id) throws ObjectNotFoundException {
-        return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
     }
 
     public ResponseClienteDTO save(RequestClientDTO requestClienteDTO) throws ObjectNotFoundException {
-        Vendedor vendedor = vendedorRepository.findById(requestClienteDTO.getIdVendedor()).orElseThrow(() -> new ObjectNotFoundException("Vendedor não encontrado na base de dados"));
+        Vendedor vendedor = vendedorRepository.findById(requestClienteDTO.getIdVendedor())
+                .orElseThrow(() -> new ObjectNotFoundException("Vendedor não encontrado na base de dados"));
 
         requestClienteDTO.setCnpj(requestClienteDTO.getCnpj().replaceAll("[^0-9]", ""));
 
         if (clienteRepository.existsByCnpj(requestClienteDTO.getCnpj()))
             throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
 
-
         Cliente cliente = ClienteMapper.toEntity(requestClienteDTO);
         cliente.setVendedor(vendedor);
 
         ResponseClienteDTO responseClienteDTO = ClienteMapper.toDTO(clienteRepository.save(cliente));
-
 
         return responseClienteDTO;
     }
@@ -113,29 +114,28 @@ public class ClienteService {
                 String cnpj = null;
                 String telefone = null;
                 String email = null;
-                String cidade = null; 
+                String cidade = null;
                 String rua = null;
 
                 while (celIterator.hasNext()) {
                     Cell cell = celIterator.next();
                     int columnIndex = cell.getColumnIndex();
 
-                    //cell.setCellFormula("Text");
+                    // cell.setCellFormula("Text");
 
-                    if(columnIndex != 2 && cell.getStringCellValue().isEmpty()) {
+                    if (columnIndex != 2 && cell.getStringCellValue().isEmpty()) {
                         throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
                     }
-
 
                     switch (columnIndex) {
                         case 0:
                             nomeFantasia = cell.getStringCellValue();
                             break;
-                    
+
                         case 1:
                             cnpj = cell.getStringCellValue();
                             break;
-                    
+
                         case 2:
                             telefone = cell.getStringCellValue();
                             break;
@@ -143,7 +143,7 @@ public class ClienteService {
                         case 3:
                             email = cell.getStringCellValue();
                             break;
-    
+
                         case 4:
                             cidade = cell.getStringCellValue();
                             break;
@@ -151,7 +151,7 @@ public class ClienteService {
                         case 5:
                             rua = cell.getStringCellValue();
                             break;
-                    
+
                         default:
                             break;
                     }
@@ -159,8 +159,9 @@ public class ClienteService {
 
                 Endereco newEnderecoCliente = new Endereco();
                 Vendedor vendedor = vendedorService.findByEmail(email);
-                
-                Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone, newEnderecoCliente);
+
+                Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
+                        newEnderecoCliente);
 
                 clientes.add(newCliente);
             }
@@ -172,15 +173,11 @@ public class ClienteService {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch(NullPointerException e) {
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        
 
     }
 
