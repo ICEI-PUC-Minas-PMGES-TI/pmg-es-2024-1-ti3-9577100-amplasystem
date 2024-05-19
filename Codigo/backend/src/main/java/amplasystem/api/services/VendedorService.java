@@ -111,7 +111,7 @@ public class VendedorService {
         Vendedor vendedor = this.getById(id);
         PasswordResetToken Basetoken = passwordTokenRepository.findByVendedor(vendedor);
         PasswordResetToken myToken;
-        if(Basetoken == null){
+        if (Basetoken == null) {
             myToken = new PasswordResetToken(token, vendedor);
         } else {
             myToken = Basetoken;
@@ -122,6 +122,6 @@ public class VendedorService {
     }
 
     public Vendedor findByEmail(String email) {
-        return vendedorRepository.findByEmail(email)
-;    }
+        return vendedorRepository.findByEmail(email);
+    }
 }
