@@ -216,12 +216,14 @@ const OrdemDeCompraPage = () => {
                
                 <div className="flex gap-3">
                 <Button  color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-                  window.location.href = 'http://localhost:8084/ordem/exportLastMonth';
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                  window.location.href = `http://localhost:8084/ordem/exportLastMonth?Authorization=Bearer ${user.token}`;
           }}>
             Exportar Ordens de Compra do mes anterior
           </Button>
           <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-                  window.location.href = 'http://localhost:8084/ordem/exportAll';
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+                  window.location.href = `http://localhost:8084/ordem/exportAll?Authorization=Bearer ${user.token}`;
           }}>
             Exportar todas as Ordens de Compra
           </Button>

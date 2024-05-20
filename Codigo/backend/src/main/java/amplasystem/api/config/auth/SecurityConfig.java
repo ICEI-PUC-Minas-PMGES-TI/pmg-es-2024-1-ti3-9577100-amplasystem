@@ -30,10 +30,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**", "/public/**", "/v3/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/auth/**", "/public/**", "/v3/api-docs", "/configuration/ui",
+                                "/swagger-resources/**", "/configuration/security", "/swagger-ui/**")
+                        .permitAll()
                         .requestMatchers("/admin/**").hasAuthority(Cargo.ADMINISTRADOR.name())
-                        .requestMatchers("/**").hasAnyAuthority(Cargo.ADMINISTRADOR.name(), Cargo.VENDEDOR.name())
-                )
+                        .requestMatchers("/**").hasAnyAuthority(Cargo.ADMINISTRADOR.name(), Cargo.VENDEDOR.name()))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
         return http.build();
@@ -45,7 +46,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
