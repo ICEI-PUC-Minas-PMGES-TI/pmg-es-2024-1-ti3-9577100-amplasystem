@@ -23,7 +23,7 @@ public class Cliente {
     @NotBlank(message = "Nome fantasia do cliente é obrigatorio")
     private String nomeFantasia;
 
-    @Column(name = "cnpj", nullable = false, columnDefinition = "CHAR(14)")
+    @Column(name = "cnpj", nullable = false, unique = true, columnDefinition = "CHAR(14)")
     @NotBlank(message = "CNPJ do vendedor obrigatorio")
     private String cnpj;
 

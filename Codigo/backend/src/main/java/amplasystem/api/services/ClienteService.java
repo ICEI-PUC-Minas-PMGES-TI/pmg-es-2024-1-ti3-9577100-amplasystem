@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 @Service
 public class ClienteService {
 
-
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -47,8 +46,7 @@ public class ClienteService {
     public ResponseClienteDTO update(RequestClientDTO cliente) {
         Vendedor vendedor = vendedorRepository.findById(cliente.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
-        Vendedor vendedor = vendedorRepository.findById(cliente.getId())
-                .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
+
         if (clienteRepository.existsByCnpj(cliente.getCnpj()))
             throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
 
@@ -57,8 +55,6 @@ public class ClienteService {
         if (!clienteRepository.existsById(cliente.getId()))
             throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
 
-        ResponseClienteDTO responseClienteDTO = ClienteMapper
-                .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
         ResponseClienteDTO responseClienteDTO = ClienteMapper
                 .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
 
@@ -78,7 +74,6 @@ public class ClienteService {
     public ResponseClienteDTO save(RequestClientDTO requestClienteDTO) throws ObjectNotFoundException {
         Vendedor vendedor = vendedorRepository.findById(requestClienteDTO.getIdVendedor())
                 .orElseThrow(() -> new ObjectNotFoundException("Vendedor não encontrado na base de dados"));
-
 
         requestClienteDTO.setCnpj(requestClienteDTO.getCnpj().replaceAll("[^0-9]", ""));
 
