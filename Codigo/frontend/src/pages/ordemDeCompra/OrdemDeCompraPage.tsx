@@ -215,10 +215,15 @@ const OrdemDeCompraPage = () => {
                 <Typography variant="h4">Ordens de Compra</Typography>
                
                 <div className="flex gap-3">
+                <Button  color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
+                  window.location.href = 'http://localhost:8084/ordem/exportLastMonth';
+          }}>
+            Exportar Ordens de Compra do mes anterior
+          </Button>
           <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
                   window.location.href = 'http://localhost:8084/ordem/exportAll';
           }}>
-            Exportar Ordens de Compra
+            Exportar todas as Ordens de Compra
           </Button>
         
           <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>

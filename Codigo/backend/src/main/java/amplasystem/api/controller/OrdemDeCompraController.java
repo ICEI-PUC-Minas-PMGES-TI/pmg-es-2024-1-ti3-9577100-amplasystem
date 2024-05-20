@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -136,14 +137,16 @@ public class OrdemDeCompraController {
 
     }
 
-    @GetMapping("/exportByDate")
-    public ResponseEntity<FileSystemResource> getMethodName(@RequestBody ExportData body) {
+    @GetMapping("/exportLastMonth")
+    public ResponseEntity<FileSystemResource> getMethodName() {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Obter data atual
+        LocalDate finalDate = LocalDate.now();
 
-        LocalDate initialDate = LocalDate.parse(body.initialDate(), formatter);
-        LocalDate finalDate = LocalDate.parse(body.finalDate(), formatter);
-        excelFileService.createPurchaseOrderReport(ordemDeCompraService.getAllBettwoenDate(initialDate, finalDate));
+        // Subtrair um mês da data atual
+        LocalDate initialDate = finalDate.minusMonths(1);
+        excelFileService.createPurchaseOrderReport(
+                ordemDeCompraService.getAllBettwoenDate((LocalDate) initialDate, finalDate));
         File fileXlsx = new File("src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
 
         if (!fileXlsx.exists()) {

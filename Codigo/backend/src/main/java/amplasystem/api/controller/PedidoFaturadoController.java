@@ -62,7 +62,7 @@ public class PedidoFaturadoController {
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
         }
-    }
+            }
 
     @PutMapping(value = "/")
     @ResponseBody
