@@ -29,7 +29,8 @@ public class OrdemDeCompraService {
 
     @Autowired
     private ClienteService clienteService;
-    @Autowired IndustriaService industriaService;
+    @Autowired
+    IndustriaService industriaService;
     @Autowired
     private Validator validator;
 
@@ -82,21 +83,30 @@ public class OrdemDeCompraService {
     public List<OrdemDeCompra> getAllOrdemDeComprasByIndustriaIdAndClient(OrderFilterDto param) {
         Cliente cliente = clienteService.getById(param.clienteId());
         Industria industria = industriaService.getById(param.industriaId());
-        return ordemDeCompraRepository.findAllByClienteAndIndustriaAndTotalmenteFaturadoIsNot(cliente, industria,StatusOrder.TOTALMENTEFATURADO);
+        return ordemDeCompraRepository.findAllByClienteAndIndustriaAndTotalmenteFaturadoIsNot(cliente, industria,
+                StatusOrder.TOTALMENTEFATURADO);
 
     }
 
     public List<OrdemDeCompra> getAllOrdemDeComprasByClientaId(Integer clienteId) {
         Cliente cliente = clienteService.getById(clienteId);
-        return ordemDeCompraRepository.findAllByClienteAndTotalmenteFaturadoIsNot(cliente,StatusOrder.TOTALMENTEFATURADO);
+        return ordemDeCompraRepository.findAllByClienteAndTotalmenteFaturadoIsNot(cliente,
+                StatusOrder.TOTALMENTEFATURADO);
     }
 
     public List<OrdemDeCompra> getAllOrdemDeComprasByIndustriaId(Integer industriaId) {
         Industria industria = industriaService.getById(industriaId);
-        return ordemDeCompraRepository.findAllByIndustriaAndTotalmenteFaturadoIsNot(industria,StatusOrder.TOTALMENTEFATURADO);
+        return ordemDeCompraRepository.findAllByIndustriaAndTotalmenteFaturadoIsNot(industria,
+                StatusOrder.TOTALMENTEFATURADO);
     }
+
     public List<OrdemDeCompra> getAllOrdemDeComprasWithWasNotFullPayment() {
         return ordemDeCompraRepository.findAllByTotalmenteFaturadoIsNot(StatusOrder.TOTALMENTEFATURADO);
 
     }
+
+    public List<OrdemDeCompra> getAllBettwoenDate(LocalDate initialDate, LocalDate finalDate) {
+        return ordemDeCompraRepository.findAllByDataCadastroBetween(initialDate, finalDate);
+    }
+
 }

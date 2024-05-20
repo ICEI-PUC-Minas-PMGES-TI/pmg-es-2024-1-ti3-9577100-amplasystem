@@ -35,6 +35,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     @Autowired
     private FinanceiroRepository financeiroRepository;
 
+    
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE");
