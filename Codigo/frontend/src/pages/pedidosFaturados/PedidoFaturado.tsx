@@ -11,6 +11,7 @@ import { useNotification } from '@/hooks/useNotification';
 import { PedidoFaturadoModel } from '@/models/PedidoFaturadoModel.ts';
 import { Cargo } from '@/enums/Cargo.ts';
 import { OrderStatus } from '@/enums/OrderStatus.ts';
+import DeleteConfirmationModal from '@/components/DeleteConfirmationModal.tsx';
 
 
 
@@ -22,6 +23,8 @@ const PedidoFaturado = () => {
     const [PedidoFaturado, setPedidoFaturado] = useState<PedidoFaturadoModel | undefined>(undefined);
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
+    const [openConfirmModal, setOpenConfirmModal] = useState(false);
+    const [id,setid] = useState<Number | null>(null);
     useEffect(() => {
         getPedidoFaturado();
         setReload(false);
@@ -180,8 +183,9 @@ const PedidoFaturado = () => {
                 <IconButton
                     color="error"
                     onClick={() => {
-                        if (row.original.id != null) {
-                            deletePedidoFaturado(row.original.id);
+                        if(row.original.id != null){
+                            setid(row.original.id)
+                            setOpenConfirmModal(true) 
                         }
                     }}
                 >
@@ -236,6 +240,9 @@ const PedidoFaturado = () => {
                         updatePedidoFaturado={PedidoFaturado}
                     />}
             </Box>
+                        
+                        
+            <DeleteConfirmationModal open={openConfirmModal} onClose={ () =>{setOpenConfirmModal(false)}} onConfirm={ () => {deletePedidoFaturado(id)}}/>
         </>
     );
 };

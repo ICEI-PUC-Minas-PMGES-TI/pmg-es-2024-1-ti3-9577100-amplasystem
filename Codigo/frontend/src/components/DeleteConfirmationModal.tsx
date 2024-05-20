@@ -20,7 +20,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ open,
                 <Button onClick={onClose} color="primary">
                     Cancelar
                 </Button>
-                <Button onClick={onConfirm} color="error">
+                <Button onClick={() => {onConfirm();onClose()}} color="error">
                     Excluir
                 </Button>
             </DialogActions>
