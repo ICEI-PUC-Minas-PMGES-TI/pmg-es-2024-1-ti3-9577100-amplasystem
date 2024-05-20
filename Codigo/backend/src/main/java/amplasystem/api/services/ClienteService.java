@@ -88,6 +88,18 @@ public class ClienteService {
         return responseClienteDTO;
     }
 
+    public ResponseClienteDTO save(Cliente client) throws ObjectNotFoundException {
+
+        client.setCnpj(client.getCnpj().replaceAll("[^0-9]", ""));
+
+        if (clienteRepository.existsByCnpj(client.getCnpj()))
+            throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
+
+        ResponseClienteDTO responseClienteDTO = ClienteMapper.toDTO(clienteRepository.save(client));
+
+        return responseClienteDTO;
+    }
+
     public void delete(Integer id) {
         clienteRepository.deleteById(id);
     }
@@ -195,10 +207,9 @@ public class ClienteService {
             Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
                     newEnderecoCliente);
 
-            clientes.add(newCliente);
+            this.save(newCliente);
         }
 
-        clienteRepository.saveAll(clientes);
         workbook.close();
 
     }
