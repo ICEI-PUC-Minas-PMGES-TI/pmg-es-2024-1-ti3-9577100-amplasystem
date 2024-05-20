@@ -14,7 +14,7 @@ Liste os artefatos produzidos, com suas localizações e descrição do conteúd
 
 - [Ata da 4° reunião ](./atas/Ata4reuniao.pdf) Ata da quarta reunião com o cliente realizada no dia 15 de abril de 2024
 - [Ata da 5° reunião ](./atas/Ata5reuniao.pdf) Ata da quinta reunião com o cliente realizada no dia 25 de abril de 2024
-
+- [Ata da 6° reunião ](./atas/Ata6reuniao.pdf) Ata da sexta reunião com o cliente realizada no dia 10 de maio de 2024
 ### Diagrama de Entidade e Relacionamento
 
 - [DER implementado ](./DER/DER.pdf)
@@ -47,7 +47,6 @@ A seguir estarão os documentos referentes as interfaces criadas
 
 - [Cadastrar/Atualizar Pedido Faturado ](userInterface/pedidoFaturado/InterfaceDeUsuárioCadastrar_EditarPedidoFaturado.pdf)
 
-- [Graficos ](userInterface/UI-Graficos.pdf)
 
 ### Diagrama de caso de uso
 
