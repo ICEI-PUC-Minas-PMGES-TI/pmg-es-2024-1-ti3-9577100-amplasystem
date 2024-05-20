@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class ClienteService {
 
+
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -46,6 +47,8 @@ public class ClienteService {
     public ResponseClienteDTO update(RequestClientDTO cliente) {
         Vendedor vendedor = vendedorRepository.findById(cliente.getId())
                 .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
+        Vendedor vendedor = vendedorRepository.findById(cliente.getId())
+                .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
         if (clienteRepository.existsByCnpj(cliente.getCnpj()))
             throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
 
@@ -54,6 +57,8 @@ public class ClienteService {
         if (!clienteRepository.existsById(cliente.getId()))
             throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
 
+        ResponseClienteDTO responseClienteDTO = ClienteMapper
+                .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
         ResponseClienteDTO responseClienteDTO = ClienteMapper
                 .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
 
@@ -73,6 +78,7 @@ public class ClienteService {
     public ResponseClienteDTO save(RequestClientDTO requestClienteDTO) throws ObjectNotFoundException {
         Vendedor vendedor = vendedorRepository.findById(requestClienteDTO.getIdVendedor())
                 .orElseThrow(() -> new ObjectNotFoundException("Vendedor não encontrado na base de dados"));
+
 
         requestClienteDTO.setCnpj(requestClienteDTO.getCnpj().replaceAll("[^0-9]", ""));
 
@@ -95,89 +101,110 @@ public class ClienteService {
         return clienteRepository.findAll().stream().map(ClienteMapper::toDTO).collect(Collectors.toList());
     }
 
-    public void createTable(MultipartFile file) {
+    public void createTable(MultipartFile file)
+            throws ObjectNotFoundException, NullPointerException, NumberFormatException, EncryptedDocumentException,
+            IOException {
         List<Cliente> clientes = new ArrayList<>();
 
-        try (InputStream inputStream = file.getInputStream()) {
-            Workbook workbook = new XSSFWorkbook(inputStream);
+        InputStream inputStream = file.getInputStream();
 
-            Sheet sheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = sheet.iterator();
+        Workbook workbook = new XSSFWorkbook(inputStream);
 
-            iterator.next();
+        Sheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> iterator = sheet.iterator();
 
-            while (iterator.hasNext()) {
-                Row row = iterator.next();
-                Iterator<Cell> celIterator = row.cellIterator();
+        iterator.next();
 
-                String nomeFantasia = null;
-                String cnpj = null;
-                String telefone = null;
-                String email = null;
-                String cidade = null;
-                String rua = null;
+        while (iterator.hasNext()) {
+            Row row = iterator.next();
+            Iterator<Cell> celIterator = row.cellIterator();
 
-                while (celIterator.hasNext()) {
-                    Cell cell = celIterator.next();
-                    int columnIndex = cell.getColumnIndex();
+            String nomeFantasia = null;
+            String cnpj = null;
+            String telefone = null;
+            String email = null;
+            String cep = null;
+            String estado = null;
+            String cidade = null;
+            String bairro = null;
+            String rua = null;
+            Integer numero = null;
+            String complemento = null;
 
-                    // cell.setCellFormula("Text");
+            while (celIterator.hasNext()) {
+                Cell cell = celIterator.next();
+                int columnIndex = cell.getColumnIndex();
 
-                    if (columnIndex != 2 && cell.getStringCellValue().isEmpty()) {
-                        throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
-                    }
-
-                    switch (columnIndex) {
-                        case 0:
-                            nomeFantasia = cell.getStringCellValue();
-                            break;
-
-                        case 1:
-                            cnpj = cell.getStringCellValue();
-                            break;
-
-                        case 2:
-                            telefone = cell.getStringCellValue();
-                            break;
-
-                        case 3:
-                            email = cell.getStringCellValue();
-                            break;
-
-                        case 4:
-                            cidade = cell.getStringCellValue();
-                            break;
-
-                        case 5:
-                            rua = cell.getStringCellValue();
-                            break;
-
-                        default:
-                            break;
-                    }
+                if (columnIndex != 2
+                        && (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null)) {
+                    throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
                 }
 
-                Endereco newEnderecoCliente = new Endereco();
-                Vendedor vendedor = vendedorService.findByEmail(email);
+                switch (columnIndex) {
+                    case 0:
+                        nomeFantasia = cell.getStringCellValue();
+                        break;
 
-                Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
-                        newEnderecoCliente);
+                    case 1:
+                        cnpj = cell.getStringCellValue();
+                        break;
 
-                clientes.add(newCliente);
+                    case 2:
+                        telefone = cell.getStringCellValue();
+                        break;
+
+                    case 3:
+                        email = cell.getStringCellValue();
+                        break;
+
+                    case 4:
+                        cep = cell.getStringCellValue();
+                        break;
+
+                    case 5:
+                        estado = cell.getStringCellValue();
+                        break;
+
+                    case 6:
+                        cidade = cell.getStringCellValue();
+                        break;
+
+                    case 7:
+                        bairro = cell.getStringCellValue();
+                        break;
+
+                    case 8:
+                        rua = cell.getStringCellValue();
+                        break;
+
+                    case 9:
+                        numero = Integer.parseInt(cell.getStringCellValue());
+                        break;
+
+                    case 10:
+                        complemento = cell.getStringCellValue();
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
-            clienteRepository.saveAll(clientes);
-            workbook.close();
+            Endereco newEnderecoCliente = new Endereco(null, cep, estado, cidade, bairro, rua, numero, complemento);
+            Vendedor vendedor = vendedorService.findByEmail(email);
 
-        } catch (EncryptedDocumentException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (vendedor == null) {
+                throw new ObjectNotFoundException("Vendedor de email " + email + " não encontrado");
+            }
+
+            Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
+                    newEnderecoCliente);
+
+            clientes.add(newCliente);
         }
+
+        clienteRepository.saveAll(clientes);
+        workbook.close();
 
     }
 

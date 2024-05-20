@@ -51,6 +51,7 @@ const ClientesPage = () => {
   const [vendedorError, setVendedorError] = useState('');
   const [telefoneError, setTelefoneError] = useState('');
   const [cepError, setCepError] = useState('');
+  const [reload, setReload] = useState(false)
 
   const cleanFormData = () => {
     setCliente(null);
@@ -90,6 +91,40 @@ const ClientesPage = () => {
     getVendedores();
   }, [getVendedores]);
 
+  useEffect(() => {
+    if(file != null) {
+      importCliente(file);
+    }
+
+  },[file])
+
+  const importCliente = async (file: File) => {
+    setFile(null)
+    const formData = new FormData();
+    formData.append('file', file);
+
+    let res : any;
+    try {  
+      console.log(1, 'INDO EXECUTAR ROTA')
+      res = await apiFetch.post('/cliente/tabela', formData);
+      setReload(true)
+      console.log(2, 'ROTA EXECUTADA')
+    }
+    catch(err) {
+      
+          console.log("ENTROU AQUI")
+          console.log(err)
+          if(err.response.status != 201) {
+            showNotification({
+              message: err.response.data,
+              type: 'error',
+              title: 'Erro na Importação',
+          });
+
+    }
+    }
+  }
+
   const handleCepChange = async (event: React.FocusEvent<HTMLInputElement>) => {
     const rawCepValue = event.target.value;
     const cepValue = rawCepValue.replace(/\D/g, ''); // Remove caracteres não numéricos
@@ -124,7 +159,8 @@ const ClientesPage = () => {
 
   useEffect(() => {
     getClientes();
-  }, [getClientes]);
+    setReload(false)
+  }, [getClientes, reload]);
 
   const postCliente = async (novoCliente: ClienteFormModel) => {
     setTableLoading(true);
@@ -407,7 +443,7 @@ const ClientesPage = () => {
             />
           </Button>
           <Button startIcon={<FileDownloadIcon />} color="warning">
-            <Link to="/files/clientes.xlsx" target="_blank" download>
+            <Link to="/files/modeloClientes.xlsx" target="_blank" download>
               Baixar modelo
             </Link>
           </Button>
