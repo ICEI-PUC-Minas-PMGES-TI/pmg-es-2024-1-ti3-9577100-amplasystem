@@ -55,4 +55,19 @@ public class OrdemDeCompra {
     @OneToMany(mappedBy = "ordemDeCompra")
     private List<PedidoFaturado> pedidoFaturados;
 
+    public Double getValueIsFaturado() {
+        Double result = 0.0;
+        for (PedidoFaturado iterable_element : getPedidoFaturados()) {
+            result = result + iterable_element.getValorFaturado();
+        }
+        return result;
+    }
+
+    public Double getValueIsFaturadoLiquid() {
+        Double result = 0.0;
+        for (PedidoFaturado iterable_element : getPedidoFaturados()) {
+            result = result + iterable_element.getValorLiquido();
+        }
+        return result;
+    }
 }

@@ -309,7 +309,7 @@ const ClientesPage = () => {
       telefone: formJson.telefone ? String(formJson.telefone) : undefined,
       endereco: {
         id: formJson.enderecoId ? Number(formJson.enderecoId) : null,
-        cep: String(formJson.cep),
+        cep: String(formJson.cep).replace("-",""),
         estado: String(formJson.estado),
         cidade: String(formJson.cidade),
         bairro: String(formJson.bairro),

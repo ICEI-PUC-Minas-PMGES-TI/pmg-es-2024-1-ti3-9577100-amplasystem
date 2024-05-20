@@ -1,5 +1,6 @@
 package amplasystem.api.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,7 @@ public interface OrdemDeCompraRepository extends JpaRepository<OrdemDeCompra, In
     List<OrdemDeCompra> findAllByIndustriaAndTotalmenteFaturadoIsNot(Industria industria,StatusOrder totalmenteFaturado);
 
     List<OrdemDeCompra> findAllByTotalmenteFaturadoIsNot(StatusOrder totalmentefaturado);
+
+    List<OrdemDeCompra> findAllByDataCadastroBetween(LocalDate initialDate, LocalDate finalDate);
     
 }
