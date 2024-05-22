@@ -9,10 +9,8 @@ import { MaterialReactTable, useMaterialReactTable, type MRT_ColumnDef } from 'm
 import { Delete, Edit } from '@mui/icons-material';
 import { useNotification } from '@/hooks/useNotification';
 import { PedidoFaturadoModel } from '@/models/PedidoFaturadoModel.ts';
-import { Cargo } from '@/enums/Cargo.ts';
-import { OrderStatus } from '@/enums/OrderStatus.ts';
 import DeleteConfirmationModal from '@/components/DeleteConfirmationModal.tsx';
-
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 
         
@@ -226,9 +224,24 @@ const PedidoFaturado = () => {
         <>
             <header className="flex justify-between">
                 <Typography variant="h4">Pedidos Faturados</Typography>
-                <Button variant="contained" onClick={ChangeModalState} endIcon={<AddIcon />}>
-                    Adicionar pedido
-                </Button>
+                <div className="flex gap-3">
+                <Button  color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                  window.location.href = `http://localhost:8084/pedido/exportLastMonth?Authorization=Bearer ${user.token}`;
+          }}>
+            Exportar pedidos do mes anterior
+          </Button>
+          <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+                  window.location.href = `http://localhost:8084/pedido/exportAll?Authorization=Bearer ${user.token}`;
+          }}>
+            Exportar todas as pedidos
+          </Button>
+        
+          <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
+            Adicionar pedido
+          </Button>
+        </div>
             </header>
 
             <Box display={'grid'} className="my-5">

@@ -2,11 +2,14 @@ package amplasystem.api.controller;
 
 import amplasystem.api.services.CreateExcelFileService;
 import amplasystem.api.services.OrdemDeCompraService;
-import amplasystem.api.dtos.ExportData;
 import amplasystem.api.dtos.OrderFilterDto;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.OrdemDeCompra;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -17,10 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -147,7 +147,10 @@ public class OrdemDeCompraController {
         LocalDate initialDate = finalDate.minusMonths(1);
         excelFileService.createPurchaseOrderReport(
                 ordemDeCompraService.getAllBettwoenDate((LocalDate) initialDate, finalDate));
-        File fileXlsx = new File("src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+                "purchaseOrdersReport.xlsx");
+
+        File fileXlsx = outputPath.toFile();
 
         if (!fileXlsx.exists()) {
             return ResponseEntity.notFound().build();
@@ -167,7 +170,10 @@ public class OrdemDeCompraController {
     @GetMapping("/exportAll")
     public ResponseEntity<FileSystemResource> downloadArquivoXML() {
         excelFileService.createPurchaseOrderReport(ordemDeCompraService.getAllOrdemDeCompras());
-        File fileXlsx = new File("src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+                "purchaseOrdersReport.xlsx");
+
+        File fileXlsx = outputPath.toFile();
 
         if (!fileXlsx.exists()) {
             return ResponseEntity.notFound().build();

@@ -1,16 +1,24 @@
 package amplasystem.api.controller;
 
+import amplasystem.api.services.CreateExcelFileService;
 import amplasystem.api.services.PedidoFaturadoService;
 import amplasystem.api.dtos.PedidoFaturadoWithFinanceiro;
 import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.PedidoFaturado;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +29,18 @@ public class PedidoFaturadoController {
     @Autowired
     PedidoFaturadoService pedidoFaturadoService;
 
+    @Autowired
+    CreateExcelFileService excelFileService;
+
     @GetMapping(value = "/")
     @ResponseBody
     public ResponseEntity<List<PedidoFaturadoWithFinanceiro>> getAllPedidoFaturadosWithFinanceiro() {
         return ResponseEntity.ok(pedidoFaturadoService.getAllPedidoFaturadosWithFinanceiro());
     }
-    
+
     @PostMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<?> save(@RequestBody PedidoFaturado PedidoFaturado) {
+    public ResponseEntity<ResponseDTO> save(@RequestBody PedidoFaturado PedidoFaturado) {
         try {
             PedidoFaturado newOrder = pedidoFaturadoService.save(PedidoFaturado);
             ResponseDTO responseDTO = new ResponseDTO("Pedido Faturado cadastrada com Sucesso",
@@ -46,7 +57,7 @@ public class PedidoFaturadoController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<ResponseDTO> delete(@PathVariable Integer id) {
         try {
             pedidoFaturadoService.delete(id);
             ResponseDTO responseDTO = new ResponseDTO("Pedido Faturado deletado",
@@ -61,20 +72,26 @@ public class PedidoFaturadoController {
             ResponseDTO errResponseDTO = new ResponseDTO("Pedido Faturado não encontrado",
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
+        } catch (IllegalStateException e) {
+            ResponseDTO responseDTO = new ResponseDTO("Pedido Faturado não atualizado",
+                    e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
         }
-            }
+    }
 
     @PutMapping(value = "/")
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody PedidoFaturado pedidoFaturado) {
+    public ResponseEntity<ResponseDTO> update(@RequestBody PedidoFaturado pedidoFaturado) {
         try {
             pedidoFaturadoService.update(pedidoFaturado);
             ResponseDTO responseDTO = new ResponseDTO("Pedido Faturado atualizado com Sucesso",
                     "Os dados do pedido agora estão atualizados no sistema");
             return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
         } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        }catch (ObjectNotFoundException e) {
+            ResponseDTO responseDTO = new ResponseDTO("Pedido Faturado não atualizado",
+                    e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
+        } catch (ObjectNotFoundException e) {
             ResponseDTO errResponseDTO = new ResponseDTO("Pedido Faturado não encontrado",
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
@@ -83,5 +100,56 @@ public class PedidoFaturadoController {
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errResponseDTO);
         }
+    }
+
+    @GetMapping("/exportLastMonth")
+    public ResponseEntity<FileSystemResource> getMethodName() {
+
+        // Obter data atual
+        LocalDate finalDate = LocalDate.now();
+
+        // Subtrair um mês da data atual
+        LocalDate initialDate = finalDate.minusMonths(1);
+        excelFileService.createSellingReport(
+                pedidoFaturadoService.getAllBettwoenDate((LocalDate) initialDate, finalDate));
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+                "sellingReport.xlsx");
+
+        File fileXlsx = outputPath.toFile();
+        if (!fileXlsx.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = fileXlsx.getName();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new FileSystemResource(fileXlsx));
+    }
+
+    @GetMapping("/exportAll")
+    public ResponseEntity<FileSystemResource> downloadArquivoXML() {
+        excelFileService.createSellingReport(pedidoFaturadoService.getAllPedidoFaturados());
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+                "sellingReport.xlsx");
+
+        File fileXlsx = outputPath.toFile();
+        if (!fileXlsx.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = fileXlsx.getName();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+        headers.setContentType(MediaType.APPLICATION_XML);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new FileSystemResource(fileXlsx));
     }
 }

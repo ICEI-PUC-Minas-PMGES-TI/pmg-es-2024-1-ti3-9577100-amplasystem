@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import amplasystem.api.models.PedidoFaturado;
 import amplasystem.api.models.OrdemDeCompra;
+
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -14,5 +16,6 @@ public interface PedidoFaturadoRepository extends JpaRepository<PedidoFaturado, 
      
     List<PedidoFaturado> getByOrdemDeCompra(OrdemDeCompra ordemDeCompra);
 
+    List<PedidoFaturado> findAllByDataVencimentoBetween(LocalDate initialDate, LocalDate finalDate);
 
 }

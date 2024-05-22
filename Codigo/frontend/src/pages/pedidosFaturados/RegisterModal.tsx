@@ -79,7 +79,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [ordens, setOrdens] = useState<OrdemDeCompraModel[]>([]);
     const [ordensCodigo, setOrdensCodigo] = useState<string[]>([]);
 
-    const [prazoEmDias, setPrazoEmDias] = useState<string>('');
+    const [prazoEmDias, setPrazoEmDias] = useState<string>("0");
 
     //filtro
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
@@ -162,7 +162,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     }
     function onSubmit() {
 
-    //    if(pedidoFaturado.cliente.nomeFantasia != '' && pedidoFaturado.industria.nome != '' && pedidoFaturado.codigoPedido != '' && pedidoFaturado.valor.toString() != null) {
+    if(pedidoFaturado && pedidoFaturado.dataFaturamento && pedidoFaturado.notaFiscal && pedidoFaturado.valorFaturado) {
             const aux = {...pedidoFaturado}
             const prazo = parseInt(prazoEmDias)
             console.log("AUX")
@@ -176,19 +176,55 @@ const RegisterModal = (props: IRegisterModalProps) => {
         
 
             aux.dataFaturamento = new Date(ano,mes,dia)
+            const year = aux.dataFaturamento.getFullYear();
+            const month = String(aux.dataFaturamento.getMonth() + 1).padStart(2, "0");
+            const day = String(aux.dataFaturamento.getDate()).padStart(2, "0");
 
-            aux.dataVencimento = new Date(ano,mes,dia)
-
-            aux.dataVencimento.setDate(aux.dataFaturamento.getDate() + (prazo == undefined ? 0 : prazo));
-
-            aux.dataFaturamento = aux.dataFaturamento.getFullYear() +"-"+(aux.dataFaturamento.getMonth() + 1)+"-"+aux.dataFaturamento.getDate()
-            aux.dataVencimento = aux.dataVencimento.getFullYear() +"-"+(aux.dataVencimento.getMonth()+1)+"-"+aux.dataVencimento.getDate()
+            if(prazoEmDias != ""){
+                aux.dataVencimento = new Date(ano,mes,dia)
+                aux.dataVencimento.setDate(aux.dataFaturamento.getDate() + (prazo == undefined ? 0 : prazo));
+                const year = aux.dataVencimento.getFullYear();
+                const month = String(aux.dataVencimento.getMonth() + 1).padStart(2, "0");
+                const day = String(aux.dataVencimento.getDate()).padStart(2, "0");
+                aux.dataVencimento = year +"-"+month+"-"+day
+                console.log(prazoEmDias)
+            } else {
+                aux.dataVencimento = year +"-"+month+"-"+day
+                        }
+            aux.dataFaturamento = year +"-"+month+"-"+day
 
             const valueStringFormatter = aux?.valorFaturado.toString();
             aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
 
                 setLoading(true);
-                apiFetch
+                if(props.updatePedidoFaturado){
+                    apiFetch
+                    .put('/pedido/', aux)
+                    .then((data) => {
+                        props.setReload(true);
+                        showNotification({
+                            message: data.data.message,
+                            type: 'success',
+                            title: data.data.titulo,
+                        });
+                        setpedidoFaturado({...emptyPedidoFaturado})
+                        setPrazoEmDias('')
+                                        })
+                    .catch((error) => {
+                        console.log(error)
+                        showNotification({
+                            message: error.response.data.message,
+                            type: 'error',
+                            title: error.response.data.titulo,
+                        });
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                       
+                        
+                    });
+                } else{
+                    apiFetch
                     .post('/pedido/', aux)
                     .then((data) => {
                         props.setReload(true);
@@ -213,14 +249,15 @@ const RegisterModal = (props: IRegisterModalProps) => {
                        
                         
                     });
+                }
 
-        // } else {
-        //     showNotification({
-        //         message: "Confira todos os campos ",
-        //         type: 'error',
-        //         title: "Campos nao preenchidos ",
-        //     });
-        // }
+        } else {
+            showNotification({
+                message: "Confira todos os campos ",
+                type: 'error',
+                title: "Campos nao preenchidos ",
+            });
+        }
     }
     function ChangeModalState() {
         props.setOpenModal(!open);

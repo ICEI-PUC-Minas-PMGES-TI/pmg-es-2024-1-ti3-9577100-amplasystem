@@ -1,5 +1,6 @@
 package amplasystem.api.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +39,29 @@ public class PedidoFaturadoService {
         return value;
     }
 
+    private double getAllValueWasPayment(OrdemDeCompra order, PedidoFaturado ignore) {
+        List<PedidoFaturado> pedidos = pedidoFaturadoRepository.getByOrdemDeCompra(order);
+        double value = 0;
+        for (PedidoFaturado pedidoFaturado : pedidos) {
+            if (pedidoFaturado.getId() != ignore.getId()) {
+                value += pedidoFaturado.getValorFaturado();
+            }
+        }
+        return value;
+    }
+
     private boolean checkOrderWasFullPayment(OrdemDeCompra order) {
         return getAllValueWasPayment(order) == order.getValor();
     }
 
     private boolean checkIfValueBiggerOrderRestValue(PedidoFaturado pedido) {
         return getAllValueWasPayment(pedido.getOrdemDeCompra()) + pedido.getValorFaturado() > pedido.getOrdemDeCompra()
+                .getValor();
+    }
+
+    private boolean checkIfValueBiggerOrderRestValueIgnoring(PedidoFaturado pedido) {
+        return getAllValueWasPayment(pedido.getOrdemDeCompra(), pedido) + pedido.getValorFaturado() > pedido
+                .getOrdemDeCompra()
                 .getValor();
     }
 
@@ -99,7 +117,15 @@ public class PedidoFaturadoService {
 
     public void update(PedidoFaturado pedido) {
         if (pedidoFaturadoRepository.existsById(pedido.getId())) {
-
+            if (ordemDeCompraService.checkIfOrderNotExist(pedido.getOrdemDeCompra())) {
+                throw new IllegalStateException("Ordem de compra não cadastrada.");
+            }
+            if (checkOrderWasFullPayment(pedido.getOrdemDeCompra())) {
+                throw new IllegalStateException("Ordem de compra ja foi totalmente faturada.");
+            }
+            if (checkIfValueBiggerOrderRestValueIgnoring(pedido)) {
+                throw new IllegalStateException("O valor ultrapassa o faltante para o faturada.");
+            }
             setValorLiquido(pedido);
 
             PedidoFaturado savPedidoFaturado = pedidoFaturadoRepository.save(pedido);
@@ -108,7 +134,7 @@ public class PedidoFaturadoService {
 
             if (checkOrderWasFullPayment(pedido.getOrdemDeCompra())) {
                 order.setTotalmenteFaturado(StatusOrder.TOTALMENTEFATURADO);
-            } else if (getAllValueWasPayment(order) > 0) {
+            } else if (getAllValueWasPayment(order, pedido) > 0) {
                 order.setTotalmenteFaturado(StatusOrder.PARCIALMENTEFATURADO);
             } else {
                 order.setTotalmenteFaturado(StatusOrder.NAOFATURADO);
@@ -131,5 +157,9 @@ public class PedidoFaturadoService {
             formattedList.add(PedidoFaturadoWithFinaceiroMapper.toDTO(pedidoFaturado, financeiro));
         }
         return formattedList;
+    }
+
+    public List<PedidoFaturado> getAllBettwoenDate(LocalDate initialDate, LocalDate finalDate) {
+        return pedidoFaturadoRepository.findAllByDataVencimentoBetween(initialDate, finalDate);
     }
 }
