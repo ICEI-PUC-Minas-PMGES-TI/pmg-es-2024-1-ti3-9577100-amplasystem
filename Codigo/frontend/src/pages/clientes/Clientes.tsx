@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+
 import axios from 'axios';
 import {
   Box,
@@ -111,19 +112,35 @@ const ClientesPage = () => {
       console.log(2, 'ROTA EXECUTADA')
     }
     catch(err) {
-      
-          console.log("ENTROU AQUI")
-          console.log(err)
-          if(err.response.status != 201) {
-            showNotification({
-              message: err.response.data,
-              type: 'error',
-              title: 'Erro na Importação',
-          });
-
-    }
+      console.log("ENTROU AQUI")
+      console.log(err)
+      if((err as any).response.status != 201) {
+        showNotification({
+          message: (err as any).response.data,
+          type: 'error',
+          title: 'Erro na Importação',
+        });
+      }
     }
   }
+
+  const maskCnpj = (cnpj: string) => {
+    if (!cnpj) return 'Não informado';
+    return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
+};
+
+const maskTelefone = (telefone: string) => {
+    if (!telefone) return 'Não informado';
+    // Verifica se é um celular (9 dígitos) ou telefone fixo (8 dígitos)
+    if (telefone.length === 11) {
+        return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+    } else if (telefone.length === 10) {
+        return telefone.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+    } else {
+        return 'Formato inválido';
+    }
+};
+  
 
   const handleCepChange = async (event: React.FocusEvent<HTMLInputElement>) => {
     const rawCepValue = event.target.value;
@@ -336,14 +353,14 @@ const ClientesPage = () => {
         accessorKey: 'cnpj',
         header: 'CNPJ',
         Cell: ({ cell }) => (
-          <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+          <Typography variant="body1">{maskCnpj(cell.getValue<string>())}</Typography>
         ),
       },
       {
         accessorKey: 'telefone',
         header: 'Telefone',
         Cell: ({ cell }) => (
-          <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}</Typography>
+          <Typography variant="body1">{maskTelefone(cell.getValue<string>())}</Typography>
         ),
       },
       {
