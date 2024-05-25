@@ -64,9 +64,9 @@
 //}
 
 package amplasystem.api.controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+
 import amplasystem.api.dtos.FinanceiroDTO;
+import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.models.Financeiro;
 import amplasystem.api.services.FinanceiroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +84,6 @@ public class FinanceiroController {
     @Autowired
     private FinanceiroService financeiroService;
 
-    
-
     @GetMapping("/")
     public ResponseEntity<List<FinanceiroDTO>> getAll() {
         List<FinanceiroDTO> financeiro = financeiroService.findAll();
@@ -99,20 +97,31 @@ public class FinanceiroController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Financeiro> createFinanceiro(@RequestBody FinanceiroDTO financeiro) {
+    public ResponseEntity<ResponseDTO> createFinanceiro(@RequestBody FinanceiroDTO financeiro) {
         Financeiro createdFinanceiro = financeiroService.create(financeiro);
-        return new ResponseEntity<>(createdFinanceiro, HttpStatus.CREATED);
+        ResponseDTO responseDTO = new ResponseDTO("Financeiro cadastrado com sucesso",
+                "O finaceiro da industria " + createdFinanceiro.getIndustria().getNome()
+                        + "  foi cadastrado do sistema");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FinanceiroDTO> update(@PathVariable Integer id, @RequestBody FinanceiroDTO financeiroDTO) {
+    public ResponseEntity<ResponseDTO> update(@PathVariable Integer id, @RequestBody FinanceiroDTO financeiroDTO) {
         FinanceiroDTO updateFinanceiro = financeiroService.update(id, financeiroDTO);
-        return new ResponseEntity<>(updateFinanceiro, HttpStatus.OK);
+        ResponseDTO responseDTO = new ResponseDTO("Financeiro atualizado com sucesso",
+                "O finaceiro da industria " + updateFinanceiro.getIndustria().getNome()
+                        + "  foi atualizado do sistema");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFinanceiro(@PathVariable Integer id) {
+    public ResponseEntity<ResponseDTO> deleteFinanceiro(@PathVariable Integer id) {
         financeiroService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        ResponseDTO responseDTO = new ResponseDTO("Financeiro deletado com sucesso",
+                "O Financeiro foi deletado do sistema");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }

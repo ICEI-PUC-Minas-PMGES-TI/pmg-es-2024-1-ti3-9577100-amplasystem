@@ -3,6 +3,7 @@ package amplasystem.api.controller;
 import amplasystem.api.dtos.cliente.ResponseClienteDTO;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.models.Cliente;
+import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.services.ClienteService;
 import jakarta.validation.Valid;
@@ -38,34 +39,55 @@ public class ClienteController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<ResponseClienteDTO> createCliente(@Valid @RequestBody RequestClientDTO requestClientDTO,
+    public ResponseEntity<ResponseDTO> createCliente(@Valid @RequestBody RequestClientDTO requestClientDTO,
             Errors errors) {
         if (errors.hasErrors()) {
-            throw new ValidationException(errors.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage).toList().get(0));
+            ResponseDTO responseDTO = new ResponseDTO("Erro ao cadastrar cliente",
+                    "Confira os dados informados");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
         }
 
         ResponseClienteDTO createdCliente = clienteService.save(requestClientDTO);
 
-        return new ResponseEntity<>(createdCliente, HttpStatus.CREATED);
+        ResponseDTO responseDTO = new ResponseDTO("Cliente cadastrado com sucesso",
+                "O cliente " + createdCliente.getNomeFantasia() + " agora esta cadastrado no sistema");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseClienteDTO> updateCliente(@Valid @RequestBody RequestClientDTO requestClientDTO,
+    public ResponseEntity<ResponseDTO> updateCliente(@PathVariable Integer id,
+            @Valid @RequestBody RequestClientDTO requestClientDTO,
             Errors errors) {
         if (errors.hasErrors()) {
-            throw new ValidationException(errors.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage).toList().get(0));
+            requestClientDTO.setId(id);
+            ResponseDTO responseDTO = new ResponseDTO("Erro ao atualizar cliente",
+                    "Confira os dados informados");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDTO);
         }
 
         ResponseClienteDTO updatedCliente = clienteService.update(requestClientDTO);
-        return new ResponseEntity<>(updatedCliente, HttpStatus.OK);
+        ResponseDTO responseDTO = new ResponseDTO("Cliente atualizado  com sucesso",
+                "O cliente " + updatedCliente.getNomeFantasia() + " foi atualizado no sistema");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCliente(@PathVariable Integer id) {
-        clienteService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ResponseDTO> deleteCliente(@PathVariable Integer id) {
+        try {
+            clienteService.delete(id);
+            ResponseDTO responseDTO = new ResponseDTO("Cliente deletado com sucesso",
+                    "O cliente foi deletado do sistema");
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+
+        } catch (Exception e) {
+            ResponseDTO responseDTO = new ResponseDTO("Erro ao deletar cliente",
+                    "O cliente não foi deletado do sistema, confira se existem pedidos faturados cadastrados \n "
+                            + e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        }
     }
 
     @PostMapping("/tabela")

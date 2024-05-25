@@ -35,7 +35,6 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     @Autowired
     private FinanceiroRepository financeiroRepository;
 
-    
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "PUT", "DELETE");
@@ -49,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer, CommandLineRunner {
     @Value("${spring.profiles.active:}")
     private String activeProfiles;
 
-    public void autoComplete() {    
+    public void autoComplete() {
         if (activeProfiles.trim().equals("test")) {
             Vendedor v1 = new Vendedor(null, "vendedor1@gmail.com", SecurityConfig.passwordEncoder().encode("senha"),
                     "Pedro Henrique", Cargo.ADMINISTRADOR, new ArrayList<>());

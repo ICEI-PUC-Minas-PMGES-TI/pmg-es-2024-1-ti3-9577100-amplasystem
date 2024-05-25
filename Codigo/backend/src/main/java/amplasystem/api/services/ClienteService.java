@@ -44,26 +44,22 @@ public class ClienteService {
     private VendedorService vendedorService;
 
     public ResponseClienteDTO update(RequestClientDTO cliente) {
-        Vendedor vendedor = vendedorRepository.findById(cliente.getId())
-                .orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrada na base de dados"));
-
-        if (clienteRepository.existsByCnpj(cliente.getCnpj()))
-            throw new EntityAlreadyExistsException("CNJP de cliente já cadastrado na base de dados");
+        Vendedor vendedor = vendedorRepository.findById(cliente.getIdVendedor())
+                .orElseThrow(() -> new ObjectNotFoundException("Vendedor não encontrada na base de dados"));
 
         cliente.setCnpj(cliente.getCnpj().replaceAll("[^0-9]", ""));
 
         if (!clienteRepository.existsById(cliente.getId()))
             throw new ObjectNotFoundException("Cliente não encontrada na base de dados");
 
-        ResponseClienteDTO responseClienteDTO = ClienteMapper
-                .toDTO(clienteRepository.save(ClienteMapper.toEntity(cliente)));
+        Cliente cliente2 = ClienteMapper.toEntity(cliente);
 
         // add vendedor
-        responseClienteDTO.setVendedor(VendedorMapper.toDTO(vendedor));
+        cliente2.setVendedor(vendedor);
         // add endereco
-        responseClienteDTO.setEndereco(cliente.getEndereco());
-
-        return responseClienteDTO;
+        cliente2.setEndereco(cliente.getEndereco());
+        clienteRepository.save(cliente2);
+        return ClienteMapper.toDTO(cliente2);
     }
 
     public Cliente getById(Integer id) throws ObjectNotFoundException {
