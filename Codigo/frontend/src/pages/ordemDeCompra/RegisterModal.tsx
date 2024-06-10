@@ -20,28 +20,39 @@ import { IndustriaModel } from '@/models/IndustriaModel';
 import { ClienteModel } from '@/models/ClienteModel';
 import { OrderStatus } from '@/enums/OrderStatus';
 import CurrencyInput from '@/components/CurrencyInput';
+import { Cargo } from '@/enums/Cargo';
 
-const emptyOrdemDeCompra:OrdemDeCompraModel =  {
+const emptyOrdemDeCompra: OrdemDeCompraModel = {
     id: null,
-    valor: '',
+    valor: 0,
     codigoPedido: '',
     totalmenteFaturado: OrderStatus.NAOFATURADO,
+    dataCadastro: '',
     industria: {
         id: null,
-        nome:"",
-        contatos:[]
+        nome: "",
+        contatos: []
     },
     cliente: {
         id: null,
         cnpj: '',
         telefone: "",
-        endereco: undefined,
+        endereco: {
+            id: null,
+            cep: '',
+            rua: '',
+            numero: 0,
+            bairro: '',
+            cidade: '',
+            estado: '',
+            complemento: null,
+        },
         nomeFantasia: '',
         vendedor: {
             id: null,
             nome: '',
             email: '',
-            cargo: '',
+            cargo: Cargo.VENDEDOR,
             token: undefined
         }
     }
@@ -60,7 +71,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [industriasName, setIndustriasName] = useState<string[]>([])
     const [clientes, setClientes] = useState<ClienteModel[]>([])
     const [clientesName, setClientesName] = useState<string[]>([])
-    const [ordemDeCompra, setOrdemDeCompra] =  useState<OrdemDeCompraModel>(emptyOrdemDeCompra);
+    const [ordemDeCompra, setOrdemDeCompra] = useState<OrdemDeCompraModel>(emptyOrdemDeCompra);
     const handleClose = () => {
         props.setOpenModal(false);
     };
@@ -69,7 +80,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             .get('/industria/withFinanceiro')
             .then((data) => {
                 setIndustrias(data.data);
-                const aux:string[] = [];
+                const aux: string[] = [];
                 industrias.forEach(element => {
                     aux.push(element.nome)
                     setIndustriasName(aux);
@@ -84,19 +95,19 @@ const RegisterModal = (props: IRegisterModalProps) => {
             .get('/cliente/')
             .then((data) => {
                 setClientes(data.data);
-                const aux:string[] = [];
+                const aux: string[] = [];
                 clientes.forEach(element => {
                     aux.push(element.nomeFantasia)
                     setClientesName(aux);
                 });
             })
             .catch((e) => {
-                console.log(e); 
+                console.log(e);
             });
     };
     function onSubmit() {
-    
-        if(ordemDeCompra.cliente.nomeFantasia != '' && ordemDeCompra.industria.nome != '' && ordemDeCompra.codigoPedido != '' && ordemDeCompra.valor.toString() != null) {
+
+        if (ordemDeCompra.cliente.nomeFantasia != '' && ordemDeCompra.industria.nome != '' && ordemDeCompra.codigoPedido != '' && ordemDeCompra.valor.toString() != null) {
             const aux = ordemDeCompra
             const valueStringFormatter = ordemDeCompra?.valor.toString();
             aux.valor = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
@@ -159,9 +170,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
     useEffect(() => {
         getIndustrias()
         getClientes()
-        if(props.updateOrdemDeCompra != undefined){
+        if (props.updateOrdemDeCompra != undefined) {
             setOrdemDeCompra(props.updateOrdemDeCompra)
-        } else{
+        } else {
             setOrdemDeCompra(emptyOrdemDeCompra)
         }
     }, [props.openModal]);
@@ -172,8 +183,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (ordemDeCompra != undefined) {
-            const {name, value} = e.target as HTMLInputElement;
-            setOrdemDeCompra({...ordemDeCompra, [name]: value});
+            const { name, value } = e.target as HTMLInputElement;
+            setOrdemDeCompra({ ...ordemDeCompra, [name]: value });
         }
     }
     return (
@@ -187,7 +198,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             }}
         >
             <DialogTitle>
-                {props.updateOrdemDeCompra == undefined ? 'Cadastrar Ordem de Compra' : 'Atualizar Ordem ' + ordemDeCompra.codigoPedido} 
+                {props.updateOrdemDeCompra == undefined ? 'Cadastrar Ordem de Compra' : 'Atualizar Ordem ' + ordemDeCompra.codigoPedido}
             </DialogTitle>
             <DialogContent>
                 <CircularProgress
@@ -198,7 +209,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         left: '45%',
                     }}
                 />
-        
+
                 <Typography
                     variant="subtitle1"
                     sx={{
@@ -215,23 +226,23 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     fullWidth
                     value={ordemDeCompra?.industria.nome}
                     renderInput={(params) => {
-                        return<TextField {...params} name='industria' placeholder="Industria" />
+                        return <TextField {...params} name='industria' placeholder="Industria" />
                     }}
                     onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
-                        const {value} = e.target as HTMLInputElement;
-                        const industria:IndustriaModel | undefined = industrias.find((element) => {
+                        const { value } = e.target as HTMLInputElement;
+                        const industria: IndustriaModel | undefined = industrias.find((element) => {
                             return element.nome == value
                         })
-                        if(industria != undefined){
+                        if (industria != undefined) {
                             console.log(ordemDeCompra)
-                            setOrdemDeCompra({...ordemDeCompra, [`industria`]:industria}); 
+                            setOrdemDeCompra({ ...ordemDeCompra, [`industria`]: industria });
                             console.log(industria)
                             console.log(ordemDeCompra)
-                        }  
+                        }
                     }}
-                
+
                 />
-                  <Typography
+                <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
@@ -248,16 +259,16 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     value={ordemDeCompra?.cliente.nomeFantasia}
                     renderInput={(params) => <TextField {...params} name="cliente" placeholder="Cliente" />}
                     onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
-                        const {value} = e.target as HTMLInputElement;
-                        const cliente:ClienteModel | undefined = clientes.find((element) => {
+                        const { value } = e.target as HTMLInputElement;
+                        const cliente: ClienteModel | undefined = clientes.find((element) => {
                             return element.nomeFantasia == value
                         })
-                        if(cliente != undefined){
-                            setOrdemDeCompra({...ordemDeCompra, [`cliente`]:cliente}); 
-                        }  
+                        if (cliente != undefined) {
+                            setOrdemDeCompra({ ...ordemDeCompra, [`cliente`]: cliente });
+                        }
                     }}
                 />
-                 <Typography
+                <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
@@ -275,7 +286,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     value={ordemDeCompra?.codigoPedido}
                     onChange={handleChange}
                 />
-                 <Typography
+                <Typography
                     variant="subtitle1"
                     sx={{
                         color: '#344054',
@@ -284,8 +295,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 >
                     Valor *
                 </Typography>
-            
-                <CurrencyInput placeholder="R$0.00"  type="text" value={ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined}/>
+
+                <CurrencyInput placeholder="R$0.00" type="text" value={ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={ChangeModalState} variant="contained">

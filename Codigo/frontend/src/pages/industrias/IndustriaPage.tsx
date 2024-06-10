@@ -249,7 +249,7 @@ const IndustriaPage = () => {
                         <Input.VisuallyHiddenInput
                             type="file"
                             onChange={(event) => {
-                                if (event.target.files[0] != null) {
+                                if (event.target.files && event.target.files[0] != null) {
                                     setFile(event.target.files[0]);
                                 }
                             }}
@@ -300,7 +300,7 @@ const IndustriaPage = () => {
                         <Input.VisuallyHiddenInput
                             type="file"
                             onChange={(event) => {
-                                if (event.target.files[0] != null) {
+                                if (event.target.files && event.target.files[0] != null) {
                                     setFile(event.target.files[0]);
                                 }
                             }}
