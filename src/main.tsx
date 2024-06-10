@@ -1,11 +1,27 @@
+// src/App.js
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { Add } from '@carbon/react/icons';
 import { GlobalTheme, Button } from '@carbon/react';
 
-import '@/styles/global.css';
+import './styles/globals.scss';
 
 const theme = 'g100'; // ← sua implementação, por exemplo, buscando configurações do usuário
+
+const Home = () => (
+  <div>
+    <h1>Home</h1>
+    <Add />
+    <Button>Home Button</Button>
+  </div>
+);
+
+const About = () => (
+  <div>
+    <h1>About</h1>
+    <Button>About Button</Button>
+  </div>
+);
 
 const App = () => {
   useEffect(() => {
@@ -14,14 +30,18 @@ const App = () => {
 
   return (
     <GlobalTheme theme={theme}>
-      <Add />
-      <Button>Teste</Button>
+      <Router>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Router>
     </GlobalTheme>
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+export default App;
