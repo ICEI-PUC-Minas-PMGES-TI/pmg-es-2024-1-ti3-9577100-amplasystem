@@ -13,8 +13,8 @@ import DeleteConfirmationModal from '@/components/DeleteConfirmationModal.tsx';
 import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 
 
-        
-        
+
+
 const PedidoFaturado = () => {
     const [data, setData] = useState<PedidoFaturadoModel[]>([]);
 
@@ -22,7 +22,7 @@ const PedidoFaturado = () => {
     const [open, setOpen] = useState(false);
     const [reload, setReload] = useState(true);
     const [openConfirmModal, setOpenConfirmModal] = useState(false);
-    const [id,setid] = useState<Number | null>(null);
+    const [id, setid] = useState<number | null>(null);
     useEffect(() => {
         getPedidoFaturado();
         setReload(false);
@@ -34,33 +34,33 @@ const PedidoFaturado = () => {
 
     const getPedidoFaturado = () => {
         apiFetch
-        .get('/pedido/')
-        .then((data) => {
-            console.log(data.data)
-            setData(data.data);
-        })
-        .catch((e) => {
-            console.log(e);
-        });
-    };
-    const deletePedidoFaturado = (id: number) => {
-        apiFetch
-        .delete(`/pedido/${id}`)
-        .then((data) => {
-            setReload(true);
-            console.log(data)
-            showNotification({
-                message: data.data.message,
-                title: data.data.titulo,
-                type: 'success',
+            .get('/pedido/')
+            .then((data) => {
+                console.log(data.data)
+                setData(data.data);
+            })
+            .catch((e) => {
+                console.log(e);
             });
-        })
-        .catch((e) => {
-            console.log(e);
-        });
+    };
+    const deletePedidoFaturado = (id: number | null) => {
+        apiFetch
+            .delete(`/pedido/${id}`)
+            .then((data) => {
+                setReload(true);
+                console.log(data)
+                showNotification({
+                    message: data.data.message,
+                    title: data.data.titulo,
+                    type: 'success',
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     };
     useEffect(() => {
-        if(!open){
+        if (!open) {
             setPedidoFaturado(undefined)
         }
     }, [open])
@@ -72,36 +72,36 @@ const PedidoFaturado = () => {
                 header: 'Ordem de compra',
             },
             {
-                accessorKey: 'notaFiscal', 
+                accessorKey: 'notaFiscal',
                 header: 'Nota fiscal',
             },
-            
+
             {
-                accessorKey: 'dataFaturamento', 
+                accessorKey: 'dataFaturamento',
                 header: 'data Faturamento',
                 Cell: ({ cell }) => {
                     const date = new Date(cell.getValue<string>())
                     return <Box
-                    component="span"
-                                       >
-                    {date.toLocaleDateString()}
-                  </Box>
+                        component="span"
+                    >
+                        {date.toLocaleDateString()}
+                    </Box>
                 }
             },
             {
-                accessorKey: 'financeiro.tipoPagamento', 
+                accessorKey: 'financeiro.tipoPagamento',
                 header: 'Tipo Pagamento',
             },
             {
-                accessorKey: 'dataVencimento', 
+                accessorKey: 'dataVencimento',
                 header: 'data Vencimento',
                 Cell: ({ cell }) => {
                     const date = new Date(cell.getValue<string>())
                     return <Box
-                    component="span"
-                                       >
-                    {date.toLocaleDateString()}
-                  </Box>
+                        component="span"
+                    >
+                        {date.toLocaleDateString()}
+                    </Box>
                 }
             },
             {
@@ -109,23 +109,23 @@ const PedidoFaturado = () => {
                 header: 'Valor Faturado',
                 Cell: ({ cell }) => (
                     <Box
-                      component="span"
-                                         >
-                      {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                       
-                      })}
+                        component="span"
+                    >
+                        {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+
+                        })}
                     </Box>)
             },
             {
-                accessorKey:'financeiro.comissao', 
+                accessorKey: 'financeiro.comissao',
                 header: 'Porcentagem de comissão ',
                 Cell: ({ cell }) => (
                     <Box
-                      component="span"
-                                         >
-                      {cell.getValue<string>()}%
+                        component="span"
+                    >
+                        {cell.getValue<string>()}%
                     </Box>)
             },
             {
@@ -133,16 +133,16 @@ const PedidoFaturado = () => {
                 header: 'Valor Liquido',
                 Cell: ({ cell }) => (
                     <Box
-                      component="span"
-                                         >
-                      {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                       
-                      })}
+                        component="span"
+                    >
+                        {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+
+                        })}
                     </Box>)
             },
-        
+
         ],
         [],
     );
@@ -181,9 +181,9 @@ const PedidoFaturado = () => {
                 <IconButton
                     color="error"
                     onClick={() => {
-                        if(row.original.id != null){
+                        if (row.original.id != null) {
                             setid(row.original.id)
-                            setOpenConfirmModal(true) 
+                            setOpenConfirmModal(true)
                         }
                     }}
                 >
@@ -225,37 +225,43 @@ const PedidoFaturado = () => {
             <header className="flex justify-between">
                 <Typography variant="h4">Pedidos Faturados</Typography>
                 <div className="flex gap-3">
-                <Button  color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-                    const user = JSON.parse(localStorage.getItem('user') || '{}');
-                  window.location.href = `http://localhost:8084/pedido/exportLastMonth?Authorization=Bearer ${user.token}`;
-          }}>
-            Exportar pedidos do mes anterior
-          </Button>
-          <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-                  window.location.href = `http://localhost:8084/pedido/exportAll?Authorization=Bearer ${user.token}`;
-          }}>
-            Exportar todas as pedidos
-          </Button>
-        
-          <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
-            Adicionar pedido
-          </Button>
-        </div>
+                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {
+                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                        window.location.href = `http://localhost:8084/pedido/exportLastMonth?Authorization=Bearer ${user.token}`;
+                    }}>
+                        Exportar pedidos do mes anterior
+                    </Button>
+                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {
+                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                        window.location.href = `http://localhost:8084/pedido/exportAll?Authorization=Bearer ${user.token}`;
+                    }}>
+                        Exportar todas as pedidos
+                    </Button>
+
+                    <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
+                        Adicionar pedido
+                    </Button>
+                </div>
             </header>
 
             <Box display={'grid'} className="my-5">
                 <MaterialReactTable table={table} />
-               {     <RegisterModal
-                        setOpenModal={setOpen}
-                        openModal={open}
-                        setReload={setReload}
-                        updatePedidoFaturado={PedidoFaturado}
-                    />}
+                {<RegisterModal
+                    setOpenModal={setOpen}
+                    openModal={open}
+                    setReload={setReload}
+                    updatePedidoFaturado={PedidoFaturado}
+                />}
             </Box>
-                        
-                        
-            <DeleteConfirmationModal open={openConfirmModal} onClose={ () =>{setOpenConfirmModal(false)}} onConfirm={ () => {deletePedidoFaturado(id)}}/>
+
+
+            <DeleteConfirmationModal open={openConfirmModal}
+                onClose={() => {
+                    setOpenConfirmModal(false)
+                }}
+                onConfirm={() => {
+                    deletePedidoFaturado(id)
+                }} />
         </>
     );
 };
