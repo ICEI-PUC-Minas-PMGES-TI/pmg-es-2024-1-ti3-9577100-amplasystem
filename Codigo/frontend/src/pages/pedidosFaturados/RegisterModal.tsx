@@ -30,13 +30,26 @@ const emptyPedidoFaturado: PedidoFaturadoModel = {
     id: null,
     dataFaturamento: '',
     dataVencimento: '',
-    valorFaturado: "",
+    valorFaturado: 0,
     notaFiscal: '',
+    valorLiquido: 0,
+    financeiro: {
+        id: null,
+        comissao: 0,
+        tipoPagamento: '',
+        tipoFiscal: '',
+        industria: {
+            id: null,
+            nome: '',
+            contatos: [],
+        },
+    },
     ordemDeCompra: {
         id: null,
         valor: 0,
         codigoPedido: '',
         totalmenteFaturado: OrderStatus.TOTALMENTEFATURADO,
+        dataCadastro: '',
         industria: {
             id: null,
             nome: '',
@@ -50,6 +63,11 @@ const emptyPedidoFaturado: PedidoFaturadoModel = {
                 id: null,
                 cidade: '',
                 rua: '',
+                cep: '',
+                estado: '',
+                bairro: '',
+                numero: -1,
+                complemento: '',
             },
             nomeFantasia: '',
             vendedor: {
@@ -85,12 +103,12 @@ const RegisterModal = (props: IRegisterModalProps) => {
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(undefined);
     const [cliente, setCliente] = useState<ClienteModel | undefined>(undefined);
 
-    const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>({...emptyPedidoFaturado});
+    const [pedidoFaturado, setpedidoFaturado] = useState<PedidoFaturadoModel>({ ...emptyPedidoFaturado });
     const handleClose = () => {
         props.setOpenModal(false);
         setIndustria(undefined)
         setCliente(undefined)
-        setpedidoFaturado({...emptyPedidoFaturado})
+        setpedidoFaturado({ ...emptyPedidoFaturado })
         setPrazoEmDias("")
     };
     const getIndustrias = () => {
@@ -125,80 +143,80 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     const getOrdens = () => {
         const filter = {
-            'clienteId':cliente?.id || null,
-            'industriaId':industria?.id || null
+            'clienteId': cliente?.id || null,
+            'industriaId': industria?.id || null
         }
         console.log(filter)
         apiFetch
-        .post('/ordem/filtered',filter)
-        .then((data) => {
-            setOrdens(data.data);
-            setOrdensCodigo([])
-            console.log(data.data)
-            const aux: string[] = [];
-            data.data.forEach((element) => {
-                aux.push(element.codigoPedido);
+            .post('/ordem/filtered', filter)
+            .then((data) => {
+                setOrdens(data.data);
+                setOrdensCodigo([])
+                console.log(data.data)
+                const aux: string[] = [];
+                data.data.forEach((element: OrdemDeCompraModel) => {
+                    aux.push(element.codigoPedido);
+                });
+                console.log(aux)
+                setOrdensCodigo(aux);
+            })
+            .catch((e) => {
+                console.log(e);
             });
-            console.log(aux)
-            setOrdensCodigo(aux);
-        })
-        .catch((e) => {
-            console.log(e);
-        });
     }
     const getDays = () => {
-        if(props.updatePedidoFaturado !== undefined){
-            const aux = {...pedidoFaturado}
+        if (props.updatePedidoFaturado !== undefined) {
+            const aux = { ...pedidoFaturado }
             const dataVencimento = new Date(props.updatePedidoFaturado.dataVencimento);
             const dataFaturamento = new Date(props.updatePedidoFaturado.dataFaturamento);
-            var diferencaEmMilissegundos = Math.abs(dataVencimento - dataFaturamento);
+            var diferencaEmMilissegundos = dataVencimento.getTime() - dataFaturamento.getTime();
             var diferencaEmDias = Math.ceil(diferencaEmMilissegundos / (1000 * 60 * 60 * 24));
             setPrazoEmDias(String(diferencaEmDias))
-    
-           
-             aux.dataFaturamento = dataFaturamento.toLocaleDateString()
-             setpedidoFaturado(aux)
+
+
+            aux.dataFaturamento = dataFaturamento.toLocaleDateString()
+            setpedidoFaturado(aux)
         }
     }
     function onSubmit() {
 
-    if(pedidoFaturado && pedidoFaturado.dataFaturamento && pedidoFaturado.notaFiscal && pedidoFaturado.valorFaturado) {
-            const aux = {...pedidoFaturado}
+        if (pedidoFaturado && pedidoFaturado.dataFaturamento && pedidoFaturado.notaFiscal && pedidoFaturado.valorFaturado) {
+            const aux = { ...pedidoFaturado }
             const prazo = parseInt(prazoEmDias)
             console.log("AUX")
             console.log(aux)
 
             var partes = String(aux.dataFaturamento).split('/');
-            var dia:number = Number(partes[0]) + 1;
-            var mes:number = Number(partes[1])- 1;
-            var ano:number = Number(partes[2]);
-        
-        
+            var dia: number = Number(partes[0]) + 1;
+            var mes: number = Number(partes[1]) - 1;
+            var ano: number = Number(partes[2]);
 
-            aux.dataFaturamento = new Date(ano,mes,dia)
+
+
+            aux.dataFaturamento = new Date(ano, mes, dia)
             const year = aux.dataFaturamento.getFullYear();
             const month = String(aux.dataFaturamento.getMonth() + 1).padStart(2, "0");
             const day = String(aux.dataFaturamento.getDate()).padStart(2, "0");
 
-            if(prazoEmDias != ""){
-                aux.dataVencimento = new Date(ano,mes,dia)
+            if (prazoEmDias != "") {
+                aux.dataVencimento = new Date(ano, mes, dia)
                 aux.dataVencimento.setDate(aux.dataFaturamento.getDate() + (prazo == undefined ? 0 : prazo));
                 const year = aux.dataVencimento.getFullYear();
                 const month = String(aux.dataVencimento.getMonth() + 1).padStart(2, "0");
                 const day = String(aux.dataVencimento.getDate()).padStart(2, "0");
-                aux.dataVencimento = year +"-"+month+"-"+day
+                aux.dataVencimento = year + "-" + month + "-" + day
                 console.log(prazoEmDias)
             } else {
-                aux.dataVencimento = year +"-"+month+"-"+day
-                        }
-            aux.dataFaturamento = year +"-"+month+"-"+day
+                aux.dataVencimento = year + "-" + month + "-" + day
+            }
+            aux.dataFaturamento = year + "-" + month + "-" + day
 
             const valueStringFormatter = aux?.valorFaturado.toString();
             aux.valorFaturado = parseFloat(valueStringFormatter.replace(/[^\d,.-]/g, '').replace(',', ''));
 
-                setLoading(true);
-                if(props.updatePedidoFaturado){
-                    apiFetch
+            setLoading(true);
+            if (props.updatePedidoFaturado) {
+                apiFetch
                     .put('/pedido/', aux)
                     .then((data) => {
                         props.setReload(true);
@@ -207,9 +225,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             type: 'success',
                             title: data.data.titulo,
                         });
-                        setpedidoFaturado({...emptyPedidoFaturado})
+                        setpedidoFaturado({ ...emptyPedidoFaturado })
                         setPrazoEmDias('')
-                                        })
+                    })
                     .catch((error) => {
                         console.log(error)
                         showNotification({
@@ -220,11 +238,11 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     })
                     .finally(() => {
                         setLoading(false);
-                       
-                        
+
+
                     });
-                } else{
-                    apiFetch
+            } else {
+                apiFetch
                     .post('/pedido/', aux)
                     .then((data) => {
                         props.setReload(true);
@@ -233,9 +251,9 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             type: 'success',
                             title: data.data.titulo,
                         });
-                        setpedidoFaturado({...emptyPedidoFaturado})
+                        setpedidoFaturado({ ...emptyPedidoFaturado })
                         setPrazoEmDias('')
-                                        })
+                    })
                     .catch((error) => {
                         console.log(error)
                         showNotification({
@@ -246,10 +264,10 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     })
                     .finally(() => {
                         setLoading(false);
-                       
-                        
+
+
                     });
-                }
+            }
 
         } else {
             showNotification({
@@ -264,7 +282,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
         props.setOpenModal(false);
         setIndustria(undefined)
         setCliente(undefined)
-        setpedidoFaturado({...emptyPedidoFaturado})
+        setpedidoFaturado({ ...emptyPedidoFaturado })
         setPrazoEmDias("")
         props.updatePedidoFaturado = undefined
     }
@@ -275,29 +293,29 @@ const RegisterModal = (props: IRegisterModalProps) => {
         console.log(props.updatePedidoFaturado)
         console.log(pedidoFaturado)
         if (props.updatePedidoFaturado != undefined) {
-            var aux:PedidoFaturadoModel = {...pedidoFaturado}
-            pedidoFaturado.dataFaturamento =props.updatePedidoFaturado.dataFaturamento;
+            var aux: PedidoFaturadoModel = { ...pedidoFaturado }
+            pedidoFaturado.dataFaturamento = props.updatePedidoFaturado.dataFaturamento;
             pedidoFaturado.dataVencimento = props.updatePedidoFaturado.dataVencimento;
-            pedidoFaturado.id =props.updatePedidoFaturado.id
-            pedidoFaturado.notaFiscal =props.updatePedidoFaturado.notaFiscal
-            pedidoFaturado.ordemDeCompra =props.updatePedidoFaturado.ordemDeCompra
-            pedidoFaturado.valorFaturado =props.updatePedidoFaturado.valorFaturado
+            pedidoFaturado.id = props.updatePedidoFaturado.id
+            pedidoFaturado.notaFiscal = props.updatePedidoFaturado.notaFiscal
+            pedidoFaturado.ordemDeCompra = props.updatePedidoFaturado.ordemDeCompra
+            pedidoFaturado.valorFaturado = props.updatePedidoFaturado.valorFaturado
             getDays()
 
         } else {
-            setpedidoFaturado({...emptyPedidoFaturado});
+            setpedidoFaturado({ ...emptyPedidoFaturado });
             setPrazoEmDias('')
         }
     }, [props.openModal]);
 
     useEffect(() => {
-       getOrdens()
-    }, [cliente,industria]);
+        getOrdens()
+    }, [cliente, industria]);
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (pedidoFaturado != undefined) {
             const { name, value } = e.target as HTMLInputElement;
-            console.log(name,value)
+            console.log(name, value)
             setpedidoFaturado({ ...pedidoFaturado, [name]: value });
         }
     }
@@ -325,7 +343,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         left: '45%',
                     }}
                 />
-                <div style={{border:"1px black solid", padding:"5px"}}>
+                <div style={{ border: "1px black solid", padding: "5px" }}>
                     <Typography
                         variant="subtitle1"
                         sx={{
@@ -335,7 +353,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     >
                         Filtros
                     </Typography>
-                    <div style={{ display: 'grid', gap: 20}}>
+                    <div style={{ display: 'grid', gap: 20 }}>
                         <div
                             style={{
                                 gridColumnStart: 1,
@@ -355,7 +373,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 disablePortal
                                 id="cargo"
                                 options={industriasName}
-                                value={pedidoFaturado?.ordemDeCompra.industria.nome  || industria?.nome}
+                                value={pedidoFaturado?.ordemDeCompra.industria.nome || industria?.nome}
                                 renderInput={(params) => {
                                     return <TextField {...params} name="industria" placeholder="Selecione uma Industria" />;
                                 }}
@@ -387,7 +405,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 disablePortal
                                 id="cliente"
                                 options={clientesName}
-                                value={pedidoFaturado.ordemDeCompra.cliente.nomeFantasia || cliente?.nomeFantasia} 
+                                value={pedidoFaturado.ordemDeCompra.cliente.nomeFantasia || cliente?.nomeFantasia}
                                 renderInput={(params) => <TextField {...params} name="cliente" placeholder="Selecione um Cliente" />}
                                 onSelect={(e: SyntheticEvent<HTMLDivElement, Event>) => {
                                     const { value } = e.target as HTMLInputElement;
@@ -398,7 +416,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                                 }}
                             />
                         </div>
-                       
+
                     </div>
                 </div>
 
@@ -424,8 +442,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
                             return element.codigoPedido == value;
                         });
                         if (ordem != undefined) {
-                           console.log(pedidoFaturado)
-                            setpedidoFaturado({...pedidoFaturado, [`ordemDeCompra`]:ordem}); 
+                            console.log(pedidoFaturado)
+                            setpedidoFaturado({ ...pedidoFaturado, [`ordemDeCompra`]: ordem });
                         }
                     }}
                 />
