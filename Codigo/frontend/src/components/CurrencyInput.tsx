@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
-interface MaskOptions {
+interface MaskOptions { 
     prefix?: string;
     suffix?: string;
     includeThousandsSeparator?: boolean;
@@ -21,6 +21,10 @@ interface CurrencyInputProps {
     inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
     inputMode?: 'numeric' | 'search' | 'none' | 'text' | 'tel' | 'url' | 'email' | 'decimal';
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: any;
+    type?: any;
+    value?: any;
+    name?:any;
 };
 
 const defaultMaskOptions = {
@@ -30,8 +34,8 @@ const defaultMaskOptions = {
     thousandsSeparatorSymbol: ' ',
     allowDecimal: true,
     decimalSymbol: '.',
-    decimalLimit: 2,
-    integerLimit: 100,
+    decimalLimit: 2, 
+    integerLimit: 100, 
     allowNegative: false,
     allowLeadingZeroes: false,
 };
