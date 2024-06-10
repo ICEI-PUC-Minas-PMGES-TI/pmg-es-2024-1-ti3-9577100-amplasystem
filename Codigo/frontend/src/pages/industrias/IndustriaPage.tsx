@@ -113,41 +113,45 @@ const IndustriaPage = () => {
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Comercial) {
+                    return row.contatos?.map((contato) => {
+                        if (contato.tipoContato === TipoContato.Comercial) {
                             return contato.nome;
                         }
-                    });
+                        return null;
+                    }).filter(Boolean).join(', ');
                 },
                 header: 'Contato Comercial',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Comercial) {
+                    return row.contatos?.map((contato) => {
+                        if (contato.tipoContato === TipoContato.Comercial) {
                             return contato.telefone;
                         }
-                    });
+                        return null;
+                    }).filter(Boolean).join(', ');
                 },
                 header: 'Telefone Comercial',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Financeiro) {
+                    return row.contatos?.map((contato) => {
+                        if (contato.tipoContato === TipoContato.Financeiro) {
                             return contato.nome;
                         }
-                    });
+                        return null;
+                    }).filter(Boolean).join(', ');
                 },
                 header: 'Contato Financeiro',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos.map((contato) => {
-                        if (contato.tipoContato == TipoContato.Financeiro) {
+                    return row.contatos?.map((contato) => {
+                        if (contato.tipoContato === TipoContato.Financeiro) {
                             return contato.telefone;
                         }
-                    });
+                        return null;
+                    }).filter(Boolean).join(', ');
                 },
                 header: 'Telefone Financeiro',
             },
@@ -159,21 +163,20 @@ const IndustriaPage = () => {
         columns,
         data,
         enableDensityToggle: false,
-        //passing the static object variant if no dynamic logic is needed
         muiSelectCheckboxProps: {
-            color: 'secondary', //makes all checkboxes use the secondary color
+            color: 'secondary',
         },
         enableRowActions: true,
         columnResizeMode: 'onChange',
         positionActionsColumn: 'last',
         displayColumnDefOptions: {
             'mrt-row-select': {
-                size: 50, //adjust the size of the row select column
-                grow: false, //new in v2.8 (default is false for this column)
+                size: 50,
+                grow: false,
             },
             'mrt-row-numbers': {
                 size: 40,
-                grow: true, //new in v2.8 (allow this column to grow to fill in remaining space)
+                grow: true,
             },
         },
         renderRowActions: ({ row }) => (

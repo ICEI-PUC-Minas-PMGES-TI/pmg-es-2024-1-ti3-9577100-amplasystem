@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+
+
+const API_URL = import.meta.env.VITE_BASE_URL;
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8084',
+    baseURL: 'https://amplasystem-ae692e9c9a30.herokuapp.com',
 });
 
 axiosInstance.interceptors.request.use(

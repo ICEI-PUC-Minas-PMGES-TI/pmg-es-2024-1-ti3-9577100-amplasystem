@@ -10,7 +10,7 @@ export default function Layout() {
             <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={true}/>
-          
+            
             }>
                 {/* TODO: add a custom load => <Suspense fallback={<></> <CustomLoader />}>*/}
                 <Outlet />

@@ -301,7 +301,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                         sx={ {borderRight: 1, borderColor: 'divider'} }
                     >
                         {contatoList.map((element, index) => {
-                           
+                            
                             return <Tab icon={element.props.preenchido ? <CheckIcon sx={{ p: 0, height:1}} /> : ""} iconPosition="start" label={element.key} {...a11yProps(index)} sx={{
                                 pt: 0,
                                 pb:0

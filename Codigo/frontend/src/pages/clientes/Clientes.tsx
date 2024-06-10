@@ -79,14 +79,32 @@ const ClientesPage = () => {
     setDialogState(false);
   };
 
+
+  //verificação do método map para saber se está retornando uma array; não sei se é necessário
+  // const getVendedores = useCallback(async () => {
+  //   try {
+  //     const res = await apiFetch.get('/vendedor');
+  //     console.log(res.data);
+  //     if (Array.isArray(res.data)) { 
+  //       setVendedores(res.data);
+  //     } else {
+  //       console.error('Response data is not an array:', res.data);
+  //     }
+  //   } catch (err) {
+  //     console.error('Error fetching vendedores:', err);
+  //   }
+  // }, []);
+
   const getVendedores = useCallback(async () => {
     try {
       const res = await apiFetch.get('/vendedor');
+      console.log(res.data); 
       setVendedores(res.data);
     } catch (err) {
       console.log(err);
     }
   }, []);
+  
 
   useEffect(() => {
     getVendedores();
