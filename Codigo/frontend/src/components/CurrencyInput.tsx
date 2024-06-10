@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MaskedInput from 'react-text-mask';
 import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
-interface MaskOptions { 
+interface MaskOptions {
     prefix?: string;
     suffix?: string;
     includeThousandsSeparator?: boolean;
@@ -30,8 +30,8 @@ const defaultMaskOptions = {
     thousandsSeparatorSymbol: ' ',
     allowDecimal: true,
     decimalSymbol: '.',
-    decimalLimit: 2, 
-    integerLimit: 100, 
+    decimalLimit: 2,
+    integerLimit: 100,
     allowNegative: false,
     allowLeadingZeroes: false,
 };

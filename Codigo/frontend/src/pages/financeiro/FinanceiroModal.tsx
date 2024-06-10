@@ -12,6 +12,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
+    SelectChangeEvent
 } from '@mui/material';
 import { FinanceiroModel } from 'models/FinanceiroModel';
 import { IndustriaModel } from '@/models/IndustriaModel';
@@ -36,15 +37,26 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
     const [loading, setLoading] = useState(false);
     const { showNotification } = useNotification();
 
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    // TODO: Criar funcao para select
+    // function handleChange(e: SelectChangeEvent<number>) {
+    function handleChange(e: any) {
         if (newFinanceiro != undefined) {
             const { name, value } = e.target as HTMLInputElement;
             if (name == 'comissao') {
                 setNewFinanceiro({ ...newFinanceiro, [name]: parseFloat(value) });
-            }else if(name == 'industria') {
-                setNewFinanceiro({ ...newFinanceiro, [name]: industrias.find((element) => {
-                    return element.id = value
-                }) });
+            } else if (name == 'industria') {
+
+                let industriaSetada = industrias.find((element) => {
+                    return element.id = Number(value)
+                });
+
+                setNewFinanceiro({
+                    ...newFinanceiro, [name]: industriaSetada || {
+                        id: null,
+                        nome: '',
+                        contatos: []
+                    }
+                });
             } else {
                 setNewFinanceiro({ ...newFinanceiro, [name]: value });
             }
@@ -62,17 +74,21 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
                 comissao: 0,
                 tipoFiscal: '',
                 tipoPagamento: '',
-                industria: '',
+                industria: {
+                    id: null,
+                    nome: '',
+                    contatos: []
+                }
             });
         }
     }, [financeiro]);
     document.getElementById('sistema-organico');
     const handleSave = async () => {
         if (
-            !newFinanceiro.comissao ||
-            !newFinanceiro.tipoPagamento ||
-            !newFinanceiro.tipoFiscal ||
-            !newFinanceiro.industria
+            !newFinanceiro?.comissao ||
+            !newFinanceiro?.tipoPagamento ||
+            !newFinanceiro?.tipoFiscal ||
+            !newFinanceiro?.industria
         ) {
             alert('Por favor, preencha todos os campos obrigatórios.');
             return;
@@ -149,61 +165,61 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
                     }}
                 />
                 <TextField
-    fullWidth
-    margin="normal"
-    label="Comissão"
-    name="comissao"
-    type="number"
-    value={newFinanceiro?.comissao || ''}
-    onChange={handleChange}
-/>
+                    fullWidth
+                    margin="normal"
+                    label="Comissão"
+                    name="comissao"
+                    type="number"
+                    value={newFinanceiro?.comissao || ''}
+                    onChange={handleChange}
+                />
 
-<FormControl fullWidth margin="normal">
-    <InputLabel id="tipo-pagamento-label">Tipo Pagamento</InputLabel>
-    <Select
-        labelId="tipo-pagamento-label"
-        value={newFinanceiro?.tipoPagamento || ''}
-        name="tipoPagamento"
-        label="Tipo Pagamento"
-        onChange={handleChange}
-    >
-        <MenuItem value="Faturamento">Faturamento</MenuItem>
-        <MenuItem value="Liquidez">Liquidez</MenuItem>
-    </Select>
-</FormControl>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="tipo-pagamento-label">Tipo Pagamento</InputLabel>
+                    <Select
+                        labelId="tipo-pagamento-label"
+                        value={newFinanceiro?.tipoPagamento || ''}
+                        name="tipoPagamento"
+                        label="Tipo Pagamento"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value="Faturamento">Faturamento</MenuItem>
+                        <MenuItem value="Liquidez">Liquidez</MenuItem>
+                    </Select>
+                </FormControl>
 
-<FormControl fullWidth margin="normal">
-    <InputLabel id="tipo-fiscal-label">Tipo Fiscal</InputLabel>
-    <Select
-        labelId="tipo-fiscal-label"
-        value={newFinanceiro?.tipoFiscal || ''}
-        name="tipoFiscal"
-        label="Tipo Fiscal"
-        onChange={handleChange}
-    >
-        <MenuItem value="REPRESENTACAO">Representação</MenuItem>
-        <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
-    </Select>
-</FormControl>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="tipo-fiscal-label">Tipo Fiscal</InputLabel>
+                    <Select
+                        labelId="tipo-fiscal-label"
+                        value={newFinanceiro?.tipoFiscal || ''}
+                        name="tipoFiscal"
+                        label="Tipo Fiscal"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value="REPRESENTACAO">Representação</MenuItem>
+                        <MenuItem value="PROMOCAO_DE_VENDAS">Promoção de Vendas</MenuItem>
+                    </Select>
+                </FormControl>
 
-{industrias && (
-    <FormControl fullWidth margin="normal">
-        <InputLabel id="industria-label">Indústria</InputLabel>
-        <Select
-            labelId="industria-label"
-            value={newFinanceiro?.industria.id || ''}
-            name="industria"
-            label="Indústria"
-            onChange={handleChange}
-        >
-            {industrias.map((industria) => (
-                <MenuItem key={industria.id} value={industria.id}>
-                    {industria.nome}
-                </MenuItem>
-            ))}
-        </Select>
-    </FormControl>
-)}
+                {industrias && (
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel id="industria-label">Indústria</InputLabel>
+                        <Select
+                            labelId="industria-label"
+                            value={newFinanceiro?.industria.id || ''}
+                            name="industria"
+                            label="Indústria"
+                            onChange={handleChange}
+                        >
+                            {industrias.map((industria) => (
+                                <MenuItem key={industria.id}>
+                                    {industria.nome}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
 
             </DialogContent>
             <DialogActions>
