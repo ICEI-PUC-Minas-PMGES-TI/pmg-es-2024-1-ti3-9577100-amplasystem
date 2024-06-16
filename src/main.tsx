@@ -1,27 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Add } from '@carbon/react/icons';
-import { Button } from '@carbon/react';
 
-import '@/styles/global.scss';
-
-const theme = 'g100'; // ← sua implementação, por exemplo, buscando configurações do usuário
-
-const App = () => {
-  useEffect(() => {
-    document.documentElement.dataset['carbonTheme'] = theme;
-  }, [theme]);
-
-  return (
-    <>
-      <Add />
-      <Button>Teste</Button>
-    </>
-  );
-};
+import '@fontsource/inter';
+import '@/styles/global.css';
+import App from '@/routes.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
