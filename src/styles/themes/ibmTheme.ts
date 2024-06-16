@@ -1,60 +1,68 @@
 import { extendTheme } from '@mui/joy/styles';
 
-const customThemec = extendTheme({
+const ibmTheme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
         primary: {
-          50: "#ffedd5",
-          100: "#fed7aa",
-          200: "#fdba74",
-          300: "#fb923c",
-          400: "#f97316",
-          500: "#ea580c",
-          600: "#c2410c",
-          700: "#9a3412",
-          800: "#7c2d12",
-          900: "#431407",
+          solidBg: '#0f62fe', // Primary button background
+          solidHoverBg: '#0353e9', // Primary button hover
+          solidActiveBg: '#002d9c', // Primary button active
+          softColor: '#0f62fe', // Soft text color
+          softBg: 'rgba(15, 98, 254, 0.1)', // Soft background color
+          softHoverBg: 'rgba(15, 98, 254, 0.2)', // Soft hover background
+          softActiveBg: 'rgba(15, 98, 254, 0.3)', // Soft active background
+          outlinedColor: '#0f62fe', // Outlined button text color
+          outlinedBorder: '#0f62fe', // Outlined button border color
+          outlinedHoverBg: 'rgba(15, 98, 254, 0.1)', // Outlined button hover background
+          outlinedHoverBorder: '#0353e9', // Outlined button hover border color
+          outlinedActiveBg: 'rgba(15, 98, 254, 0.2)', // Outlined button active background
         },
         neutral: {
-          50: "#fafafa",
-          100: "#f4f4f5",
-          200: "#e4e4e7",
-          300: "#d4d4d8",
-          400: "#a1a1aa",
-          500: "#71717a",
-          600: "#52525b",
-          700: "#3f3f46",
-          800: "#27272a",
-          900: "#18181b",
+          solidBg: '#393939', // Neutral button background
+          solidHoverBg: '#2b2b2b', // Neutral button hover
+          solidActiveBg: '#212121', // Neutral button active
+          softColor: '#393939', // Soft text color
+          softBg: 'rgba(57, 57, 57, 0.1)', // Soft background color
+          softHoverBg: 'rgba(57, 57, 57, 0.2)', // Soft hover background
+          softActiveBg: 'rgba(57, 57, 57, 0.3)', // Soft active background
+          outlinedColor: '#393939', // Outlined button text color
+          outlinedBorder: '#393939', // Outlined button border color
+          outlinedHoverBg: 'rgba(57, 57, 57, 0.1)', // Outlined button hover background
+          outlinedHoverBorder: '#2b2b2b', // Outlined button hover border color
+          outlinedActiveBg: 'rgba(57, 57, 57, 0.2)', // Outlined button active background
         },
       },
     },
     dark: {
       palette: {
         primary: {
-          50: "#fff7ed",
-          100: "#ffedd5",
-          200: "#fed7aa",
-          300: "#fdba74",
-          400: "#fb923c",
-          500: "#f97316",
-          600: "#ea580c",
-          700: "#c2410c",
-          800: "#9a3412",
-          900: "#7c2d12",
+          solidBg: '#4589ff',
+          solidHoverBg: '#1a73e8',
+          solidActiveBg: '#0043ce',
+          softColor: '#4589ff',
+          softBg: 'rgba(69, 137, 255, 0.1)',
+          softHoverBg: 'rgba(69, 137, 255, 0.2)',
+          softActiveBg: 'rgba(69, 137, 255, 0.3)',
+          outlinedColor: '#4589ff',
+          outlinedBorder: '#4589ff',
+          outlinedHoverBg: 'rgba(69, 137, 255, 0.1)',
+          outlinedHoverBorder: '#1a73e8',
+          outlinedActiveBg: 'rgba(69, 137, 255, 0.2)',
         },
         neutral: {
-          50: "#f4f4f5",
-          100: "#e4e4e7",
-          200: "#d4d4d8",
-          300: "#a1a1aa",
-          400: "#71717a",
-          500: "#52525b",
-          600: "#3f3f46",
-          700: "#27272a",
-          800: "#18181b",
-          900: "#09090b",
+          solidBg: '#6f6f6f',
+          solidHoverBg: '#525252',
+          solidActiveBg: '#393939',
+          softColor: '#6f6f6f',
+          softBg: 'rgba(111, 111, 111, 0.1)',
+          softHoverBg: 'rgba(111, 111, 111, 0.2)',
+          softActiveBg: 'rgba(111, 111, 111, 0.3)',
+          outlinedColor: '#6f6f6f',
+          outlinedBorder: '#6f6f6f',
+          outlinedHoverBg: 'rgba(111, 111, 111, 0.1)',
+          outlinedHoverBorder: '#525252',
+          outlinedActiveBg: 'rgba(111, 111, 111, 0.2)',
         },
       },
     },
@@ -199,4 +207,4 @@ const customThemec = extendTheme({
   },
 });
 
-export default customThemec;
+export default ibmTheme;
