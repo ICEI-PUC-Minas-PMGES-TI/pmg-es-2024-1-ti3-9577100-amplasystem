@@ -163,7 +163,7 @@ const Sidebar = () => {
           sx={{
             gap: 1,
             '--List-nestedInsetStart': '30px',
-            '--ListItem-radius': (theme) => theme.vars.radius.sm,
+            // '--ListItem-radius': (theme) => theme.vars.radius.xs,
           }}
         >
           <ListItem>

@@ -362,7 +362,7 @@ export default function OrderTable() {
       <Box
         className="SearchAndFilters-tabletUp"
         sx={{
-          borderRadius: 'sm',
+          borderRadius: '0px',
           py: 2,
           display: { xs: 'none', sm: 'flex' },
           flexWrap: 'wrap',
@@ -384,7 +384,7 @@ export default function OrderTable() {
         sx={{
           display: { xs: 'none', sm: 'initial' },
           width: '100%',
-          borderRadius: 'sm',
+          borderRadius: '0px',
           flexShrink: 1,
           overflow: 'auto',
           minHeight: 0,
@@ -523,7 +523,7 @@ export default function OrderTable() {
         sx={{
           pt: 2,
           gap: 1,
-          [`& .${iconButtonClasses.root}`]: { borderRadius: '50%' },
+          [`& .${iconButtonClasses.root}`]: { borderRadius: '0px' },
           display: {
             xs: 'none',
             md: 'flex',

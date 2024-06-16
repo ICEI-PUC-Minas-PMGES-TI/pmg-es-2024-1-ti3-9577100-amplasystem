@@ -404,10 +404,30 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.2.tgz#d8bae93ac8b815b2bd7a98078cf91e2724ef11e5"
   integrity sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==
 
+"@fontsource/ibm-plex-mono@^5.0.13":
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-mono/-/ibm-plex-mono-5.0.13.tgz#01e8284d21024635d0f7c7f5110171d0448d114e"
+  integrity sha512-gtlMmvk//2AgDEZDFsoL5z9mgW3ZZg/9SC7pIfDwNKp5DtZpApgqd1Fua3HhPwYRIHrT76IQ1tMTzQKLEGtJGQ==
+
+"@fontsource/ibm-plex-sans@^5.0.20":
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-sans/-/ibm-plex-sans-5.0.20.tgz#9d3c1903995b23b92809687d0652740d81ed7a97"
+  integrity sha512-svcHbwKbeDBoxrAVlcZ7hRbeAcMp7bXrftoJxTRKg8vedVqYfVGccEITrCwqD04PFbhmcqScOI34ClHTBxQFvQ==
+
+"@fontsource/ibm-plex-serif@^5.0.13":
+  version "5.0.13"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-serif/-/ibm-plex-serif-5.0.13.tgz#f7ad5b7a60153ee1617526a17a80b772b50a0273"
+  integrity sha512-cJsfWHOljHPbFTXjrsYiNw6i2YclggFb6YTueFiw9gr0AJxtgzizh2ObgrvVtEZlQt/UFmCetpK4W27UM5v5/A==
+
 "@fontsource/inter@^5.0.18":
   version "5.0.18"
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.0.18.tgz#eaddac790ee74b70932030f37ebaa9fc76decbd8"
   integrity sha512-YCsoYPTcs713sI7tLtxaPrIhXAXvEetGg5Ry02ivA8qUOb3fQHojbK/X9HLD5OOKvFUNR2Ynkwb1kR1hVKQHpw==
+
+"@fontsource/montserrat@^5.0.18":
+  version "5.0.18"
+  resolved "https://registry.yarnpkg.com/@fontsource/montserrat/-/montserrat-5.0.18.tgz#eecb91b0f0062787a0eee5622988ed21f2899a90"
+  integrity sha512-85JBs2rCdFK/VBdSb401e2lXk5gynVo2zi3Rh2Guem4WNtT2q52+V90o3KzjmajY3TPJvCZA/kI7R05ev7148g==
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
