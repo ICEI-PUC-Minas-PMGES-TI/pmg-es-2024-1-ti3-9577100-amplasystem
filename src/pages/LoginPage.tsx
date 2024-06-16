@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useColorScheme } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
-import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Checkbox from '@mui/joy/Checkbox';
@@ -54,7 +53,6 @@ function ColorSchemeToggle(props: IconButtonProps) {
 export default function JoySignInSideTemplate() {
   return (
     <>
-      <CssBaseline />
       <GlobalStyles
         styles={{
           ':root': {

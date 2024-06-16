@@ -11,7 +11,7 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import OrderTable from '@/components/OrderTable';
 import OrderList from '@/components/OrderList';
 
-const ClientesPage = () => {
+const VendedoresPage = () => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -39,7 +39,7 @@ const ClientesPage = () => {
             Dashboard
           </Link>
           <Typography color="primary" fontWeight={500} fontSize={12}>
-            Clientes
+            Vendedores
           </Typography>
         </Breadcrumbs>
       </Box>
@@ -55,7 +55,7 @@ const ClientesPage = () => {
         }}
       >
         <Typography level="h2" component="h1">
-          Clientes
+          Vendedores
         </Typography>
         <Button
           color="primary"
@@ -71,4 +71,4 @@ const ClientesPage = () => {
   );
 }
 
-export default ClientesPage;
+export default VendedoresPage;
