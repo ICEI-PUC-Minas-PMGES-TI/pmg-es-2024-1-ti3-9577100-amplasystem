@@ -46,7 +46,6 @@ const VendedoresPage = () => {
       <Box
         sx={{
           display: 'flex',
-          mb: 1,
           gap: 1,
           flexDirection: { xs: 'column', sm: 'row' },
           alignItems: { xs: 'start', sm: 'center' },

@@ -536,7 +536,7 @@ export default function OrderTable() {
           color="neutral"
           startDecorator={<KeyboardArrowLeftIcon />}
         >
-          Previous
+          Anterior
         </Button>
 
         <Box sx={{ flex: 1 }} />
@@ -558,7 +558,7 @@ export default function OrderTable() {
           color="neutral"
           endDecorator={<KeyboardArrowRightIcon />}
         >
-          Next
+          Próximo
         </Button>
       </Box>
     </React.Fragment>

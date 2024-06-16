@@ -83,9 +83,6 @@ const customThemec = extendTheme({
             fontSize: '14px',
             paddingInline: '18px',
           }),
-          '&:active': {
-            transform: 'translateY(1px)',
-          },
         }),
       },
     },
