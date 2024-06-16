@@ -33,12 +33,12 @@ const FinanceiroPage = () => {
 
     useEffect(() => {
         getIndustriasWithOutFinanceiro()
-         getFinanceiros();
+        getFinanceiros();
         setTableLoading(false)
-        
+
     }, [tableLoading]);
 
-     const getIndustriasWithOutFinanceiro = useCallback(async () => {
+    const getIndustriasWithOutFinanceiro = useCallback(async () => {
         try {
             const res = await apiFetch.get('/industria/withOutFinanceiro');
             setIndustriasSemCadastro(res.data);
@@ -50,7 +50,7 @@ const FinanceiroPage = () => {
     const getFinanceiros = useCallback(async () => {
         setTableLoading(true);
         try {
-            const res = await apiFetch.get('/financeiro/');
+            const res = await apiFetch.get('/financeiro');
             setFinanceiros(res.data);
         } catch (err) {
             console.log(err);
@@ -59,7 +59,7 @@ const FinanceiroPage = () => {
         }
     }, []);
 
-  
+
 
     const deleteFinanceiro = async (id: number) => {
         setTableLoading(true);
@@ -85,7 +85,7 @@ const FinanceiroPage = () => {
     //         [name]: value,
     //     });
     // };
-    
+
     // const handleSelectChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     //     const { name, value } = event.target;
     //     setFinanceiro({
@@ -108,7 +108,7 @@ const FinanceiroPage = () => {
                 accessorKey: 'comissao',
                 header: 'Comissão',
                 Cell: ({ cell }) => (
-                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}%</Typography> 
+                    <Typography variant="body1">{cell.getValue<string>() ?? 'Não informado'}%</Typography>
                 ),
             },
             {
@@ -211,7 +211,7 @@ const FinanceiroPage = () => {
                 </Button>
             </header>
             <MaterialReactTable table={table} />
-            <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} setTableLoading={setTableLoading} financeiro={financeiro}/>
+            <FinanceiroModal industrias={financeiro != null ? [financeiro.industria] : industriasSemCadastro} open={dialogState} onClose={handleClose} setTableLoading={setTableLoading} financeiro={financeiro} />
         </React.Fragment>
     );
 };

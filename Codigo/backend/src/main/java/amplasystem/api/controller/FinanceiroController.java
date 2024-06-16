@@ -84,7 +84,7 @@ public class FinanceiroController {
     @Autowired
     private FinanceiroService financeiroService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<FinanceiroDTO>> getAll() {
         List<FinanceiroDTO> financeiro = financeiroService.findAll();
         return new ResponseEntity<>(financeiro, HttpStatus.OK);
@@ -96,7 +96,7 @@ public class FinanceiroController {
         return new ResponseEntity<>(financeiro, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createFinanceiro(@RequestBody FinanceiroDTO financeiro) {
         Financeiro createdFinanceiro = financeiroService.create(financeiro);
         ResponseDTO responseDTO = new ResponseDTO("Financeiro cadastrado com sucesso",

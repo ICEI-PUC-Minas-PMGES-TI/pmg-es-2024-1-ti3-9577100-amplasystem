@@ -84,7 +84,6 @@ public class EmailSenderService {
         email.addInline("unlocked", clr2, PNG_MIME);
         email.addInline("linkedIn", clr3, PNG_MIME);
         mailSender.send(mimeMessage);
-
     }
 
     public void sendNewUser(String mail, String password)

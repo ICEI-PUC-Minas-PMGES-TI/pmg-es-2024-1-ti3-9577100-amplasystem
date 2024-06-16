@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.math3.analysis.function.Ceil;
+// import org.apache.commons.math3.analysis.function.Ceil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import amplasystem.api.models.OrdemDeCompra;
 import amplasystem.api.models.PedidoFaturado;
-import jakarta.mail.FolderClosedException;
+// import jakarta.mail.FolderClosedException;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -138,7 +138,7 @@ public class CreateExcelFileService {
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
-            // TODO: handle exception
+            // TODO: handle exception   
         } catch (IOException e) {
 
         }

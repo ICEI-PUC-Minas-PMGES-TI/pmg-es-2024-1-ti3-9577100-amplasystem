@@ -112,7 +112,7 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
     const postFinanceiro = async () => {
         try {
             console.log(newFinanceiro);
-            const res = await apiFetch.post('/financeiro/', newFinanceiro);
+            const res = await apiFetch.post('/financeiro', newFinanceiro);
             showNotification({
                 message: res.data.message,
                 title: res.data.titulo,

@@ -7,10 +7,10 @@ import amplasystem.api.dtos.ResponseDTO;
 import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.services.ClienteService;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
+// import jakarta.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+// import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -26,7 +26,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<ResponseClienteDTO>> getAllClientes() {
         List<ResponseClienteDTO> clientes = clienteService.getAllClientes();
         return new ResponseEntity<>(clientes, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class ClienteController {
         return new ResponseEntity<>(cliente, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ResponseDTO> createCliente(@Valid @RequestBody RequestClientDTO requestClientDTO,
             Errors errors) {
         if (errors.hasErrors()) {

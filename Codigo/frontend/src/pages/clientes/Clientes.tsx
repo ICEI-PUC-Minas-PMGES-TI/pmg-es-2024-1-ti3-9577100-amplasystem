@@ -98,41 +98,41 @@ const ClientesPage = () => {
   const getVendedores = useCallback(async () => {
     try {
       const res = await apiFetch.get('/vendedor');
-      console.log(res.data); 
+      console.log(res.data);
       setVendedores(res.data);
     } catch (err) {
       console.log(err);
     }
   }, []);
-  
+
 
   useEffect(() => {
     getVendedores();
   }, [getVendedores]);
 
   useEffect(() => {
-    if(file != null) {
+    if (file != null) {
       importCliente(file);
     }
 
-  },[file])
+  }, [file])
 
   const importCliente = async (file: File) => {
     setFile(null)
     const formData = new FormData();
     formData.append('file', file);
 
-    let res : any;
-    try {  
+    let res: any;
+    try {
       console.log(1, 'INDO EXECUTAR ROTA')
       res = await apiFetch.post('/cliente/tabela', formData);
       setReload(true)
       console.log(2, 'ROTA EXECUTADA')
     }
-    catch(err) {
+    catch (err) {
       console.log("ENTROU AQUI")
       console.log(err)
-      if((err as any).response.status != 201) {
+      if ((err as any).response.status != 201) {
         showNotification({
           message: (err as any).response.data,
           type: 'error',
@@ -145,20 +145,20 @@ const ClientesPage = () => {
   const maskCnpj = (cnpj: string) => {
     if (!cnpj) return 'Não informado';
     return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5");
-};
+  };
 
-const maskTelefone = (telefone: string) => {
+  const maskTelefone = (telefone: string) => {
     if (!telefone) return 'Não informado';
     // Verifica se é um celular (9 dígitos) ou telefone fixo (8 dígitos)
     if (telefone.length === 11) {
-        return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+      return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
     } else if (telefone.length === 10) {
-        return telefone.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+      return telefone.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
     } else {
-        return 'Formato inválido';
+      return 'Formato inválido';
     }
-};
-  
+  };
+
 
   const handleCepChange = async (event: React.FocusEvent<HTMLInputElement>) => {
     const rawCepValue = event.target.value;
@@ -183,7 +183,7 @@ const maskTelefone = (telefone: string) => {
   const getClientes = useCallback(async () => {
     setTableLoading(true);
     try {
-      const res = await apiFetch.get('/cliente/');
+      const res = await apiFetch.get('/cliente');
       setClientes(res.data);
     } catch (err) {
       console.log(err);
@@ -200,7 +200,7 @@ const maskTelefone = (telefone: string) => {
   const postCliente = async (novoCliente: ClienteFormModel) => {
     setTableLoading(true);
     try {
-      const res = await apiFetch.post('/cliente/', novoCliente);
+      const res = await apiFetch.post('/cliente', novoCliente);
       showNotification({
         message: res.data.message,
         title: res.data.titulo,
@@ -344,7 +344,7 @@ const maskTelefone = (telefone: string) => {
       telefone: formJson.telefone ? String(formJson.telefone) : undefined,
       endereco: {
         id: formJson.enderecoId ? Number(formJson.enderecoId) : null,
-        cep: String(formJson.cep).replace("-",""),
+        cep: String(formJson.cep).replace("-", ""),
         estado: String(formJson.estado),
         cidade: String(formJson.cidade),
         bairro: String(formJson.bairro),

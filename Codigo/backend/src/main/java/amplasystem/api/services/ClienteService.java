@@ -5,7 +5,7 @@ import amplasystem.api.dtos.cliente.RequestClientDTO;
 import amplasystem.api.exceptions.EntityAlreadyExistsException;
 import amplasystem.api.exceptions.ObjectNotFoundException;
 import amplasystem.api.mappers.ClienteMapper;
-import amplasystem.api.mappers.VendedorMapper;
+// import amplasystem.api.mappers.VendedorMapper;
 import amplasystem.api.models.Cliente;
 import amplasystem.api.models.Endereco;
 import amplasystem.api.models.Vendedor;
@@ -107,106 +107,106 @@ public class ClienteService {
     public void createTable(MultipartFile file)
             throws ObjectNotFoundException, NullPointerException, NumberFormatException, EncryptedDocumentException,
             IOException {
-        List<Cliente> clientes = new ArrayList<>();
+        // List<Cliente> clientes = new ArrayList<>();
 
         InputStream inputStream = file.getInputStream();
 
-        Workbook workbook = new XSSFWorkbook(inputStream);
+        try (Workbook workbook = new XSSFWorkbook(inputStream)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = sheet.iterator();
 
-        Sheet sheet = workbook.getSheetAt(0);
-        Iterator<Row> iterator = sheet.iterator();
+            iterator.next();
 
-        iterator.next();
+            while (iterator.hasNext()) {
+                Row row = iterator.next();
+                Iterator<Cell> celIterator = row.cellIterator();
 
-        while (iterator.hasNext()) {
-            Row row = iterator.next();
-            Iterator<Cell> celIterator = row.cellIterator();
+                String nomeFantasia = null;
+                String cnpj = null;
+                String telefone = null;
+                String email = null;
+                String cep = null;
+                String estado = null;
+                String cidade = null;
+                String bairro = null;
+                String rua = null;
+                Integer numero = null;
+                String complemento = null;
 
-            String nomeFantasia = null;
-            String cnpj = null;
-            String telefone = null;
-            String email = null;
-            String cep = null;
-            String estado = null;
-            String cidade = null;
-            String bairro = null;
-            String rua = null;
-            Integer numero = null;
-            String complemento = null;
+                while (celIterator.hasNext()) {
+                    Cell cell = celIterator.next();
+                    int columnIndex = cell.getColumnIndex();
 
-            while (celIterator.hasNext()) {
-                Cell cell = celIterator.next();
-                int columnIndex = cell.getColumnIndex();
+                    if (columnIndex != 2
+                            && (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null)) {
+                        throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
+                    }
 
-                if (columnIndex != 2
-                        && (cell.getStringCellValue().isEmpty() || cell.getStringCellValue() == null)) {
-                    throw new NullPointerException("Dados da tabela inconsistentes em: " + cell.getAddress());
+                    switch (columnIndex) {
+                        case 0:
+                            nomeFantasia = cell.getStringCellValue();
+                            break;
+
+                        case 1:
+                            cnpj = cell.getStringCellValue();
+                            break;
+
+                        case 2:
+                            telefone = cell.getStringCellValue();
+                            break;
+
+                        case 3:
+                            email = cell.getStringCellValue();
+                            break;
+
+                        case 4:
+                            cep = cell.getStringCellValue();
+                            break;
+
+                        case 5:
+                            estado = cell.getStringCellValue();
+                            break;
+
+                        case 6:
+                            cidade = cell.getStringCellValue();
+                            break;
+
+                        case 7:
+                            bairro = cell.getStringCellValue();
+                            break;
+
+                        case 8:
+                            rua = cell.getStringCellValue();
+                            break;
+
+                        case 9:
+                            numero = Integer.parseInt(cell.getStringCellValue());
+                            break;
+
+                        case 10:
+                            complemento = cell.getStringCellValue();
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
 
-                switch (columnIndex) {
-                    case 0:
-                        nomeFantasia = cell.getStringCellValue();
-                        break;
+                Endereco newEnderecoCliente = new Endereco(null, cep, estado, cidade, bairro, rua, numero, complemento);
+                Vendedor vendedor = vendedorService.findByEmail(email);
 
-                    case 1:
-                        cnpj = cell.getStringCellValue();
-                        break;
-
-                    case 2:
-                        telefone = cell.getStringCellValue();
-                        break;
-
-                    case 3:
-                        email = cell.getStringCellValue();
-                        break;
-
-                    case 4:
-                        cep = cell.getStringCellValue();
-                        break;
-
-                    case 5:
-                        estado = cell.getStringCellValue();
-                        break;
-
-                    case 6:
-                        cidade = cell.getStringCellValue();
-                        break;
-
-                    case 7:
-                        bairro = cell.getStringCellValue();
-                        break;
-
-                    case 8:
-                        rua = cell.getStringCellValue();
-                        break;
-
-                    case 9:
-                        numero = Integer.parseInt(cell.getStringCellValue());
-                        break;
-
-                    case 10:
-                        complemento = cell.getStringCellValue();
-                        break;
-
-                    default:
-                        break;
+                if (vendedor == null) {
+                    throw new ObjectNotFoundException("Vendedor de email " + email + " não encontrado");
                 }
+
+                Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
+                        newEnderecoCliente);
+
+                this.save(newCliente);
             }
 
-            Endereco newEnderecoCliente = new Endereco(null, cep, estado, cidade, bairro, rua, numero, complemento);
-            Vendedor vendedor = vendedorService.findByEmail(email);
-
-            if (vendedor == null) {
-                throw new ObjectNotFoundException("Vendedor de email " + email + " não encontrado");
-            }
-
-            Cliente newCliente = new Cliente(null, nomeFantasia, cnpj, vendedor, new ArrayList<>(), telefone,
-                    newEnderecoCliente);
-
-            this.save(newCliente);
+            workbook.close();
         }
-
-        workbook.close();
 
     }
 
