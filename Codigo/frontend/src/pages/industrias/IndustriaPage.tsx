@@ -55,7 +55,7 @@ const IndustriaPage = () => {
     };
     const getIndustrias = () => {
         apiFetch
-            .get('/industria/')
+            .get('/industria')
             .then((data) => {
                 setData(data.data);
             })

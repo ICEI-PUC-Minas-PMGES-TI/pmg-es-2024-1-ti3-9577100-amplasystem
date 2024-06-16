@@ -60,7 +60,7 @@ public class AuthController {
         }
     }
 
-    @PostMapping(value = "/changePassword")
+    @PostMapping("/changePassword")
     @ResponseBody
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         try {

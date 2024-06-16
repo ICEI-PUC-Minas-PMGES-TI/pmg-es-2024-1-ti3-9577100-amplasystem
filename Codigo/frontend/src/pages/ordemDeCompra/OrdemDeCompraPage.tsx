@@ -28,38 +28,38 @@ const OrdemDeCompraPage = () => {
 
     const getOrdensDeCompra = () => {
         apiFetch
-        .get('/ordem/')
-        .then((data) => {
-            console.log(data.data)
-            setData(data.data);
-        })
-        .catch((e) => {
-            console.log(e);
-        });
+            .get('/ordem')
+            .then((data) => {
+                console.log(data.data)
+                setData(data.data);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     };
     const deleteOrdemDeCompra = (id: number) => {
         apiFetch
-        .delete(`/ordem/${id}`)
-        .then((data) => {
-            setReload(true);
-            console.log(data)
-            showNotification({
-                message: data.data.message,
-                title: data.data.titulo,
-                type: 'success',
+            .delete(`/ordem/${id}`)
+            .then((data) => {
+                setReload(true);
+                console.log(data)
+                showNotification({
+                    message: data.data.message,
+                    title: data.data.titulo,
+                    type: 'success',
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+                showNotification({
+                    message: e.response.data.message,
+                    title: e.response.data.titulo,
+                    type: 'error',
+                });
             });
-        })
-        .catch((e) => {
-            console.log(e);
-            showNotification({
-                message: e.response.data.message,
-                title: e.response.data.titulo,
-                type: 'error',
-            });
-        });
     };
     useEffect(() => {
-        if(!open){
+        if (!open) {
             setOrdemDeCompra(undefined)
         }
     }, [open])
@@ -73,10 +73,10 @@ const OrdemDeCompraPage = () => {
                     const date = new Date(cell.getValue<string>())
                     console.log(date)
                     return <Box
-                    component="span"
-                                       >
-                    {date.toLocaleDateString()}
-                  </Box>
+                        component="span"
+                    >
+                        {date.toLocaleDateString()}
+                    </Box>
                 }
             },
             {
@@ -92,7 +92,7 @@ const OrdemDeCompraPage = () => {
                 header: 'Vendedor',
             },
             {
-                accessorKey: 'codigoPedido', 
+                accessorKey: 'codigoPedido',
                 header: 'Codigo do Pedido',
             },
             {
@@ -100,13 +100,13 @@ const OrdemDeCompraPage = () => {
                 header: 'Valor da Ordem',
                 Cell: ({ cell }) => (
                     <Box
-                      component="span"
-                                         >
-                      {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL',
-                       
-                      })}
+                        component="span"
+                    >
+                        {cell.getValue<number>()?.toLocaleString?.('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+
+                        })}
                     </Box>)
             },
             {
@@ -114,24 +114,24 @@ const OrdemDeCompraPage = () => {
                 header: 'Status ',
                 Cell: ({ cell }) => (
                     <Box
-                      component="span"
-                      sx={(theme) => ({
-                        backgroundColor:
-                          cell.getValue<OrderStatus>() == OrderStatus.TOTALMENTEFATURADO
-                              ? theme.palette.success.dark
-                              :  cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ?theme.palette.warning.dark :theme.palette.error.dark,
-                        borderRadius: '0.25rem',
-                        color: '#fff',
-                        p: '0.25rem',
-                      })}
+                        component="span"
+                        sx={(theme) => ({
+                            backgroundColor:
+                                cell.getValue<OrderStatus>() == OrderStatus.TOTALMENTEFATURADO
+                                    ? theme.palette.success.dark
+                                    : cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ? theme.palette.warning.dark : theme.palette.error.dark,
+                            borderRadius: '0.25rem',
+                            color: '#fff',
+                            p: '0.25rem',
+                        })}
                     >
-                    {   cell.getValue<OrderStatus>() == OrderStatus.TOTALMENTEFATURADO ? `Totalmente faturado` :  
-                        cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ? `Parcialmente faturado` : 
-                        `Nao faturado` 
-                    }
+                        {cell.getValue<OrderStatus>() == OrderStatus.TOTALMENTEFATURADO ? `Totalmente faturado` :
+                            cell.getValue<OrderStatus>() == OrderStatus.PARCIALMENTEFATURADO ? `Parcialmente faturado` :
+                                `Nao faturado`
+                        }
                     </Box>
-                  ),
-    
+                ),
+
             },
         ],
         [],
@@ -213,25 +213,25 @@ const OrdemDeCompraPage = () => {
         <>
             <header className="flex justify-between">
                 <Typography variant="h4">Ordens de Compra</Typography>
-               
+
                 <div className="flex gap-3">
-                <Button  color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-                    const user = JSON.parse(localStorage.getItem('user') || '{}');
-                  window.location.href = `http://localhost:8084/ordem/exportLastMonth?Authorization=Bearer ${user.token}`;
-          }}>
-            Exportar Ordens de Compra do mes anterior
-          </Button>
-          <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={()=>{
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-                  window.location.href = `http://localhost:8084/ordem/exportAll?Authorization=Bearer ${user.token}`;
-          }}>
-            Exportar todas as Ordens de Compra
-          </Button>
-        
-          <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
-            Adicionar ordem de compra
-          </Button>
-        </div>
+                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {
+                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                        window.location.href = `http://localhost:8084/ordem/exportLastMonth?Authorization=Bearer ${user.token}`;
+                    }}>
+                        Exportar Ordens de Compra do mes anterior
+                    </Button>
+                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {
+                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                        window.location.href = `http://localhost:8084/ordem/exportAll?Authorization=Bearer ${user.token}`;
+                    }}>
+                        Exportar todas as Ordens de Compra
+                    </Button>
+
+                    <Button startIcon={<AddIcon sx={{ fontSize: 5 }} />} onClick={ChangeModalState}>
+                        Adicionar ordem de compra
+                    </Button>
+                </div>
             </header>
 
             <Box display={'grid'} className="my-5">

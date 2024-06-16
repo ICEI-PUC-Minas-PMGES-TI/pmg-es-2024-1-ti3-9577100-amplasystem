@@ -55,7 +55,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 if (props.updateVendedor == undefined) {
                     setLoading(true);
                     apiFetch
-                        .post('/vendedor/admin/save', obj)
+                        .post('/vendedor', obj)
                         .then((data) => {
                             props.setReload(true);
                             showNotification({
@@ -77,7 +77,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 } else {
                     setLoading(true);
                     apiFetch
-                        .put(`/vendedor/admin/update/${obj.id}`, obj)
+                        .put(`/vendedor/${obj.id}`, obj)
                         .then((data) => {
                             props.setReload(true);
                             showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });

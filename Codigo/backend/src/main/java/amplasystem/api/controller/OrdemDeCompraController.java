@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/ordem")
+@RequestMapping("/ordem_de_compra")
 public class OrdemDeCompraController {
 
     @Autowired
@@ -34,13 +34,13 @@ public class OrdemDeCompraController {
     @Autowired
     CreateExcelFileService excelFileService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<OrdemDeCompra>> getAllOrdemDeCompras() {
         return ResponseEntity.ok(ordemDeCompraService.getAllOrdemDeCompras());
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> getOrdemDeCompraById(@PathVariable Integer id) throws NoSuchElementException {
         try {
@@ -53,7 +53,7 @@ public class OrdemDeCompraController {
         }
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody OrdemDeCompra ordemDeCompra) {
         try {
@@ -70,7 +70,7 @@ public class OrdemDeCompraController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
@@ -94,7 +94,7 @@ public class OrdemDeCompraController {
         }
     }
 
-    @PutMapping(value = "/")
+    @PutMapping
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody OrdemDeCompra ordemDeCompra) {
         try {

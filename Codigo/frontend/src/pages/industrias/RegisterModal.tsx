@@ -1,5 +1,5 @@
-import {JSX} from 'react/jsx-runtime';
-import {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from 'react';
+import { JSX } from 'react/jsx-runtime';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import {
     Box,
@@ -16,10 +16,10 @@ import {
     Typography
 } from '@mui/material';
 
-import {TipoContato} from '@/enums/TipoContato';
-import {useNotification} from '@/hooks/useNotification';
-import {IndustriaModel} from '@/models/IndustriaModel';
-import {ContatoModel} from '@/models/ContatoModels';
+import { TipoContato } from '@/enums/TipoContato';
+import { useNotification } from '@/hooks/useNotification';
+import { IndustriaModel } from '@/models/IndustriaModel';
+import { ContatoModel } from '@/models/ContatoModels';
 import IndustriaContato from '@/pages/industrias/IndustriaContato';
 import apiFetch from '@/services/api';
 import Validade from '@/utils/Validate';
@@ -38,36 +38,36 @@ interface TabPanelProps {
 }
 
 function TabPanel(props: TabPanelProps) {
-    const {children, value, index} = props;
+    const { children, value, index } = props;
 
     return (
         <div
-            style={ {width: "100%"} }
+            style={{ width: "100%" }}
             role="tabpanel"
-            hidden={ value !== index }
-            id={ `vertical-tabpanel-${ index }` }
-            aria-labelledby={ `vertical-tab-${ index }` }
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
         >
-            { value === index && (
-                <Box sx={ {paddingLeft: 3} }>
-                    { children }
+            {value === index && (
+                <Box sx={{ paddingLeft: 3 }}>
+                    {children}
                 </Box>
-            ) }
+            )}
         </div>
     );
 }
 
 function a11yProps(index: number) {
     return {
-        id: `vertical-tab-${ index }`,
-        'aria-controls': `vertical-tabpanel-${ index }`,
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
     };
 }
 
 const RegisterModal = (props: IRegisterModalProps) => {
     const [loading, setLoading] = useState(false);
     const tiposContatos = Object.values(TipoContato);
-    const {showNotification} = useNotification();
+    const { showNotification } = useNotification();
     const [reset, setRest] = useState<boolean>(false);
     const [contatoList, setContatoList] = useState<JSX.Element[]>([]);
     const [industria, setIndustria] = useState<IndustriaModel | undefined>(props.updateIndustria);
@@ -79,8 +79,8 @@ const RegisterModal = (props: IRegisterModalProps) => {
 
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
         if (industria != undefined) {
-            const {name, value} = e.target as HTMLInputElement;
-            setIndustria({...industria, [name]: value});
+            const { name, value } = e.target as HTMLInputElement;
+            setIndustria({ ...industria, [name]: value });
         }
     }
 
@@ -104,12 +104,12 @@ const RegisterModal = (props: IRegisterModalProps) => {
         industria?.contatos.map((element, index) => {
             aux2.push(
                 <IndustriaContato
-                    key={ element.tipoContato }
+                    key={element.tipoContato}
                     contatoModel={element}
-                    preenchido ={ element.nome != "" && element.email != "" && element.telefone != ""}
-                    index={ index }
-                    handleChange={ handleChangeContato }
-                    reset={ reset }
+                    preenchido={element.nome != "" && element.email != "" && element.telefone != ""}
+                    index={index}
+                    handleChange={handleChangeContato}
+                    reset={reset}
                 />,
             );
         });
@@ -201,7 +201,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             if (props.updateIndustria == undefined) {
                 setLoading(true);
                 apiFetch
-                    .post('industria/', obj)
+                    .post('/industria', obj)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -225,10 +225,10 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 setLoading(true);
                 console.log(obj);
                 apiFetch
-                    .put(`industria/`, obj)
+                    .put(`/industria`, obj)
                     .then((data) => {
                         props.setReload(true);
-                        showNotification({message: data.data.message, type: 'success', title: data.data.titulo});
+                        showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
                     })
                     .catch((error) => {
                         showNotification({
@@ -252,29 +252,29 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     return (
         <Dialog
-            open={ props.openModal }
-            onClose={ handleClose }
-            fullWidth={ true }
-            maxWidth={ "md" }
-            PaperProps={ {
+            open={props.openModal}
+            onClose={handleClose}
+            fullWidth={true}
+            maxWidth={"md"}
+            PaperProps={{
                 component: 'form',
                 onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
                     event.preventDefault();
                 },
-            } }
+            }}
         >
 
-            <DialogTitle>{ props.updateIndustria == undefined ? 'Adicionar industria' : 'Atualizar ' + props?.updateIndustria?.nome } </DialogTitle>
+            <DialogTitle>{props.updateIndustria == undefined ? 'Adicionar industria' : 'Atualizar ' + props?.updateIndustria?.nome} </DialogTitle>
             <DialogContent>
                 <CircularProgress
-                    sx={ {
+                    sx={{
                         visibility: loading ? 'visible' : 'hidden',
                         position: 'absolute',
                         top: '40%',
                         left: '45%',
-                    } }
+                    }}
                 />
-                <DialogContentText>{ props.updateIndustria == undefined ? 'Criação' : 'Edição' } de
+                <DialogContentText>{props.updateIndustria == undefined ? 'Criação' : 'Edição'} de
                     industria</DialogContentText>
                 <TextField
                     autoFocus
@@ -284,42 +284,42 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     name="nome"
                     label="Nome fantasia"
                     fullWidth
-                    value={ industria?.nome }
-                    onChange={ handleChange }
+                    value={industria?.nome}
+                    onChange={handleChange}
 
                 />
-                <Typography variant={ 'h6' }>Contatos</Typography>
+                <Typography variant={'h6'}>Contatos</Typography>
                 <Box
-                    sx={ {flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224} }
+                    sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: 224 }}
                 >
                     <Tabs
                         orientation="vertical"
                         variant="scrollable"
-                        value={ value }
-                        onChange={ changeTab }
+                        value={value}
+                        onChange={changeTab}
                         aria-label="Vertical tabs example"
-                        sx={ {borderRight: 1, borderColor: 'divider'} }
+                        sx={{ borderRight: 1, borderColor: 'divider' }}
                     >
                         {contatoList.map((element, index) => {
-                            
-                            return <Tab icon={element.props.preenchido ? <CheckIcon sx={{ p: 0, height:1}} /> : ""} iconPosition="start" label={element.key} {...a11yProps(index)} sx={{
+
+                            return <Tab icon={element.props.preenchido ? <CheckIcon sx={{ p: 0, height: 1 }} /> : ""} iconPosition="start" label={element.key} {...a11yProps(index)} sx={{
                                 pt: 0,
-                                pb:0
+                                pb: 0
                             }} />
-                        }) }
+                        })}
 
                     </Tabs>
-                    { contatoList.map((element, index) => {
-                        return <TabPanel value={ value } index={ index }>
-                            { element }
+                    {contatoList.map((element, index) => {
+                        return <TabPanel value={value} index={index}>
+                            {element}
                         </TabPanel>
-                    }) }
+                    })}
 
                 </Box>
             </DialogContent>
             <DialogActions>
-                <Button onClick={ handleClose }>Cancel</Button>
-                <Button onClick={ onSubmit }>Salvar</Button>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={onSubmit}>Salvar</Button>
             </DialogActions>
         </Dialog>
     );

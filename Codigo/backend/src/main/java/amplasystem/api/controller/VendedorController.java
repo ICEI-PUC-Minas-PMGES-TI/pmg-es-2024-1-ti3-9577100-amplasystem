@@ -29,13 +29,13 @@ public class VendedorController {
     @Autowired
     VendedorService vendedorService;
 
-    @GetMapping()
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<VendedorDTO>> getAllVendedores() {
         return ResponseEntity.ok(vendedorService.getAllVendedores());
     }
 
-    @GetMapping(value = "/getVendedor/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> getVendedorById(@PathVariable Integer id) throws ObjectNotFoundException {
         try {
@@ -48,7 +48,7 @@ public class VendedorController {
         }
     }
 
-    @PostMapping(value = "/admin/save")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody VendedorDTO vendedorDTO) {
         try {
@@ -74,7 +74,7 @@ public class VendedorController {
 
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVendedorById(@PathVariable Integer id) throws ObjectNotFoundException {
         try {
             VendedorDTO vendedor = vendedorService.deleteVendedorById(id);
@@ -98,7 +98,7 @@ public class VendedorController {
     }
 
     
-    @PutMapping("admin/update/{id}")
+    @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody VendedorDTO vendedor) {
         try {

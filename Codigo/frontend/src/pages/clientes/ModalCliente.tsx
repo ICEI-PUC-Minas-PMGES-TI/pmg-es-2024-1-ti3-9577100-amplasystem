@@ -52,7 +52,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 if (props.updateCliente == undefined) {
                     setLoading(true);
                     apiFetch
-                        .post('/cliente/admin/save', obj)
+                        .post('/cliente', obj)
                         .then((data) => {
                             props.setReload(true);
                             showNotification({
@@ -74,7 +74,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 } else {
                     setLoading(true);
                     apiFetch
-                        .put(`/cliente/admin/update/${obj.id}`, obj)
+                        .put(`/cliente/${obj.id}`, obj)
                         .then((data) => {
                             props.setReload(true);
                             showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });

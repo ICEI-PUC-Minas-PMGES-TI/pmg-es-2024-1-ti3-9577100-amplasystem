@@ -19,12 +19,12 @@ public class IndustriaController {
     @Autowired
     IndustriaService industriaService;
 
-
-    @GetMapping(value = "/")
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<Industria>> getAllIndustrias() {
         return ResponseEntity.ok(industriaService.getAllIndustrias());
     }
+
     @GetMapping(value = "/withOutFinanceiro")
     @ResponseBody
     public ResponseEntity<List<Industria>> getAllIndustriasWithOutFinanceiro() {
@@ -36,7 +36,7 @@ public class IndustriaController {
     public ResponseEntity<List<Industria>> getAllIndustriasWithFinanceiro() {
         return ResponseEntity.ok(industriaService.getAllIndustriasWithFinanceiro());
     }
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> getIndustriaById(@PathVariable Integer id) throws NoSuchElementException {
         try {
@@ -49,7 +49,7 @@ public class IndustriaController {
         }
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody Industria industria) {
         try {
@@ -63,7 +63,7 @@ public class IndustriaController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
@@ -76,7 +76,7 @@ public class IndustriaController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/")
+    @PutMapping
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody Industria industria) {
         try {
@@ -88,7 +88,6 @@ public class IndustriaController {
         }
         return ResponseEntity.ok().build();
     }
-
     
     @PostMapping(value = "/tabela")
     @ResponseBody

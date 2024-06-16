@@ -92,7 +92,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     const getClientes = () => {
         apiFetch
-            .get('/cliente/')
+            .get('/cliente')
             .then((data) => {
                 setClientes(data.data);
                 const aux: string[] = [];
@@ -116,7 +116,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             if (props.updateOrdemDeCompra == undefined) {
                 setLoading(true);
                 apiFetch
-                    .post('/ordem/', ordemDeCompra)
+                    .post('/ordem', ordemDeCompra)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -139,7 +139,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             } else {
                 setLoading(true);
                 apiFetch
-                    .put(`/ordem/`, ordemDeCompra)
+                    .put(`/ordem`, ordemDeCompra)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });

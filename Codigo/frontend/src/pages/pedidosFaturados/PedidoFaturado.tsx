@@ -34,7 +34,7 @@ const PedidoFaturado = () => {
 
     const getPedidoFaturado = () => {
         apiFetch
-            .get('/pedido/')
+            .get('/pedido')
             .then((data) => {
                 console.log(data.data)
                 setData(data.data);

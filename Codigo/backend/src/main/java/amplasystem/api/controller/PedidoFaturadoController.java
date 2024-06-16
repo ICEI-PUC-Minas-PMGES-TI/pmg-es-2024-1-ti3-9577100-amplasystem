@@ -23,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/pedido")
+@RequestMapping("/pedido_faturado")
 public class PedidoFaturadoController {
 
     @Autowired
@@ -32,13 +32,13 @@ public class PedidoFaturadoController {
     @Autowired
     CreateExcelFileService excelFileService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<PedidoFaturadoWithFinanceiro>> getAllPedidoFaturadosWithFinanceiro() {
         return ResponseEntity.ok(pedidoFaturadoService.getAllPedidoFaturadosWithFinanceiro());
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO> save(@RequestBody PedidoFaturado PedidoFaturado) {
         try {
@@ -55,7 +55,7 @@ public class PedidoFaturadoController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<ResponseDTO> delete(@PathVariable Integer id) {
         try {
@@ -79,7 +79,7 @@ public class PedidoFaturadoController {
         }
     }
 
-    @PutMapping(value = "/")
+    @PutMapping
     @ResponseBody
     public ResponseEntity<ResponseDTO> update(@RequestBody PedidoFaturado pedidoFaturado) {
         try {

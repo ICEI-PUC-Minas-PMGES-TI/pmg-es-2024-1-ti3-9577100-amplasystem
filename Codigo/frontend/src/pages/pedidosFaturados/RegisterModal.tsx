@@ -113,7 +113,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     const getIndustrias = () => {
         apiFetch
-            .get('/industria/')
+            .get('/industria')
             .then((data) => {
                 setIndustrias(data.data);
                 const aux: string[] = [];
@@ -128,7 +128,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
     };
     const getClientes = () => {
         apiFetch
-            .get('/cliente/')
+            .get('/cliente')
             .then((data) => {
                 setClientes(data.data);
                 const aux: string[] = [];
@@ -217,7 +217,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             setLoading(true);
             if (props.updatePedidoFaturado) {
                 apiFetch
-                    .put('/pedido/', aux)
+                    .put('/pedido', aux)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -243,7 +243,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     });
             } else {
                 apiFetch
-                    .post('/pedido/', aux)
+                    .post('/pedido', aux)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
