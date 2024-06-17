@@ -21,7 +21,7 @@ import HandshakeIcon from '@mui/icons-material/Handshake';
 import FactoryIcon from '@mui/icons-material/Factory';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ColorSchemeToggle from './ColorSchemeToggle';
+import ColorSchemeToggle from '@/components/ColorSchemeToggle';
 import { closeSidebar } from '@/utils/toogle.ts';
 
 const Toggler = ({

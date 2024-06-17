@@ -112,7 +112,6 @@ const customThemec = extendTheme({
       defaultProps: {
         sx: {
           borderRadius: '0px !important',
-          display: 'none',
         },
       },
     },
