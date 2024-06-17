@@ -24,7 +24,9 @@ const chakraTheme = extendTheme({
     },
   },
   fontFamily: {
-    body: 'Inter, var(--chakra-fontFamily-fallback)',
+    display: 'IBM Plex Sans',
+    body: 'IBM Plex Sans',
+    code: 'IBM Plex Mono',
   },
   components: {
     JoyButton: {

@@ -167,7 +167,7 @@ const Sidebar = () => {
           }}
         >
           <ListItem>
-            <ListItemButton component={Link} to="/dashboard" selected={location.pathname === '/dashboard'}>
+            <ListItemButton component={Link} to="/" selected={location.pathname === '/'}>
               <HomeRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Home</Typography>
@@ -176,7 +176,7 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/dashboard/vendedores" selected={location.pathname === '/dashboard/vendedores'}>
+            <ListItemButton component={Link} to="/vendedores" selected={location.pathname === '/vendedores'}>
               <HandshakeIcon />
               <ListItemContent>
                 <Typography level="title-sm">Vendedores</Typography>
@@ -185,7 +185,7 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/dashboard/clientes" selected={location.pathname === '/dashboard/clientes'}>
+            <ListItemButton component={Link} to="/clientes" selected={location.pathname === '/clientes'}>
               <GroupRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Clientes</Typography>
@@ -222,7 +222,7 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/dashboard/industrias" selected={location.pathname === '/dashboard/industrias'}>
+            <ListItemButton component={Link} to="/industrias" selected={location.pathname === '/industrias'}>
               <FactoryIcon />
               <ListItemContent>
                 <Typography level="title-sm">Indústrias</Typography>
@@ -236,13 +236,13 @@ const Sidebar = () => {
           sx={{
             mt: 'auto',
             flexGrow: 0,
-            '--ListItem-radius': (theme) => theme.vars.radius.sm,
+            // '--ListItem-radius': (theme) => theme.vars.radius.sm,
             '--List-gap': '8px',
             mb: 2,
           }}
         >
           <ListItem>
-            <ListItemButton component={Link} to="/dashboard/configuracoes" selected={location.pathname === '/dashboard/configuracoes'}>
+            <ListItemButton component={Link} to="/configuracoes" selected={location.pathname === '/configuracoes'}>
               <SettingsRoundedIcon />
               Configurações
             </ListItemButton>
