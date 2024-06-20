@@ -1,20 +1,22 @@
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Breadcrumbs from '@mui/joy/Breadcrumbs';
-import Link from '@mui/joy/Link';
-import Typography from '@mui/joy/Typography';
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Breadcrumbs from "@mui/joy/Breadcrumbs";
+import Link from "@mui/joy/Link";
+import Typography from "@mui/joy/Typography";
 
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import DownloadIcon from "@mui/icons-material/Download";
+import UploadIcon from "@mui/icons-material/Upload";
+import AddIcon from "@mui/icons-material/Add";
 
-import OrderTable from '@/components/OrderTable';
-import OrderList from '@/components/OrderList';
+import OrderTable from "@/components/OrderTable";
+import OrderList from "@/components/OrderList";
 
 const ClientesPage = () => {
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <Breadcrumbs
           size="sm"
           aria-label="breadcrumbs"
@@ -45,29 +47,48 @@ const ClientesPage = () => {
       </Box>
       <Box
         sx={{
-          display: 'flex',
+          display: "flex",
           gap: 1,
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: { xs: 'start', sm: 'center' },
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: { xs: "start", sm: "center" },
+          flexWrap: "wrap",
+          justifyContent: "space-between",
         }}
       >
         <Typography level="h2" component="h1">
           Clientes
         </Typography>
-        <Button
-          color="primary"
-          startDecorator={<DownloadRoundedIcon />}
-          size="sm"
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+          }}
         >
-          Exportar
-        </Button>
+          <Button
+            color="neutral"
+            startDecorator={<UploadIcon />}
+            size="sm"
+            variant="soft"
+          >
+            Importar
+          </Button>
+          <Button
+            color="neutral"
+            startDecorator={<DownloadIcon />}
+            size="sm"
+            variant="soft"
+          >
+            Exportar
+          </Button>
+          <Button color="primary" startDecorator={<AddIcon />} size="sm">
+            Adicionar cliente
+          </Button>
+        </Box>
       </Box>
       <OrderTable />
       <OrderList />
     </>
   );
-}
+};
 
 export default ClientesPage;

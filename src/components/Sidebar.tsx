@@ -1,28 +1,28 @@
-import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import Avatar from '@mui/joy/Avatar';
-import Box from '@mui/joy/Box';
-import Divider from '@mui/joy/Divider';
-import IconButton from '@mui/joy/IconButton';
-import Input from '@mui/joy/Input';
-import List from '@mui/joy/List';
-import ListItem from '@mui/joy/ListItem';
-import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
-import ListItemContent from '@mui/joy/ListItemContent';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import HandshakeIcon from '@mui/icons-material/Handshake';
-import FactoryIcon from '@mui/icons-material/Factory';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ColorSchemeToggle from '@/components/ColorSchemeToggle';
-import { closeSidebar } from '@/utils/toogle.ts';
+import React from "react";
+import { useLocation, Link } from "react-router-dom";
+import GlobalStyles from "@mui/joy/GlobalStyles";
+import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import Divider from "@mui/joy/Divider";
+import IconButton from "@mui/joy/IconButton";
+import Input from "@mui/joy/Input";
+import List from "@mui/joy/List";
+import ListItem from "@mui/joy/ListItem";
+import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
+import ListItemContent from "@mui/joy/ListItemContent";
+import Typography from "@mui/joy/Typography";
+import Sheet from "@mui/joy/Sheet";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import FactoryIcon from "@mui/icons-material/Factory";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ColorSchemeToggle from "@/components/ColorSchemeToggle";
+import { closeSidebar } from "@/utils/toogle.ts";
 
 const Toggler = ({
   defaultExpanded = false,
@@ -42,11 +42,11 @@ const Toggler = ({
       {renderToggle({ open, setOpen })}
       <Box
         sx={{
-          display: 'grid',
-          gridTemplateRows: open ? '1fr' : '0fr',
-          transition: '0.2s ease',
-          '& > *': {
-            overflow: 'hidden',
+          display: "grid",
+          gridTemplateRows: open ? "1fr" : "0fr",
+          transition: "0.2s ease",
+          "& > *": {
+            overflow: "hidden",
           },
         }}
       >
@@ -54,40 +54,46 @@ const Toggler = ({
       </Box>
     </React.Fragment>
   );
-}
+};
 
 const Sidebar = () => {
   const location = useLocation();
+  const usuario = {
+    nome: "Vendedor 1",
+    email: "vendedor1@gmail.com",
+  };
+
+  const usuarioInicial = usuario.nome.charAt(0).toUpperCase();
 
   return (
     <Sheet
       className="Sidebar"
       sx={{
-        position: { xs: 'fixed', md: 'sticky' },
+        position: { xs: "fixed", md: "sticky" },
         transform: {
-          xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
-          md: 'none',
+          xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))",
+          md: "none",
         },
-        transition: 'transform 0.4s, width 0.4s',
+        transition: "transform 0.4s, width 0.4s",
         zIndex: 10000,
-        height: '100dvh',
-        width: 'var(--Sidebar-width)',
+        height: "100dvh",
+        width: "var(--Sidebar-width)",
         top: 0,
         p: 2,
         flexShrink: 0,
-        display: 'flex',
-        flexDirection: 'column',
+        display: "flex",
+        flexDirection: "column",
         gap: 2,
-        borderRight: '1px solid',
-        borderColor: 'divider',
+        borderRight: "1px solid",
+        borderColor: "divider",
       }}
     >
       <GlobalStyles
         styles={(theme) => ({
-          ':root': {
-            '--Sidebar-width': '220px',
-            [theme.breakpoints.up('lg')]: {
-              '--Sidebar-width': '240px',
+          ":root": {
+            "--Sidebar-width": "220px",
+            [theme.breakpoints.up("lg")]: {
+              "--Sidebar-width": "240px",
             },
           },
         })}
@@ -95,23 +101,23 @@ const Sidebar = () => {
       <Box
         className="Sidebar-overlay"
         sx={{
-          position: 'fixed',
+          position: "fixed",
           zIndex: 9998,
           top: 0,
           left: 0,
-          width: '100vw',
-          height: '100vh',
-          opacity: 'var(--SideNavigation-slideIn)',
-          backgroundColor: 'var(--joy-palette-background-backdrop)',
-          transition: 'opacity 0.4s',
+          width: "100vw",
+          height: "100vh",
+          opacity: "var(--SideNavigation-slideIn)",
+          backgroundColor: "var(--joy-palette-background-backdrop)",
+          transition: "opacity 0.4s",
           transform: {
-            xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))',
-            lg: 'translateX(-100%)',
+            xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
+            lg: "translateX(-100%)",
           },
         }}
         onClick={() => closeSidebar()}
       />
-      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <IconButton variant="plain" color="neutral" size="sm">
           <svg
             width="24"
@@ -143,16 +149,20 @@ const Sidebar = () => {
           </svg>
         </IconButton>
         <Typography level="title-lg">AmplaSystem</Typography>
-        <ColorSchemeToggle sx={{ ml: 'auto' }} />
+        <ColorSchemeToggle sx={{ ml: "auto" }} />
       </Box>
-      <Input size="sm" startDecorator={<SearchRoundedIcon />} placeholder="Search" />
+      <Input
+        size="sm"
+        startDecorator={<SearchRoundedIcon />}
+        placeholder="Search"
+      />
       <Box
         sx={{
           minHeight: 0,
-          overflow: 'hidden auto',
+          overflow: "hidden auto",
           flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           [`& .${listItemButtonClasses.root}`]: {
             gap: 1.5,
           },
@@ -162,12 +172,16 @@ const Sidebar = () => {
           size="sm"
           sx={{
             gap: 1,
-            '--List-nestedInsetStart': '30px',
+            "--List-nestedInsetStart": "30px",
             // '--ListItem-radius': (theme) => theme.vars.radius.xs,
           }}
         >
           <ListItem>
-            <ListItemButton component={Link} to="/" selected={location.pathname === '/'}>
+            <ListItemButton
+              component={Link}
+              to="/"
+              selected={location.pathname === "/"}
+            >
               <HomeRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Home</Typography>
@@ -176,7 +190,11 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/vendedores" selected={location.pathname === '/vendedores'}>
+            <ListItemButton
+              component={Link}
+              to="/vendedores"
+              selected={location.pathname === "/vendedores"}
+            >
               <HandshakeIcon />
               <ListItemContent>
                 <Typography level="title-sm">Vendedores</Typography>
@@ -185,7 +203,11 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/clientes" selected={location.pathname === '/clientes'}>
+            <ListItemButton
+              component={Link}
+              to="/clientes"
+              selected={location.pathname === "/clientes"}
+            >
               <GroupRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Clientes</Typography>
@@ -202,7 +224,7 @@ const Sidebar = () => {
                     <Typography level="title-sm">Finanças</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
-                    sx={{ transform: open ? 'rotate(180deg)' : 'none' }}
+                    sx={{ transform: open ? "rotate(180deg)" : "none" }}
                   />
                 </ListItemButton>
               )}
@@ -222,7 +244,11 @@ const Sidebar = () => {
           </ListItem>
 
           <ListItem>
-            <ListItemButton component={Link} to="/industrias" selected={location.pathname === '/industrias'}>
+            <ListItemButton
+              component={Link}
+              to="/industrias"
+              selected={location.pathname === "/industrias"}
+            >
               <FactoryIcon />
               <ListItemContent>
                 <Typography level="title-sm">Indústrias</Typography>
@@ -234,15 +260,19 @@ const Sidebar = () => {
         <List
           size="sm"
           sx={{
-            mt: 'auto',
+            mt: "auto",
             flexGrow: 0,
             // '--ListItem-radius': (theme) => theme.vars.radius.sm,
-            '--List-gap': '8px',
+            "--List-gap": "8px",
             mb: 2,
           }}
         >
           <ListItem>
-            <ListItemButton component={Link} to="/configuracoes" selected={location.pathname === '/configuracoes'}>
+            <ListItemButton
+              component={Link}
+              to="/configuracoes"
+              selected={location.pathname === "/configuracoes"}
+            >
               <SettingsRoundedIcon />
               Configurações
             </ListItemButton>
@@ -250,22 +280,20 @@ const Sidebar = () => {
         </List>
       </Box>
       <Divider />
-      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <Avatar
-          variant="outlined"
-          size="sm"
-          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-        />
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+        <Avatar variant="solid" size="sm" color="primary">
+          {usuarioInicial}
+        </Avatar>
         <Box sx={{ minWidth: 0, flex: 1 }}>
-          <Typography level="title-sm">Siriwat K.</Typography>
-          <Typography level="body-xs">siriwatk@test.com</Typography>
+          <Typography level="title-sm">{usuario.nome}</Typography>
+          <Typography level="body-xs">{usuario.email}</Typography>
         </Box>
         <IconButton size="sm" variant="plain" color="neutral">
-          <LogoutRoundedIcon />
+          <LogoutIcon />
         </IconButton>
       </Box>
     </Sheet>
   );
-}
+};
 
 export default Sidebar;

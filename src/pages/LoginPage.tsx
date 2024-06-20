@@ -1,18 +1,18 @@
-import * as React from 'react';
-import GlobalStyles from '@mui/joy/GlobalStyles';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Checkbox from '@mui/joy/Checkbox';
-import Divider from '@mui/joy/Divider';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Link from '@mui/joy/Link';
-import Input from '@mui/joy/Input';
-import Typography from '@mui/joy/Typography';
-import Stack from '@mui/joy/Stack';
-import IconButton from '@mui/joy/IconButton';
+import * as React from "react";
+import GlobalStyles from "@mui/joy/GlobalStyles";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Checkbox from "@mui/joy/Checkbox";
+import Divider from "@mui/joy/Divider";
+import FormControl from "@mui/joy/FormControl";
+import FormLabel from "@mui/joy/FormLabel";
+import Link from "@mui/joy/Link";
+import Input from "@mui/joy/Input";
+import Typography from "@mui/joy/Typography";
+import Stack from "@mui/joy/Stack";
+import IconButton from "@mui/joy/IconButton";
 
-import ColorSchemeToggle from '@/components/ColorSchemeToggle';
+import ColorSchemeToggle from "@/components/ColorSchemeToggle";
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -28,34 +28,34 @@ export default function JoySignInSideTemplate() {
     <>
       <GlobalStyles
         styles={{
-          ':root': {
-            '--Form-maxWidth': '800px',
-            '--Transition-duration': '0.4s',
+          ":root": {
+            "--Form-maxWidth": "800px",
+            "--Transition-duration": "0.4s",
           },
         }}
       />
       <Box
         sx={(theme) => ({
-          width: { xs: '100%', md: '50vw' },
-          transition: 'width var(--Transition-duration)',
-          transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-          position: 'relative',
+          width: { xs: "100%", md: "50vw" },
+          transition: "width var(--Transition-duration)",
+          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+          position: "relative",
           zIndex: 1,
-          display: 'flex',
-          justifyContent: 'flex-end',
-          backdropFilter: 'blur(12px)',
-          backgroundColor: 'rgba(255 255 255 / 0.2)',
-          [theme.getColorSchemeSelector('dark')]: {
-            backgroundColor: 'rgba(19 19 24 / 0.4)',
+          display: "flex",
+          justifyContent: "flex-end",
+          backdropFilter: "blur(12px)",
+          backgroundColor: "rgba(255 255 255 / 0.2)",
+          [theme.getColorSchemeSelector("dark")]: {
+            backgroundColor: "rgba(19 19 24 / 0.4)",
           },
         })}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100dvh',
-            width: '100%',
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100dvh",
+            width: "100%",
             px: 2,
           }}
         >
@@ -63,11 +63,11 @@ export default function JoySignInSideTemplate() {
             component="header"
             sx={{
               py: 3,
-              display: 'flex',
-              justifyContent: 'space-between',
+              display: "flex",
+              justifyContent: "space-between",
             }}
           >
-            <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ gap: 2, display: "flex", alignItems: "center" }}>
               <IconButton variant="plain" color="neutral" size="sm">
                 <svg
                   width="24"
@@ -105,23 +105,23 @@ export default function JoySignInSideTemplate() {
           <Box
             component="main"
             sx={{
-              my: 'auto',
+              my: "auto",
               py: 2,
               pb: 5,
-              display: 'flex',
-              flexDirection: 'column',
+              display: "flex",
+              flexDirection: "column",
               gap: 2,
               width: 400,
-              maxWidth: '100%',
-              mx: 'auto',
-              borderRadius: 'sm',
-              '& form': {
-                display: 'flex',
-                flexDirection: 'column',
+              maxWidth: "100%",
+              mx: "auto",
+              borderRadius: "sm",
+              "& form": {
+                display: "flex",
+                flexDirection: "column",
                 gap: 2,
               },
               [`& .MuiFormLabel-asterisk`]: {
-                visibility: 'hidden',
+                visibility: "hidden",
               },
             }}
           >
@@ -131,7 +131,7 @@ export default function JoySignInSideTemplate() {
                   Faça login
                 </Typography>
                 <Typography level="body-sm">
-                  Não tem uma conta?{' '}
+                  Não tem uma conta?{" "}
                   <Link href="#suporte" level="title-sm">
                     Contate o suporte
                   </Link>
@@ -140,8 +140,8 @@ export default function JoySignInSideTemplate() {
             </Stack>
             <Divider
               sx={(theme) => ({
-                [theme.getColorSchemeSelector('light')]: {
-                  color: { xs: '#FFF', md: 'text.tertiary' },
+                [theme.getColorSchemeSelector("light")]: {
+                  color: { xs: "#FFF", md: "text.tertiary" },
                 },
               })}
             />
@@ -169,12 +169,16 @@ export default function JoySignInSideTemplate() {
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Box
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
                   >
-                    <Checkbox size="sm" label="Lembrar de mim" name="persistent" />
+                    <Checkbox
+                      size="sm"
+                      label="Lembrar de mim"
+                      name="persistent"
+                    />
                     <Link level="title-sm" href="recovery">
                       Esqueceu sua senha?
                     </Link>
@@ -195,24 +199,18 @@ export default function JoySignInSideTemplate() {
       </Box>
       <Box
         sx={(theme) => ({
-          height: '100%',
-          position: 'fixed',
+          height: "100%",
+          position: "fixed",
           right: 0,
           top: 0,
           bottom: 0,
-          left: { xs: 0, md: '50vw' },
+          left: { xs: 0, md: "50vw" },
           transition:
-            'background-image var(--Transition-duration), left var(--Transition-duration) !important',
-          transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-          backgroundColor: 'background.level1',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundImage:
-            'url(https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&w=1000&dpr=2)',
-          [theme.getColorSchemeSelector('dark')]: {
-            backgroundImage:
-              'url(https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?auto=format&w=1000&dpr=2)',
+            "background-image var(--Transition-duration), left var(--Transition-duration) !important",
+          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
+          background: "#f0f0f0",
+          [theme.getColorSchemeSelector("dark")]: {
+            background: "black",
           },
         })}
       />
