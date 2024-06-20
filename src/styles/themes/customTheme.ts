@@ -76,7 +76,7 @@ const customThemec = extendTheme({
       styleOverrides: {
         root: ({ ownerState }) => ({
           transition: 'initial',
-          borderRadius: '0px',
+          borderRadius: '2px',
           fontWeight: 600,
           ...(ownerState.size === 'md' && {
             minHeight: '36px',
@@ -93,106 +93,121 @@ const customThemec = extendTheme({
     JoyInput: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoySelect: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
         listbox: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyCheckbox: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
       defaultProps: {
         sx: {
-          borderRadius: '0px !important',
+          borderRadius: '2px',
         },
       },
     },
     JoyRadio: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoySwitch: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoySlider: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyTextarea: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyAvatar: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyBadge: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyChip: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyDivider: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoySheet: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
         },
       },
     },
     JoyTable: {
       styleOverrides: {
         root: {
-          borderRadius: '0px',
+          borderRadius: '2px',
+        },
+      },
+    },
+    JoyList: {
+      styleOverrides: {
+        root: {
+          borderRadius: '2px',
+        },
+      },
+      defaultProps: {
+        sx: {
+          gap: 1,
+          "--List-nestedInsetStart": "30px",
+          "--ListItem-radius": "2px",
+          // "--ListItem-radius": (theme) => theme.vars.radius.xs,
         },
       },
     },

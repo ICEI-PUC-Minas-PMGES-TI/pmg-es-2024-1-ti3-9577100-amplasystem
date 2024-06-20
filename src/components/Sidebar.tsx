@@ -168,14 +168,7 @@ const Sidebar = () => {
           },
         }}
       >
-        <List
-          size="sm"
-          sx={{
-            gap: 1,
-            "--List-nestedInsetStart": "30px",
-            // '--ListItem-radius': (theme) => theme.vars.radius.xs,
-          }}
-        >
+        <List size="sm">
           <ListItem>
             <ListItemButton
               component={Link}
@@ -262,7 +255,7 @@ const Sidebar = () => {
           sx={{
             mt: "auto",
             flexGrow: 0,
-            // '--ListItem-radius': (theme) => theme.vars.radius.sm,
+            "--ListItem-radius": (theme) => theme.vars.radius.sm,
             "--List-gap": "8px",
             mb: 2,
           }}
