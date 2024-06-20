@@ -112,8 +112,9 @@ public class PedidoFaturadoController {
         LocalDate initialDate = finalDate.minusMonths(1);
         excelFileService.createSellingReport(
                 pedidoFaturadoService.getAllBettwoenDate((LocalDate) initialDate, finalDate));
-        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
-                "sellingReport.xlsx");
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                "amplasystem", "api", "out",
+                "purchaseOrdersReport.xlsx");
 
         File fileXlsx = outputPath.toFile();
         if (!fileXlsx.exists()) {
@@ -134,8 +135,9 @@ public class PedidoFaturadoController {
     @GetMapping("/exportAll")
     public ResponseEntity<FileSystemResource> downloadArquivoXML() {
         excelFileService.createSellingReport(pedidoFaturadoService.getAllPedidoFaturados());
-        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
-                "sellingReport.xlsx");
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                "amplasystem", "api", "out",
+                "purchaseOrdersReport.xlsx");
 
         File fileXlsx = outputPath.toFile();
         if (!fileXlsx.exists()) {

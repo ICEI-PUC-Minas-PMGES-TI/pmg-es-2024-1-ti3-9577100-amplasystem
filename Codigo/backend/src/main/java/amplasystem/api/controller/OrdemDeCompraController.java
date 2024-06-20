@@ -2,17 +2,18 @@ package amplasystem.api.controller;
 
 import amplasystem.api.services.CreateExcelFileService;
 import amplasystem.api.services.OrdemDeCompraService;
-import amplasystem.api.dtos.OrderFilterDto;
-import amplasystem.api.dtos.ResponseDTO;
-import amplasystem.api.exceptions.ObjectNotFoundException;
-import amplasystem.api.models.OrdemDeCompra;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Logger;
+import amplasystem.api.dtos.OrderFilterDto;
+import amplasystem.api.dtos.ResponseDTO;
+import amplasystem.api.exceptions.ObjectNotFoundException;
+import amplasystem.api.models.OrdemDeCompra;
+import org.springframework.core.io.FileSystemResource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -147,7 +148,8 @@ public class OrdemDeCompraController {
         LocalDate initialDate = finalDate.minusMonths(1);
         excelFileService.createPurchaseOrderReport(
                 ordemDeCompraService.getAllBettwoenDate((LocalDate) initialDate, finalDate));
-        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                "amplasystem", "api", "out",
                 "purchaseOrdersReport.xlsx");
 
         File fileXlsx = outputPath.toFile();
@@ -167,15 +169,22 @@ public class OrdemDeCompraController {
                 .body(new FileSystemResource(fileXlsx));
     }
 
+    private static final Logger logger = Logger.getLogger(OrdemDeCompraController.class.getName());
+
     @GetMapping("/exportAll")
     public ResponseEntity<FileSystemResource> downloadArquivoXML() {
+
         excelFileService.createPurchaseOrderReport(ordemDeCompraService.getAllOrdemDeCompras());
-        Path outputPath = Paths.get(System.getProperty("user.dir"), "src", "main", "java", "amplasystem", "api", "out",
+        Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                "amplasystem", "api", "out",
                 "purchaseOrdersReport.xlsx");
+
+        logger.info("Attempting to find file at: " + outputPath.toString());
 
         File fileXlsx = outputPath.toFile();
 
         if (!fileXlsx.exists()) {
+            logger.severe("File not found: " + outputPath.toString());
             return ResponseEntity.notFound().build();
         }
 

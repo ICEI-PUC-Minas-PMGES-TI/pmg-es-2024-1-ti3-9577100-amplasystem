@@ -36,6 +36,7 @@ public class IndustriaController {
     public ResponseEntity<List<Industria>> getAllIndustriasWithFinanceiro() {
         return ResponseEntity.ok(industriaService.getAllIndustriasWithFinanceiro());
     }
+
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> getIndustriaById(@PathVariable Integer id) throws NoSuchElementException {
@@ -53,7 +54,10 @@ public class IndustriaController {
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody Industria industria) {
         try {
-            return ResponseEntity.ok(industriaService.save(industria));
+
+            ResponseDTO result = new ResponseDTO("Indústria cadastrada com sucesso!",
+                    "A industria " + industria.getNome() + " foi cadastrada com sucesso!");
+            return ResponseEntity.status(HttpStatus.OK).body(result);
         } catch (IllegalStateException e) {
             ResponseDTO errorResponse = new ResponseDTO("Indústria já cadastrada", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
@@ -88,10 +92,10 @@ public class IndustriaController {
         }
         return ResponseEntity.ok().build();
     }
-    
+
     @PostMapping(value = "/tabela")
     @ResponseBody
-    public ResponseEntity<?> saveTable(@RequestParam MultipartFile  file) {
+    public ResponseEntity<?> saveTable(@RequestParam MultipartFile file) {
         industriaService.createTable(file);
         return ResponseEntity.status(HttpStatus.CREATED).body("CREATED");
     }

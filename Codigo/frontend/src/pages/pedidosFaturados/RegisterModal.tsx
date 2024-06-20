@@ -148,7 +148,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
         }
         console.log(filter)
         apiFetch
-            .post('/ordem/filtered', filter)
+            .post('/ordem_de_compra/filtered', filter)
             .then((data) => {
                 setOrdens(data.data);
                 setOrdensCodigo([])
@@ -217,7 +217,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             setLoading(true);
             if (props.updatePedidoFaturado) {
                 apiFetch
-                    .put('/pedido', aux)
+                    .put('/pedido_faturado', aux)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -243,7 +243,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     });
             } else {
                 apiFetch
-                    .post('/pedido', aux)
+                    .post('/pedido_faturado', aux)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -537,7 +537,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                 <CurrencyInput
                     placeholder="R$0.00"
                     type="text"
-                    value={pedidoFaturado?.valorFaturado}
+                    value={pedidoFaturado?.valorFaturado == 0 ? '': pedidoFaturado?.valorFaturado} 
                     name="valorFaturado"
                     onChange={handleChange}
                     maskOptions={undefined}

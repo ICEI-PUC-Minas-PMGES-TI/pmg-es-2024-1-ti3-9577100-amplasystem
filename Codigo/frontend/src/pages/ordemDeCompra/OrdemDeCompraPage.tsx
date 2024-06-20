@@ -25,10 +25,35 @@ const OrdemDeCompraPage = () => {
     const ChangeModalState = () => {
         setOpen(!open);
     };
-
+    const handleDownload = (url:string) => {
+            apiFetch.get(url, {
+                responseType: 'blob', 
+            }).then (
+                (response) => {
+                    const blob = new Blob([response.data], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    });
+        
+                    const link = document.createElement('a');
+        
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'purchaseOrdersReport.xlsx';
+        
+                    document.body.appendChild(link);
+        
+                    link.click();
+        
+                    if(link.parentNode != undefined){
+                        link.parentNode.removeChild(link);
+                    }
+                }
+            ).catch((e) => {
+                console.log(e);
+            });;        
+    };
     const getOrdensDeCompra = () => {
         apiFetch
-            .get('/ordem')
+            .get('/ordem_de_compra')
             .then((data) => {
                 console.log(data.data)
                 setData(data.data);
@@ -39,7 +64,7 @@ const OrdemDeCompraPage = () => {
     };
     const deleteOrdemDeCompra = (id: number) => {
         apiFetch
-            .delete(`/ordem/${id}`)
+            .delete(`/ordem_de_compra/${id}`)
             .then((data) => {
                 setReload(true);
                 console.log(data)
@@ -215,16 +240,13 @@ const OrdemDeCompraPage = () => {
                 <Typography variant="h4">Ordens de Compra</Typography>
 
                 <div className="flex gap-3">
-                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {
-                        const user = JSON.parse(localStorage.getItem('user') || '{}');
-                        window.location.href = `http://localhost:8084/ordem/exportLastMonth?Authorization=Bearer ${user.token}`;
-                    }}>
+                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {handleDownload("ordem_de_compra/exportLastMonth")}} 
+                    >
                         Exportar Ordens de Compra do mes anterior
                     </Button>
-                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {
-                        const user = JSON.parse(localStorage.getItem('user') || '{}');
-                        window.location.href = `http://localhost:8084/ordem/exportAll?Authorization=Bearer ${user.token}`;
-                    }}>
+                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {handleDownload("ordem_de_compra/exportAll")}} 
+                    
+                    >
                         Exportar todas as Ordens de Compra
                     </Button>
 

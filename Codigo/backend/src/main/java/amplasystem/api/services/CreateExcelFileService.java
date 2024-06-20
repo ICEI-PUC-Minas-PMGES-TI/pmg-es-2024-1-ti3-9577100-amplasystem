@@ -1,8 +1,11 @@
 package amplasystem.api.services;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -74,9 +77,11 @@ public class CreateExcelFileService {
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
-            FileOutputStream outputStream = new FileOutputStream(
-                    "src\\main\\java\\amplasystem\\api\\out\\purchaseOrdersReport.xlsx");
-
+            Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                    "amplasystem", "api", "out",
+                    "purchaseOrdersReport.xlsx");
+            File fileXlsx = outputPath.toFile();
+            FileOutputStream outputStream = new FileOutputStream(fileXlsx);
             XSSFSheet sheet = workbook.createSheet("Purchase Orders Report");
             int size = 0;
             String[] headers = { "ID", "Industria", "Cliente", "Codigo do Pedido", "Status",
@@ -110,9 +115,11 @@ public class CreateExcelFileService {
     public void createSellingReport(List<PedidoFaturado> purchaseOrders) {
         try {
             XSSFWorkbook workbook = new XSSFWorkbook();
-            FileOutputStream outputStream = new FileOutputStream(
-                    "src\\main\\java\\amplasystem\\api\\out\\sellingReport.xlsx");
-
+            Path outputPath = Paths.get(System.getProperty("user.dir"), "Codigo", "backend", "src", "main", "java",
+                    "amplasystem", "api", "out",
+                    "purchaseOrdersReport.xlsx");
+            File fileXlsx = outputPath.toFile();
+            FileOutputStream outputStream = new FileOutputStream(fileXlsx);
             XSSFSheet sheet = workbook.createSheet("Purchase Orders Report");
             int size = 0;
             String[] headers = { "ID", "Industria", "Cliente", "Codigo do Pedido", "Nota fiscal", "Data vencimento",
@@ -138,7 +145,7 @@ public class CreateExcelFileService {
             workbook.write(outputStream);
             workbook.close();
         } catch (FileNotFoundException e) {
-            // TODO: handle exception   
+            // TODO: handle exception
         } catch (IOException e) {
 
         }

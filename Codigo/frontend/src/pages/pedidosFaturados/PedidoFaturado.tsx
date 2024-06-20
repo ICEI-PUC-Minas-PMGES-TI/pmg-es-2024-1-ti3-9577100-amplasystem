@@ -34,7 +34,7 @@ const PedidoFaturado = () => {
 
     const getPedidoFaturado = () => {
         apiFetch
-            .get('/pedido')
+            .get('/pedido_faturado')
             .then((data) => {
                 console.log(data.data)
                 setData(data.data);
@@ -43,9 +43,35 @@ const PedidoFaturado = () => {
                 console.log(e);
             });
     };
+    const handleDownload = (url:string) => {
+        apiFetch.get(url, {
+            responseType: 'blob', 
+        }).then (
+            (response) => {
+                const blob = new Blob([response.data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+    
+                const link = document.createElement('a');
+    
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'purchaseOrdersReport.xlsx';
+    
+                document.body.appendChild(link);
+    
+                link.click();
+    
+                if(link.parentNode != undefined){
+                    link.parentNode.removeChild(link);
+                }
+            }
+        ).catch((e) => {
+            console.log(e);
+        });;        
+};
     const deletePedidoFaturado = (id: number | null) => {
         apiFetch
-            .delete(`/pedido/${id}`)
+            .delete(`/pedido_faturado/${id}`)
             .then((data) => {
                 setReload(true);
                 console.log(data)
@@ -225,16 +251,10 @@ const PedidoFaturado = () => {
             <header className="flex justify-between">
                 <Typography variant="h4">Pedidos Faturados</Typography>
                 <div className="flex gap-3">
-                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {
-                        const user = JSON.parse(localStorage.getItem('user') || '{}');
-                        window.location.href = `http://localhost:8084/pedido/exportLastMonth?Authorization=Bearer ${user.token}`;
-                    }}>
+                    <Button color="warning" component="label" variant="outlined" startIcon={<DownloadForOfflineIcon />} onClick={() => {handleDownload("pedido_faturado/exportLastMonth")}} >
                         Exportar pedidos do mes anterior
                     </Button>
-                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {
-                        const user = JSON.parse(localStorage.getItem('user') || '{}');
-                        window.location.href = `http://localhost:8084/pedido/exportAll?Authorization=Bearer ${user.token}`;
-                    }}>
+                    <Button color="warning" startIcon={<DownloadForOfflineIcon />} onClick={() => {handleDownload("pedido_faturado/exportAll")}} >
                         Exportar todas as pedidos
                     </Button>
 

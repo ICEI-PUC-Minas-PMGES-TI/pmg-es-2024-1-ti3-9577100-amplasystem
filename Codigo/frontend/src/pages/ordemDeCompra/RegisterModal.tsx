@@ -116,7 +116,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             if (props.updateOrdemDeCompra == undefined) {
                 setLoading(true);
                 apiFetch
-                    .post('/ordem', ordemDeCompra)
+                    .post('/ordem_de_compra', ordemDeCompra)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({
@@ -139,7 +139,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
             } else {
                 setLoading(true);
                 apiFetch
-                    .put(`/ordem`, ordemDeCompra)
+                    .put(`/ordem_de_compra`, ordemDeCompra)
                     .then((data) => {
                         props.setReload(true);
                         showNotification({ message: data.data.message, type: 'success', title: data.data.titulo });
@@ -296,7 +296,7 @@ const RegisterModal = (props: IRegisterModalProps) => {
                     Valor *
                 </Typography>
 
-                <CurrencyInput placeholder="R$0.00" type="text" value={ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined} />
+                <CurrencyInput placeholder="R$0.00" type="text" value={ordemDeCompra?.valor == 0 ? '':ordemDeCompra?.valor} name="valor" onChange={handleChange} maskOptions={undefined} />
             </DialogContent>
             <DialogActions>
                 <Button onClick={ChangeModalState} variant="contained">

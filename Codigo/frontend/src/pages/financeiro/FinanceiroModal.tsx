@@ -213,9 +213,9 @@ const FinanceiroModal: React.FC<FinanceiroModalProps> = ({
                             onChange={handleChange}
                         >
                             {industrias.map((industria) => (
-                                <MenuItem key={industria.id}>
-                                    {industria.nome}
-                                </MenuItem>
+                                industria.id != null ? <MenuItem value={industria.id} key={industria.id} >
+                                {industria.nome}
+                            </MenuItem>:""
                             ))}
                         </Select>
                     </FormControl>

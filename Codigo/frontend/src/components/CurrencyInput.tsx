@@ -21,9 +21,9 @@ interface CurrencyInputProps {
     inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
     inputMode?: 'numeric' | 'search' | 'none' | 'text' | 'tel' | 'url' | 'email' | 'decimal';
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    placeholder?: any;
+    placeholder?: string;
     type?: any;
-    value?: any;
+    value?: number | string;
     name?:any;
 };
 
