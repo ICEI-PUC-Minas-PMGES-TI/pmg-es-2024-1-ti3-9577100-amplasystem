@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useColorScheme } from '@mui/joy/styles';
 import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
@@ -9,9 +10,12 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, sx, ...other } = props;
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
+  const [isToggling, setIsToggling] = React.useState(false);
+
   React.useEffect(() => {
     setMounted(true);
   }, []);
+
   if (!mounted) {
     return (
       <IconButton
@@ -24,6 +28,7 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
       />
     );
   }
+
   return (
     <IconButton
       id="toggle-mode"
@@ -32,12 +37,16 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
       color="neutral"
       {...other}
       onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-        onClick?.(event);
+        setIsToggling(true);
+        setTimeout(() => {
+          if (mode === 'light') {
+            setMode('dark');
+          } else {
+            setMode('light');
+          }
+          setIsToggling(false);
+          onClick?.(event);
+        }, 50); 
       }}
       sx={[
         {
@@ -50,6 +59,7 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
+      disabled={isToggling}
     >
       <LightModeIcon />
       <NightsStayIcon />

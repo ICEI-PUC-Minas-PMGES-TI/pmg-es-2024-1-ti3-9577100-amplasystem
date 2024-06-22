@@ -44,7 +44,7 @@ const Toggler = ({
         sx={{
           display: "grid",
           gridTemplateRows: open ? "1fr" : "0fr",
-          transition: "0.2s ease",
+          transition: "4s ease",
           "& > *": {
             overflow: "hidden",
           },
@@ -109,7 +109,7 @@ const Sidebar = () => {
           height: "100vh",
           opacity: "var(--SideNavigation-slideIn)",
           backgroundColor: "var(--joy-palette-background-backdrop)",
-          transition: "opacity 0.4s",
+          transition: "opacity 1s",
           transform: {
             xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
             lg: "translateX(-100%)",
