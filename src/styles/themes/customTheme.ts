@@ -5,8 +5,8 @@ const theme = extendTheme({
     light: {
       palette: {
         background: {
-          body:  '#f8fafc',
-          surface: '#f1f5f9',
+          body:  '#fff',
+          surface: '#f8fafc',
         },
         divider: '#cbd5e1',
         primary: { // Orange
@@ -195,7 +195,7 @@ const theme = extendTheme({
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
   },
   fontFamily: {
-    display: 'IBM Plex Sans',
+    display: 'IBM Plex Serif',
     body: 'IBM Plex Sans',
     code: 'IBM Plex Mono',
   },
@@ -238,20 +238,20 @@ const theme = extendTheme({
           gap: 0,
           transition: 'transform 0.2s',
           position: 'relative',
-          '& :hover': {
-            '& .MuiSvgIcon-root:first-of-type': {
-              transform: 'scale(1.1)',
-            },
-          },
+          textDecoration: 'none',
           '& .MuiSvgIcon-root': {
             marginLeft: 4,
             transition: 'transform 0.2s',
+            color: theme.palette.mode === 'dark' ? theme.palette.neutral[300] : theme.palette.neutral[800],
+          },
+          '& .MuiTypography-root': {
+            color: theme.palette.mode === 'dark' ? theme.palette.neutral[300] : theme.palette.neutral[800],
           },
           '& .Mui-selected': {
             color: theme.palette.primary[500],
             backgroundColor: theme.palette.background.surface,
             '&:hover': {
-              backgroundColor: theme.palette.mode === 'dark' ? theme.palette.primary[900] : theme.palette.primary[50],
+              backgroundColor: theme.palette.mode === 'dark' ? theme.palette.neutral[800] : theme.palette.neutral[100],
             },
             '&::after': {
               content: '""',
@@ -264,27 +264,13 @@ const theme = extendTheme({
               backgroundColor: theme.palette.primary[500],
             },
             '& .MuiSvgIcon-root': {
-              '& :hover': {
-                transform: 'scale(2)',
-              },
+              color: theme.palette.primary[500],
             },
             '& .MuiTypography-root': {
               color: theme.palette.primary[500],
               fontWeight: 900,
             },
           },
-          '& :not(.Mui-selected, .MuiListItem-nesting *):hover': {
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '4px',
-              height: '100%',
-              borderRadius: theme.radius.xl,
-              backgroundColor: theme.palette.neutral[500],
-            },
-          }
         }),
       },
     },

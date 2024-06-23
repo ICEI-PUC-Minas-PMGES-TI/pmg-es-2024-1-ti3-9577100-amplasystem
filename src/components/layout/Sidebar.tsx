@@ -178,7 +178,12 @@ const Sidebar = () => {
           <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
-                <ListItemButton onClick={() => setOpen(!open)}>
+                <ListItemButton
+                  onClick={() => setOpen(!open)}
+                  selected={
+                    location.pathname.startsWith("/financas") && open === false
+                  }
+                >
                   <AttachMoneyIcon />
                   <ListItemContent>
                     <Typography level="title-sm">Finanças</Typography>
@@ -190,14 +195,36 @@ const Sidebar = () => {
               )}
             >
               <List sx={{ gap: 0.5 }}>
-                <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton>Receitas e despesas</ListItemButton>
+                <ListItem
+                  sx={{ mt: 0.5 }}
+                  component={Link}
+                  to="/financas/dados-financeiros"
+                >
+                  <ListItemButton
+                    selected={
+                      location.pathname === "/financas/dados-financeiros"
+                    }
+                  >
+                    <Typography level="title-sm">Dados financeiros</Typography>
+                  </ListItemButton>
                 </ListItem>
-                <ListItem>
-                  <ListItemButton>Ordens de compra</ListItemButton>
+                <ListItem component={Link} to="/financas/ordens-de-compra">
+                  <ListItemButton
+                    selected={
+                      location.pathname === "/financas/ordens-de-compra"
+                    }
+                  >
+                    <Typography level="title-sm">Ordens de compra</Typography>
+                  </ListItemButton>
                 </ListItem>
-                <ListItem>
-                  <ListItemButton>Pedidos faturados</ListItemButton>
+                <ListItem component={Link} to="/financas/pedidos-faturados">
+                  <ListItemButton
+                    selected={
+                      location.pathname === "/financas/pedidos-faturados"
+                    }
+                  >
+                    <Typography level="title-sm">Pedidos faturados</Typography>
+                  </ListItemButton>
                 </ListItem>
               </List>
             </Toggler>
@@ -232,7 +259,7 @@ const Sidebar = () => {
               selected={location.pathname === "/configuracoes"}
             >
               <SettingsRoundedIcon />
-              Configurações
+              <Typography level="title-sm">Configurações</Typography>
             </ListItemButton>
           </ListItem>
         </List>
