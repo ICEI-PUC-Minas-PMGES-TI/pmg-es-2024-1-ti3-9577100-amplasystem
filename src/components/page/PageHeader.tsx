@@ -25,6 +25,7 @@ const PageHeader = ({
       <Box
         sx={{
           display: "flex",
+          flexWrap: "wrap-reverse",
           gap: 1,
         }}
       >

@@ -326,34 +326,32 @@ const Sidebar = () => {
         <ModalDialog>
           <ModalClose />
           <DialogTitle>Configurações</DialogTitle>
-          <Typography id="nested-modal-description" textColor="text.tertiary">
-            Será salvo no browser que você está utilizando neste momento.
-          </Typography>
           <DialogContent>
-            <Stack gap={3}>
-              <FormControl>
-                <FormLabel>Tema</FormLabel>
-                <Select>
-                  <Option value="light">Claro</Option>
-                  <Option value="dark">Escuro</Option>
-                  <Option value="system">Sistema</Option>
-                </Select>
-              </FormControl>
-
-              <FormControl>
-                <FormLabel>Estilo</FormLabel>
-                <Select>
-                  <Option value="chakraTheme">Chakra UI</Option>
-                  <Option value="fluentTheme">Fluent UI</Option>
-                  <Option value="joyTheme">Joy UI</Option>
-                  <Option value="antTheme">Ant Design</Option>
-                </Select>
-                <FormHelperText>
-                  Altera a estilização de cada componente.
-                </FormHelperText>
-              </FormControl>
-            </Stack>
+            Será salvo no browser que você está utilizando neste momento.
           </DialogContent>
+          <Stack gap={2}>
+            <FormControl>
+              <FormLabel>Tema</FormLabel>
+              <Select>
+                <Option value="light">Claro</Option>
+                <Option value="dark">Escuro</Option>
+                <Option value="system">Sistema</Option>
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Estilo</FormLabel>
+              <Select>
+                <Option value="chakraTheme">Chakra UI</Option>
+                <Option value="fluentTheme">Fluent UI</Option>
+                <Option value="joyTheme">Joy UI</Option>
+                <Option value="antTheme">Ant Design</Option>
+              </Select>
+              <FormHelperText>
+                Altera a estilização de cada componente.
+              </FormHelperText>
+            </FormControl>
+          </Stack>
           <DialogActions>
             <Button
               variant="solid"
