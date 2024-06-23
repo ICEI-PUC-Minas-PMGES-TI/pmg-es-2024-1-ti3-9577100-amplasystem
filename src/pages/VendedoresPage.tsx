@@ -37,7 +37,7 @@ const VendedoresPage = () => {
     {
       label: "Adicionar vendedor",
       icon: <AddIcon />,
-      color: "primary",
+      color: "success",
       size: "sm",
       variant: "solid",
       onClick: () => alert("Adicionar vendedor clicked"),

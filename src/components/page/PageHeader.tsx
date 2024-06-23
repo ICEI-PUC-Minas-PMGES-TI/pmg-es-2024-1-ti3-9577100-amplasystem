@@ -1,16 +1,5 @@
 import { Box, Typography, Button } from "@mui/joy";
-import { ReactNode } from "react";
-
-type Action = {
-  label: string;
-  icon?: ReactNode;
-  color?: "primary" | "neutral" | "danger" | "success" | "warning";
-  size?: "sm" | "md" | "lg";
-  variant?: "plain" | "outlined" | "soft" | "solid";
-  disabled?: boolean;
-  loading?: boolean;
-  onClick?: () => void;
-};
+import { Action } from "@/types/common/Action";
 
 const PageHeader = ({
   title,

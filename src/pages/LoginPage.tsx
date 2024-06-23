@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -36,6 +37,8 @@ interface FormErrors {
 }
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [errors, setErrors] = useState<FormErrors>({
     email: "",
     password: "",
@@ -77,6 +80,7 @@ const LoginPage: React.FC = () => {
       alert(
         `Email: ${formData.email}\nPassword: ${formData.password}\nPersistent: ${formData.persistent}`
       );
+      navigate("/vendedores");
     }
   };
 
