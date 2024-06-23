@@ -279,10 +279,17 @@ const Sidebar = () => {
             }}
           >
             <ListItem>
-              <ListItemButton onClick={() => setModalConfiguracoes(true)}>
-                <SettingsRoundedIcon />
-                <Typography level="title-sm">Configurações</Typography>
-              </ListItemButton>
+              <Tooltip
+                title="Personalize o sistema!"
+                placement="top-start"
+                color="primary"
+                variant="solid"
+              >
+                <ListItemButton onClick={() => setModalConfiguracoes(true)}>
+                  <SettingsRoundedIcon />
+                  <Typography level="title-sm">Configurações</Typography>
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
           </List>
         </Box>
@@ -295,7 +302,12 @@ const Sidebar = () => {
             <Typography level="title-sm">{usuario.nome}</Typography>
             <Typography level="body-xs">{usuario.email}</Typography>
           </Box>
-          <Tooltip title="Sair do sistema" variant="solid" color="danger">
+          <Tooltip
+            title="Sair"
+            variant="solid"
+            color="danger"
+            placement="right"
+          >
             <IconButton
               size="sm"
               variant="plain"
