@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
@@ -11,21 +11,75 @@ import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
+import FormHelperText from "@mui/joy/FormHelperText";
+import { InfoOutlined } from "@mui/icons-material";
 
 import ColorSchemeToggle from "@/components/ColorSchemeToggle";
-import { InfoOutlined } from "@mui/icons-material";
-import FormHelperText from "@mui/joy/FormHelperText";
 
-interface FormElements extends HTMLFormControlsCollection {
-  email: HTMLInputElement;
-  password: HTMLInputElement;
-  persistent: HTMLInputElement;
-}
 interface SignInFormElement extends HTMLFormElement {
-  readonly elements: FormElements;
+  elements: HTMLFormControlsCollection & {
+    email: HTMLInputElement;
+    password: HTMLInputElement;
+    persistent: HTMLInputElement;
+  };
 }
 
-export default function JoySignInSideTemplate() {
+interface FormData {
+  email: string;
+  password: string;
+  persistent: boolean;
+}
+
+interface FormErrors {
+  email: string;
+  password: string;
+}
+
+const LoginPage: React.FC = () => {
+  const [errors, setErrors] = useState<FormErrors>({
+    email: "",
+    password: "",
+  });
+
+  const validateForm = (data: FormData): FormErrors => {
+    const errors: FormErrors = {
+      email: "",
+      password: "",
+    };
+
+    if (!data.email) {
+      errors.email = "Email é obrigatório";
+    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+      errors.email = "Email inválido";
+    }
+
+    if (!data.password) {
+      errors.password = "Senha é obrigatória";
+    }
+
+    return errors;
+  };
+
+  const handleFormSubmit = (event: React.FormEvent<SignInFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData: FormData = {
+      email: form.elements.email.value,
+      password: form.elements.password.value,
+      persistent: form.elements.persistent.checked,
+    };
+
+    const formErrors = validateForm(formData);
+    setErrors(formErrors);
+
+    if (!formErrors.email && !formErrors.password) {
+      alert(
+        `Email: ${formData.email}\nPassword: ${formData.password}\nPersistent: ${formData.persistent}`
+      );
+    }
+  };
+
   return (
     <>
       <GlobalStyles
@@ -146,30 +200,26 @@ export default function JoySignInSideTemplate() {
               })}
             />
             <Stack gap={4} sx={{ mt: 2 }}>
-              <form
-                onSubmit={async (event: React.FormEvent<SignInFormElement>) => {
-                  event.preventDefault();
-                  const formElements = event.currentTarget.elements;
-                  const data = {
-                    email: formElements.email.value,
-                    password: formElements.password.value,
-                    persistent: formElements.persistent.checked,
-                  };
-
-                  alert(JSON.stringify(data, null, 2));
-                }}
-              >
-                <FormControl required error>
+              <form onSubmit={handleFormSubmit}>
+                <FormControl error={Boolean(errors.email)}>
                   <FormLabel>Email</FormLabel>
-                  <Input type="email" name="email" />
-                  <FormHelperText>
-                    <InfoOutlined />
-                    Opps! something is wrong.
-                  </FormHelperText>
+                  <Input name="email" />
+                  {errors.email && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      {errors.email}
+                    </FormHelperText>
+                  )}
                 </FormControl>
-                <FormControl required>
+                <FormControl error={Boolean(errors.password)}>
                   <FormLabel>Password</FormLabel>
                   <Input type="password" name="password" />
+                  {errors.password && (
+                    <FormHelperText>
+                      <InfoOutlined />
+                      {errors.password}
+                    </FormHelperText>
+                  )}
                 </FormControl>
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Box
@@ -213,10 +263,11 @@ export default function JoySignInSideTemplate() {
           transition:
             "background-image var(--Transition-duration), left var(--Transition-duration) !important",
           transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          // background: theme.palette.primary[500],
           background: theme.palette.background.surface,
         })}
       />
     </>
   );
-}
+};
+
+export default LoginPage;
