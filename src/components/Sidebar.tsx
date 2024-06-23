@@ -161,7 +161,7 @@ const Sidebar = () => {
           },
         }}
       >
-        <List size="sm">
+        <List size="sm" className="Sidebar">
           <ListItem>
             <ListItemButton
               component={Link}
@@ -245,11 +245,10 @@ const Sidebar = () => {
 
         <List
           size="sm"
+          className="Sidebar"
           sx={{
             mt: "auto",
             flexGrow: 0,
-            "--ListItem-radius": (theme) => theme.vars.radius.sm,
-            "--List-gap": "8px",
             mb: 2,
           }}
         >

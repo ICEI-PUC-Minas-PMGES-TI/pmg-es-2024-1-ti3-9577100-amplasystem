@@ -45,18 +45,18 @@ const theme = extendTheme({
           800: "#881337",
           900: "#4c0519",
         },
-        // primary: { // Green
-        //   50: "#dcfce7",
-        //   100: "#bbf7d0",
-        //   200: "#86efac",
-        //   300: "#4ade80",
-        //   400: "#22c55e",
-        //   500: "#16a34a",
-        //   600: "#15803d",
-        //   700: "#166534",
-        //   800: "#14532d",
-        //   900: "#052e16",
-        // },
+        success: { // Green
+          50: "#dcfce7",
+          100: "#bbf7d0",
+          200: "#86efac",
+          300: "#4ade80",
+          400: "#22c55e",
+          500: "#16a34a",
+          600: "#15803d",
+          700: "#166534",
+          800: "#14532d",
+          900: "#052e16",
+        },
         // neutral: { // Zinc
         //   50: "#fafafa",
         //   100: "#f4f4f5",
@@ -127,18 +127,18 @@ const theme = extendTheme({
           800: "#9f1239",
           900: "#881337",
         },
-        // primary: { // Green
-        //   50: "#f0fdf4",
-        //   100: "#dcfce7",
-        //   200: "#bbf7d0",
-        //   300: "#86efac",
-        //   400: "#4ade80",
-        //   500: "#22c55e",
-        //   600: "#16a34a",
-        //   700: "#15803d",
-        //   800: "#166534",
-        //   900: "#14532d",
-        // },
+        success: { // Green
+          50: "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          300: "#86efac",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+          800: "#166534",
+          900: "#14532d",
+        },
         // neutral: { // Zinc
         //   50: "#fafafa",
         //   100: "#f4f4f5",
@@ -188,8 +188,8 @@ const theme = extendTheme({
   focus: {
     default: {
       outlineWidth: '2px',
-      outlineOffset: '2px',
-      outlineColor: '#339af0',
+      outlineOffset: '1px',
+      outlineColor: '#fb923c',
     },
   },
   components: {
@@ -235,6 +235,10 @@ const theme = extendTheme({
           },
           '& .Mui-selected': {
             color: theme.palette.primary[500],
+            backgroundColor: theme.palette.background.surface,
+            '&:hover': {
+              backgroundColor: theme.palette.mode === 'dark' ? theme.palette.primary[900] : theme.palette.primary[50],
+            },
             '&::after': {
               content: '""',
               position: 'absolute',
