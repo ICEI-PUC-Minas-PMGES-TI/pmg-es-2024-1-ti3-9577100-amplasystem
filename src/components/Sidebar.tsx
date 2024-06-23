@@ -83,7 +83,7 @@ const Sidebar = () => {
         flexDirection: "column",
         gap: 2,
         borderRight: "1px solid",
-        borderColor: "divider",
+        borderColor: (theme) => theme.palette.divider,
       }}
     >
       <GlobalStyles

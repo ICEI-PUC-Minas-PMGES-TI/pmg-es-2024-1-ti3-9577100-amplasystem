@@ -4,7 +4,12 @@ const theme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
-        primary: { // LARANJA
+        background: {
+          body:  '#fff',
+          surface: '#f8fafc',
+        },
+        divider: '#cbd5e1',
+        primary: { // Orange
           50: "#ffedd5",
           100: "#fed7aa",
           200: "#fdba74",
@@ -16,7 +21,19 @@ const theme = extendTheme({
           800: "#7c2d12",
           900: "#431407",
         },
-        // primary: { // VERDE
+        danger: {
+          50: "#fee2e2",
+          100: "#fecaca",
+          200: "#fca5a5",
+          300: "#f87171",
+          400: "#ef4444",
+          500: "#dc2626",
+          600: "#b91c1c",
+          700: "#991b1b",
+          800: "#7f1d1d",
+          900: "#450a0a",
+        },
+        // primary: { // Green
         //   50: "#dcfce7",
         //   100: "#bbf7d0",
         //   200: "#86efac",
@@ -28,35 +45,41 @@ const theme = extendTheme({
         //   800: "#14532d",
         //   900: "#052e16",
         // },
-        neutral: { // ZINC
-          50: "#fafafa",
-          100: "#f4f4f5",
-          200: "#e4e4e7",
-          300: "#d4d4d8",
-          400: "#a1a1aa",
-          500: "#71717a",
-          600: "#52525b",
-          700: "#3f3f46",
-          800: "#27272a",
-          900: "#18181b",
-        },
-        // neutral: { // Slate
-        //   50: "#f8fafc",
-        //   100: "#f1f5f9",
-        //   200: "#e2e8f0",
-        //   300: "#cbd5e1",
-        //   400: "#94a3b8",
-        //   500: "#64748b",
-        //   600: "#475569",
-        //   700: "#334155",
-        //   800: "#1e293b",
-        //   900: "#0f172a",
-        // }
+        // neutral: { // Zinc
+        //   50: "#fafafa",
+        //   100: "#f4f4f5",
+        //   200: "#e4e4e7",
+        //   300: "#d4d4d8",
+        //   400: "#a1a1aa",
+        //   500: "#71717a",
+        //   600: "#52525b",
+        //   700: "#3f3f46",
+        //   800: "#27272a",
+        //   900: "#18181b",
+        // },
+        neutral: { // Slate
+          50: "#f8fafc",
+          100: "#f1f5f9",
+          200: "#e2e8f0",
+          300: "#cbd5e1",
+          400: "#94a3b8",
+          500: "#64748b",
+          600: "#475569",
+          700: "#334155",
+          800: "#1e293b",
+          900: "#0f172a",
+        }
       },
     },
     dark: {
       palette: {
-        primary: { // LARANJA
+        background: {
+          // body:  '#09090b', // Zinc
+          body:  '#020617', // Slate
+          surface: '#0f172a',
+        },
+        divider: '#334155',
+        primary: { // Orange
           50: "#fff7ed",
           100: "#ffedd5",
           200: "#fed7aa",
@@ -68,7 +91,19 @@ const theme = extendTheme({
           800: "#9a3412",
           900: "#7c2d12",
         },
-        // primary: { // VERDE
+        danger: {
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#ef4444",
+          600: "#dc2626",
+          700: "#b91c1c",
+          800: "#991b1b",
+          900: "#7f1d1d",
+        },
+        // primary: { // Green
         //   50: "#f0fdf4",
         //   100: "#dcfce7",
         //   200: "#bbf7d0",
@@ -80,35 +115,36 @@ const theme = extendTheme({
         //   800: "#166534",
         //   900: "#14532d",
         // },
-        neutral: { // ZINC
-          50: "#f4f4f5",
-          100: "#e4e4e7",
-          200: "#d4d4d8",
-          300: "#a1a1aa",
-          400: "#71717a",
-          500: "#52525b",
-          600: "#3f3f46",
-          700: "#27272a",
-          800: "#18181b",
-          900: "#09090b",
-        },
-        // neutral: { // Slate
-        //   50: "#f1f5f9",
-        //   100: "#e2e8f0",
-        //   200: "#cbd5e1",
-        //   300: "#94a3b8",
-        //   400: "#64748b",
-        //   500: "#475569",
-        //   600: "#334155",
-        //   700: "#1e293b",
-        //   800: "#0f172a",
-        //   900: "#020617",
-        // }
+        // neutral: { // Zinc
+        //   50: "#fafafa",
+        //   100: "#f4f4f5",
+        //   200: "#e4e4e7",
+        //   300: "#d4d4d8",
+        //   400: "#a1a1aa",
+        //   500: "#71717a",
+        //   600: "#52525b",
+        //   700: "#3f3f46",
+        //   800: "#27272a",
+        //   900: "#18181b",
+        // },
+        neutral: { // Slate
+          50: "#f8fafc",
+          100: "#f1f5f9",
+          200: "#e2e8f0",
+          300: "#cbd5e1",
+          400: "#94a3b8",
+          500: "#64748b",
+          600: "#475569",
+          700: "#334155",
+          800: "#1e293b",
+          900: "#0f172a",
+        }
       },
     },
   },
   radius: {
-    xs: '.125rem',
+    xs: '.5rem',
+    // xs: '.125rem',
     sm: '.25rem',
     md: '.5rem',
     lg: '1rem',
@@ -122,7 +158,7 @@ const theme = extendTheme({
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
   },
   fontFamily: {
-    display: 'IBM Plex Serif',
+    display: 'IBM Plex Sans',
     body: 'IBM Plex Sans',
     code: 'IBM Plex Mono',
   },
@@ -166,7 +202,7 @@ const theme = extendTheme({
           transition: 'transform 0.2s',
           position: 'relative',
           '& :hover': {
-            '& .MuiSvgIcon-root:first-child': {
+            '& .MuiSvgIcon-root:first-of-type': {
               transform: 'scale(1.1)',
             },
           },
@@ -225,12 +261,24 @@ const theme = extendTheme({
         }),
         listbox: ({ theme }) => ({
           borderRadius: theme.vars.radius.xs,
+          backgroundColor: theme.palette.background.body,
+        }),
+      },
+    },
+    JoyMenu: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.radius.xs,
+          backgroundColor: theme.palette.background.body,
         }),
       },
     },
     JoyCheckbox: {
       styleOverrides: {
         root: ({ theme }) => ({
+          borderRadius: theme.vars.radius.xs,
+        }),
+        checkbox: ({ theme }) => ({
           borderRadius: theme.vars.radius.xs,
         }),
       },

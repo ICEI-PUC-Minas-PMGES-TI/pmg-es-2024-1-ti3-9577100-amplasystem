@@ -13,6 +13,8 @@ import Stack from "@mui/joy/Stack";
 import IconButton from "@mui/joy/IconButton";
 
 import ColorSchemeToggle from "@/components/ColorSchemeToggle";
+import { InfoOutlined } from "@mui/icons-material";
+import FormHelperText from "@mui/joy/FormHelperText";
 
 interface FormElements extends HTMLFormControlsCollection {
   email: HTMLInputElement;
@@ -44,10 +46,8 @@ export default function JoySignInSideTemplate() {
           display: "flex",
           justifyContent: "flex-end",
           backdropFilter: "blur(12px)",
-          backgroundColor: "rgba(255 255 255 / 0.2)",
-          [theme.getColorSchemeSelector("dark")]: {
-            backgroundColor: "rgba(19 19 24 / 0.4)",
-          },
+          backgroundColor: theme.palette.background.body,
+          boxShadow: theme.shadow.xl,
         })}
       >
         <Box
@@ -147,7 +147,7 @@ export default function JoySignInSideTemplate() {
             />
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
-                onSubmit={(event: React.FormEvent<SignInFormElement>) => {
+                onSubmit={async (event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
                   const formElements = event.currentTarget.elements;
                   const data = {
@@ -155,12 +155,17 @@ export default function JoySignInSideTemplate() {
                     password: formElements.password.value,
                     persistent: formElements.persistent.checked,
                   };
+
                   alert(JSON.stringify(data, null, 2));
                 }}
               >
-                <FormControl required>
+                <FormControl required error>
                   <FormLabel>Email</FormLabel>
                   <Input type="email" name="email" />
+                  <FormHelperText>
+                    <InfoOutlined />
+                    Opps! something is wrong.
+                  </FormHelperText>
                 </FormControl>
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
@@ -208,10 +213,8 @@ export default function JoySignInSideTemplate() {
           transition:
             "background-image var(--Transition-duration), left var(--Transition-duration) !important",
           transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          background: "#f0f0f0",
-          [theme.getColorSchemeSelector("dark")]: {
-            background: "black",
-          },
+          // background: theme.palette.primary[500],
+          background: theme.palette.background.surface,
         })}
       />
     </>
