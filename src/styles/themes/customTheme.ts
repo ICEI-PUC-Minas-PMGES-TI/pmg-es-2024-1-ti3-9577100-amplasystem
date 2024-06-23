@@ -152,7 +152,7 @@ const theme = extendTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           borderRadius: theme.vars.radius.xs,
-          gap: 8,
+          gap: 0,
           "--List-nestedInsetStart": "32px",
           "--ListItem-radius": theme.vars.radius.xs,
         }),
@@ -166,7 +166,7 @@ const theme = extendTheme({
           transition: 'transform 0.2s',
           position: 'relative',
           '& :hover': {
-            '& .MuiSvgIcon-root': {
+            '& .MuiSvgIcon-root:first-child': {
               transform: 'scale(1.1)',
             },
           },
@@ -183,6 +183,7 @@ const theme = extendTheme({
               left: 0,
               width: '4px',
               height: '100%',
+              borderRadius: theme.radius.xl,
               backgroundColor: theme.palette.primary[500],
             },
             '& .MuiSvgIcon-root': {
@@ -195,7 +196,7 @@ const theme = extendTheme({
               fontWeight: 900,
             },
           },
-          '& > :not(.Mui-selected):hover': {
+          '& :not(.Mui-selected, .MuiListItem-nesting *):hover': {
             '&::after': {
               content: '""',
               position: 'absolute',
@@ -203,6 +204,7 @@ const theme = extendTheme({
               left: 0,
               width: '4px',
               height: '100%',
+              borderRadius: theme.radius.xl,
               backgroundColor: theme.palette.neutral[500],
             },
           }
