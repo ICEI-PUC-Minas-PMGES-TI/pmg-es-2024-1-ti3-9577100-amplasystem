@@ -1,6 +1,6 @@
 import { TipoContato } from '@/enums/TipoContato';
 
-export interface ContatoModel {
+export interface Contato {
     id: number | null;
     nome: string;
     email: string;

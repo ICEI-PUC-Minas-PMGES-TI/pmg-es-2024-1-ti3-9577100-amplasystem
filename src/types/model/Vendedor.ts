@@ -1,6 +1,6 @@
 import { Cargo } from '@/enums/Cargo.ts';
 
-export type VendedorModel = {
+export type Vendedor = {
     id: number;
     nome: string;
     email: string;

@@ -1,14 +1,14 @@
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import AddIcon from "@mui/icons-material/Add";
-import { ReactNode } from "react";
 
-import OrderTable from "@/components/OrderTable";
-import OrderList from "@/components/OrderList";
-import CustomBreadcrumbs from "@/components/CustomBreadcrumbs";
-import PageHeader from "@/components/PageHeader";
+import OrderTable from "@/components/page/OrderTable";
+import OrderList from "@/components/page/OrderList";
+import PageBreadcrumbs from "@/components/page/PageBreadcrumbs";
+import PageHeader from "@/components/page/PageHeader";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import { Action } from "@/types/common/Action";
 
 const ClientesPage = () => {
   const breadcrumbs = [
@@ -16,17 +16,6 @@ const ClientesPage = () => {
     { text: "Dashboard", href: "#dashboard" },
     { text: "Clientes" },
   ];
-
-  type Action = {
-    label: string;
-    icon?: ReactNode;
-    color?: "primary" | "neutral" | "danger" | "success" | "warning";
-    size?: "sm" | "md" | "lg";
-    variant?: "plain" | "outlined" | "soft" | "solid";
-    disabled?: boolean;
-    loading?: boolean;
-    onClick?: () => void;
-  };
 
   const actions: Action[] = [
     {
@@ -49,6 +38,7 @@ const ClientesPage = () => {
       label: "Adicionar cliente",
       icon: <AddIcon />,
       color: "primary",
+      variant: "solid",
       size: "sm",
       onClick: () => alert("Adicionar cliente clicked"),
     },
@@ -56,7 +46,7 @@ const ClientesPage = () => {
 
   return (
     <>
-      <CustomBreadcrumbs breadcrumbs={breadcrumbs} />
+      <PageBreadcrumbs breadcrumbs={breadcrumbs} />
       <PageHeader title="Clientes" actions={actions} />
       <OrderTable />
       <OrderList />

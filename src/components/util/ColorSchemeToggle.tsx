@@ -1,10 +1,9 @@
+import * as React from "react";
+import { useColorScheme } from "@mui/joy/styles";
+import IconButton, { IconButtonProps } from "@mui/joy/IconButton";
 
-import * as React from 'react';
-import { useColorScheme } from '@mui/joy/styles';
-import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
-
-import NightsStayIcon from '@mui/icons-material/NightsStay';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import LightModeIcon from "@mui/icons-material/LightMode";
 
 export default function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, sx, ...other } = props;
@@ -39,22 +38,22 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
       onClick={(event) => {
         setIsToggling(true);
         setTimeout(() => {
-          if (mode === 'light') {
-            setMode('dark');
+          if (mode === "light") {
+            setMode("dark");
           } else {
-            setMode('light');
+            setMode("light");
           }
           setIsToggling(false);
           onClick?.(event);
-        }, 50); 
+        }, 50);
       }}
       sx={[
         {
-          '& > *:first-child': {
-            display: mode === 'dark' ? 'none' : 'initial',
+          "& > *:first-child": {
+            display: mode === "dark" ? "none" : "initial",
           },
-          '& > *:last-child': {
-            display: mode === 'light' ? 'none' : 'initial',
+          "& > *:last-child": {
+            display: mode === "light" ? "none" : "initial",
           },
         },
         ...(Array.isArray(sx) ? sx : [sx]),

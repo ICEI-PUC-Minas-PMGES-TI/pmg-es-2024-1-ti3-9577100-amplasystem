@@ -1,12 +1,7 @@
 import { Box, Breadcrumbs, Link, Typography } from "@mui/joy";
+import { Breadcrumb } from "@/types/common/Breadcrumb";
 
-type Breadcrumb = {
-  text: string;
-  href?: string;
-  icon?: React.ElementType;
-};
-
-const CustomBreadcrumbs = ({ breadcrumbs }: { breadcrumbs: Breadcrumb[] }) => {
+const PageBreadcrumbs = ({ breadcrumbs }: { breadcrumbs: Breadcrumb[] }) => {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Breadcrumbs size="sm" aria-label="breadcrumbs" sx={{ pl: 0 }}>
@@ -40,4 +35,4 @@ const CustomBreadcrumbs = ({ breadcrumbs }: { breadcrumbs: Breadcrumb[] }) => {
   );
 };
 
-export default CustomBreadcrumbs;
+export default PageBreadcrumbs;

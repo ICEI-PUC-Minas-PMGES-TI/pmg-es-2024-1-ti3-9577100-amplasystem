@@ -1,5 +1,4 @@
-
-export type EnderecoModel = {
+export type Endereco = {
     id: number | null;
     cep: string;
     estado: string;
