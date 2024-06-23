@@ -5,14 +5,12 @@ import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
 import Divider from "@mui/joy/Divider";
 import IconButton from "@mui/joy/IconButton";
-import Input from "@mui/joy/Input";
 import List from "@mui/joy/List";
 import ListItem from "@mui/joy/ListItem";
 import ListItemButton, { listItemButtonClasses } from "@mui/joy/ListItemButton";
 import ListItemContent from "@mui/joy/ListItemContent";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
@@ -44,7 +42,7 @@ const Toggler = ({
         sx={{
           display: "grid",
           gridTemplateRows: open ? "1fr" : "0fr",
-          transition: "4s ease",
+          transition: ".2s ease",
           "& > *": {
             overflow: "hidden",
           },
@@ -109,7 +107,7 @@ const Sidebar = () => {
           height: "100vh",
           opacity: "var(--SideNavigation-slideIn)",
           backgroundColor: "var(--joy-palette-background-backdrop)",
-          transition: "opacity 1s",
+          transition: "opacity 0.4s",
           transform: {
             xs: "translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))",
             lg: "translateX(-100%)",
@@ -151,11 +149,6 @@ const Sidebar = () => {
         <Typography level="title-lg">AmplaSystem</Typography>
         <ColorSchemeToggle sx={{ ml: "auto" }} />
       </Box>
-      <Input
-        size="sm"
-        startDecorator={<SearchRoundedIcon />}
-        placeholder="Search"
-      />
       <Box
         sx={{
           minHeight: 0,

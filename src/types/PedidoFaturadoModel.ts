@@ -1,4 +1,3 @@
-import { financeiroDTOModels } from "./FinanceiroDTOModels";
 import { FinanceiroModel } from "./FinanceiroModel";
 import { OrdemDeCompraModel } from "./OrdemDeCompraModel";
 
