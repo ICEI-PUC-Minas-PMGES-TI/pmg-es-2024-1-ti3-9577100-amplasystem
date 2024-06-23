@@ -5,8 +5,8 @@ const theme = extendTheme({
     light: {
       palette: {
         background: {
-          body:  '#fff',
-          surface: '#f8fafc',
+          body:  '#f8fafc',
+          surface: '#f1f5f9',
         },
         divider: '#cbd5e1',
         primary: { // Orange
@@ -80,17 +80,19 @@ const theme = extendTheme({
           700: "#334155",
           800: "#1e293b",
           900: "#0f172a",
-        }
+        },
       },
     },
     dark: {
       palette: {
         background: {
-          // body:  '#09090b', // Zinc
           body:  '#020617', // Slate
-          surface: '#0f172a',
+          // body:  '#052e16', // Green
+          surface: '#0f172a', // Slate
+          // surface: '#052e16', // Green
         },
         divider: '#334155',
+        // divider: '#166534', // Green
         primary: { // Orange
           50: "#fff7ed",
           100: "#ffedd5",
@@ -162,7 +164,19 @@ const theme = extendTheme({
           700: "#334155",
           800: "#1e293b",
           900: "#0f172a",
-        }
+        },
+        // neutral: { // Green
+        //   50: "#dcfce7",
+        //   100: "#bbf7d0",
+        //   200: "#86efac",
+        //   300: "#4ade80",
+        //   400: "#22c55e",
+        //   500: "#16a34a",
+        //   600: "#15803d",
+        //   700: "#166534",
+        //   800: "#14532d",
+        //   900: "#052e16",
+        // },
       },
     },
   },
