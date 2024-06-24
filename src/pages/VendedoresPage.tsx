@@ -10,6 +10,7 @@ import PageHeader from "@/components/page/PageHeader";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { Action } from "@/types/common/Action";
+import { Breadcrumb } from "@/types/common/Breadcrumb";
 
 import {
   Button,
@@ -28,11 +29,12 @@ import {
   DialogActions,
 } from "@mui/joy";
 import { InfoOutlined } from "@mui/icons-material";
+import { Vendedor } from "@/types/model/Vendedor";
+import { Cargo } from "@/enums/Cargo.ts";
 
 const VendedoresPage = () => {
-  const breadcrumbs = [
-    { text: "Home", href: "#home", icon: HomeRoundedIcon },
-    { text: "Dashboard", href: "#dashboard" },
+  const breadcrumbs: Breadcrumb[] = [
+    { text: "Dashboard", href: "#dashboard", icon: HomeRoundedIcon },
     { text: "Vendedores" },
   ];
 
@@ -59,23 +61,25 @@ const VendedoresPage = () => {
       color: "success",
       size: "sm",
       variant: "solid",
-      onClick: () => setModalAdicionarVendedor(true),
+      onClick: () => setModalVendedor(true),
     },
   ];
 
-  const [modalAdicionarVendedor, setModalAdicionarVendedor] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [cargo, setCargo] = useState("");
+  const [modalAdicionarVendedor, setModalVendedor] = useState(false);
+  const [vendedorData, setVendedorData] = useState<Vendedor>({
+    nome: "",
+    email: "",
+    cargo: Cargo.VENDEDOR,
+  });
   const [errors, setErrors] = useState({ nome: "", email: "", cargo: "" });
 
-  const handleAdicionarVendedor = () => {
+  const handleVendedorModalSubmit = () => {
     const newErrors = { nome: "", email: "", cargo: "" };
-
-    if (!nome) newErrors.nome = "Nome é obrigatório";
-    if (!email) newErrors.email = "Email é obrigatório";
-    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email inválido";
-    if (!cargo) newErrors.cargo = "Cargo é obrigatório";
+    if (!vendedorData.nome) newErrors.nome = "Nome é obrigatório";
+    if (!vendedorData.email) newErrors.email = "Email é obrigatório";
+    else if (!/\S+@\S+\.\S+/.test(vendedorData.email))
+      newErrors.email = "Email inválido";
+    if (!vendedorData.cargo) newErrors.cargo = "Cargo é obrigatório";
 
     setErrors(newErrors);
 
@@ -84,11 +88,11 @@ const VendedoresPage = () => {
     }
 
     // Está demorando para limpar porque a função é síncrona
-    alert(`Nome: ${nome}\nEmail: ${email}\nCargo: ${cargo}, cadastrado`);
+    alert(
+      `Nome: ${vendedorData?.nome}\nEmail: ${vendedorData?.email}\nCargo: ${vendedorData?.cargo}, cadastrado`
+    );
 
-    setNome("");
-    setEmail("");
-    setCargo("");
+    setVendedorData({ nome: "", email: "", cargo: Cargo.VENDEDOR });
   };
 
   return (
@@ -100,7 +104,7 @@ const VendedoresPage = () => {
 
       <Modal
         open={modalAdicionarVendedor}
-        onClose={() => setModalAdicionarVendedor(false)}
+        onClose={() => setModalVendedor(false)}
       >
         <ModalDialog>
           <ModalClose />
@@ -113,8 +117,10 @@ const VendedoresPage = () => {
               <FormLabel>Nome</FormLabel>
               <Input
                 autoFocus
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                value={vendedorData?.nome}
+                onChange={(e) =>
+                  setVendedorData({ ...vendedorData, nome: e.target.value })
+                }
               />
               {errors.nome && (
                 <FormHelperText>
@@ -125,7 +131,12 @@ const VendedoresPage = () => {
             </FormControl>
             <FormControl error={Boolean(errors.email)}>
               <FormLabel>Email</FormLabel>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                value={vendedorData.email}
+                onChange={(e) =>
+                  setVendedorData({ ...vendedorData, email: e.target.value })
+                }
+              />
               {errors.email && (
                 <FormHelperText>
                   <InfoOutlined />
@@ -136,11 +147,16 @@ const VendedoresPage = () => {
             <FormControl error={Boolean(errors.cargo)}>
               <FormLabel>Cargo</FormLabel>
               <Select
-                value={cargo}
-                onChange={(_, newValue) => setCargo(newValue ?? "")}
+                value={vendedorData.cargo}
+                onChange={(_, newValue) =>
+                  setVendedorData({
+                    ...vendedorData,
+                    cargo: newValue as Cargo,
+                  })
+                }
               >
-                <Option value="vendedor">Vendedor</Option>
-                <Option value="administrador">Administrador</Option>
+                <Option value={Cargo.VENDEDOR}>Vendedor</Option>
+                <Option value={Cargo.ADMINISTRADOR}>Administrador</Option>
               </Select>
               {errors.cargo && (
                 <FormHelperText>
@@ -154,14 +170,14 @@ const VendedoresPage = () => {
             <Button
               variant="solid"
               color="primary"
-              onClick={() => handleAdicionarVendedor()}
+              onClick={handleVendedorModalSubmit}
             >
               Cadastrar
             </Button>
             <Button
-              variant="outlined"
+              variant="plain"
               color="neutral"
-              onClick={() => setModalAdicionarVendedor(false)}
+              onClick={() => setModalVendedor(false)}
             >
               Cancelar
             </Button>
