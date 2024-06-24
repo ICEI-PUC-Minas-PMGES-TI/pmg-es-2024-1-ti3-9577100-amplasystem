@@ -54,7 +54,7 @@ public class IndustriaController {
     @ResponseBody
     public ResponseEntity<?> save(@RequestBody Industria industria) {
         try {
-
+            industriaService.save(industria);
             ResponseDTO result = new ResponseDTO("Indústria cadastrada com sucesso!",
                     "A industria " + industria.getNome() + " foi cadastrada com sucesso!");
             return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -77,7 +77,9 @@ public class IndustriaController {
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-        return ResponseEntity.ok().build();
+        ResponseDTO result = new ResponseDTO("Indústria deletada com sucesso!",
+                "A industria foi deletada com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PutMapping
@@ -90,7 +92,10 @@ public class IndustriaController {
                     e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-        return ResponseEntity.ok().build();
+        ResponseDTO result = new ResponseDTO("Indústria atualizada com sucesso!",
+                "A industria foi atualizada com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+
     }
 
     @PostMapping(value = "/tabela")
