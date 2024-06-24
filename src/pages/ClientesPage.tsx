@@ -166,7 +166,12 @@ const ClientesPage = () => {
 
     // Está demorando para limpar porque a função é síncrona
     alert(
-      `CNPJ: ${clienteData?.cnpj}\nNome Fantasia: ${clienteData?.nomeFantasia}, cadastrado`
+      `CNPJ: ${clienteData?.cnpj}\n
+      Nome Fantasia: ${clienteData?.nomeFantasia}\n
+      Vendedor: ${clienteData?.idVendedor}\n
+      Telefone: ${clienteData?.telefone}\n
+      Endereço: ${clienteData?.endereco?.cep}, ${clienteData?.endereco?.estado}, ${clienteData?.endereco?.cidade}, ${clienteData?.endereco?.bairro}, ${clienteData?.endereco?.rua}, ${clienteData?.endereco?.numero}, ${clienteData?.endereco?.complemento}, cadastrado
+      `
     );
 
     setClienteData({
@@ -402,7 +407,7 @@ const ClientesPage = () => {
                 )}
               </FormControl>
               <FormControl>
-                <FormLabel>Complemento</FormLabel>
+                <FormLabel>Complemento (Opcional)</FormLabel>
                 <Input
                   value={clienteData.endereco?.complemento?.toString()}
                   onChange={(e) =>
