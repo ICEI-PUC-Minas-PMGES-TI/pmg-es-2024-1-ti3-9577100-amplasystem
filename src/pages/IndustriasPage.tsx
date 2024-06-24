@@ -1,3 +1,4 @@
+import React from "react";
 import DownloadIcon from "@mui/icons-material/Download";
 import UploadIcon from "@mui/icons-material/Upload";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,6 +10,9 @@ import PageHeader from "@/components/page/PageHeader";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { Action } from "@/types/common/Action";
+import SnackbarComponent from "@/components/common/SnackbarComponent";
+import ModalIndustria from "@/components/page/ModalIndustria";
+import useFormIndustria from "@/hooks/useFormIndustria";
 
 const IndustriasPage = () => {
   const breadcrumbs = [
@@ -40,17 +44,43 @@ const IndustriasPage = () => {
       color: "primary",
       variant: "solid",
       size: "sm",
-      onClick: () => alert("Adicionar cliente clicked"),
+      onClick: () => setModalIndustria(true),
     },
   ];
 
+  const {
+    modalIndustria,
+    setModalIndustria,
+    industriaData,
+    setIndustriaData,
+    errors,
+    handleModalSubmit,
+    snackbar,
+    handleSnackbarClose,
+  } = useFormIndustria();
+
   return (
-    <>
+    <React.Fragment>
       <PageBreadcrumbs breadcrumbs={breadcrumbs} />
       <PageHeader title="Indústrias" actions={actions} />
       <OrderTable />
       <OrderList />
-    </>
+      <ModalIndustria
+        open={modalIndustria}
+        onClose={() => setModalIndustria(false)}
+        industriaData={industriaData}
+        setIndustriaData={setIndustriaData}
+        errors={errors}
+        handleSubmit={handleModalSubmit}
+      />
+      <SnackbarComponent
+        open={snackbar.open}
+        onClose={handleSnackbarClose}
+        message={snackbar.message}
+        color={snackbar.color}
+        anchorOrigin={snackbar.anchorOrigin}
+      />
+    </React.Fragment>
   );
 };
 

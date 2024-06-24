@@ -1,8 +1,20 @@
 import React from "react";
 import {
-  Button, FormControl, FormLabel, Input, Modal, ModalDialog, DialogTitle,
-  DialogContent, Stack, ModalClose, FormHelperText, Select, Option, ModalOverflow,
-  DialogActions
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalDialog,
+  DialogTitle,
+  DialogContent,
+  Stack,
+  ModalClose,
+  FormHelperText,
+  Select,
+  Option,
+  ModalOverflow,
+  DialogActions,
 } from "@mui/joy";
 import { InfoOutlined, LocationOn } from "@mui/icons-material";
 import { Cliente } from "@/types/model/Cliente";
@@ -13,15 +25,34 @@ interface ModalClienteProps {
   onClose: () => void;
   clienteData: Cliente;
   setClienteData: (cliente: Cliente) => void;
-  errors: { cnpj: string; nomeFantasia: string; idVendedor: string; telefone: string; endereco: { cep: string; estado: string; cidade: string; bairro: string; rua: string; numero: string } };
+  errors: {
+    cnpj: string;
+    nomeFantasia: string;
+    idVendedor: string;
+    telefone: string;
+    endereco: {
+      cep: string;
+      estado: string;
+      cidade: string;
+      bairro: string;
+      rua: string;
+      numero: string;
+    };
+  };
   handleSubmit: () => void;
   vendedores: { id: number; nome: string }[];
   buscaCep: () => void;
 }
 
-
 const ModalCliente: React.FC<ModalClienteProps> = ({
-  open, onClose, clienteData, setClienteData, errors, handleSubmit, vendedores, buscaCep
+  open,
+  onClose,
+  clienteData,
+  setClienteData,
+  errors,
+  handleSubmit,
+  vendedores,
+  buscaCep,
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
@@ -30,7 +61,8 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
           <ModalClose />
           <DialogTitle>Adicionar cliente</DialogTitle>
           <DialogContent>
-            Após inserir CEP, os dados de endereço serão preenchidos automaticamente
+            Após inserir CEP, os dados de endereço serão preenchidos
+            automaticamente
           </DialogContent>
           <Stack spacing={2}>
             <FormControl error={Boolean(errors.cnpj)}>
@@ -93,7 +125,7 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
             <FormControl error={Boolean(errors.telefone)}>
               <FormLabel>Telefone</FormLabel>
               <Input
-                value={formatPhone(clienteData.telefone ?? '')}
+                value={formatPhone(clienteData.telefone ?? "")}
                 onChange={(e) =>
                   setClienteData({ ...clienteData, telefone: e.target.value })
                 }
@@ -110,10 +142,12 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
               <Input
                 startDecorator={
                   <Button
-                    variant="solid" color="primary" startDecorator={<LocationOn />}
+                    variant="solid"
+                    color="primary"
+                    startDecorator={<LocationOn />}
                     onClick={buscaCep}
                     sx={{
-                      transform: 'translateX(-4px)',
+                      transform: "translateX(-4px)",
                       borderTopRightRadius: 0,
                       borderBottomRightRadius: 0,
                     }}
@@ -121,7 +155,7 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
                     Buscar CEP
                   </Button>
                 }
-                value={formatCEP(clienteData.endereco?.cep ?? '')}
+                value={formatCEP(clienteData.endereco?.cep ?? "")}
                 onChange={(e) =>
                   setClienteData({
                     ...clienteData,

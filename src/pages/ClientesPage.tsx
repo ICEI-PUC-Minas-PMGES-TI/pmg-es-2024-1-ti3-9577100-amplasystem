@@ -22,16 +22,6 @@ const ClientesPage = () => {
     { text: "Clientes" },
   ];
 
-  const vendedores = [
-    { id: 1, nome: "João" },
-    { id: 2, nome: "Maria" },
-    { id: 3, nome: "José" },
-  ];
-
-  const {
-    modalCliente, setModalCliente, clienteData, setClienteData, errors, handleModalSubmit, buscaCep, snackbar, handleSnackbarClose
-  } = useFormCliente();
-
   const actions: Action[] = [
     {
       label: "Importar",
@@ -58,6 +48,24 @@ const ClientesPage = () => {
       onClick: () => setModalCliente(true),
     },
   ];
+
+  const vendedores = [
+    { id: 1, nome: "João" },
+    { id: 2, nome: "Maria" },
+    { id: 3, nome: "Elenias" },
+  ];
+
+  const {
+    modalCliente,
+    setModalCliente,
+    clienteData,
+    setClienteData,
+    errors,
+    handleModalSubmit,
+    buscaCep,
+    snackbar,
+    handleSnackbarClose,
+  } = useFormCliente();
 
   return (
     <React.Fragment>
