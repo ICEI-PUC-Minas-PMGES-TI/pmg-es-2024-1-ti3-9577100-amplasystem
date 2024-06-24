@@ -1,30 +1,32 @@
 cff-version: 1.0.1
 message: Please cite this software using these metadata.
-title: 
+title: AmplaSystem
+* Luis Felipe Teixeira Dias Brescia
+* Pedro Henrique Pires Rodrigues
+* Pedro Henrique Vilaça Valverde
+* Victor Reis Carlota
+* Vinicius Rezende Arantes de Araujo Moreira
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
-  - name-suffix: Professor
+
+  - family-names: Felipe Teixeira Dias Brescia
+    given-names: Luis
+  - family-names: Pires Rodrigues
+    given-names: Pedro Henrique
+  - family-names: Reis Carlota
+    given-names: Victor
+  - family-names: Rezende Arantes de Araujo Moreir
+    given-names: Vinicius
+  - name-suffix: Professora
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
-  - name-suffix: Professor
+    family-names: Gabriela Ribeiro de Souza
+    given-names: Joana
+  - name-suffix: Professora 
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Hanne Soares de Andrade
+    given-names: Michelle 
 keywords:
-  - 
-  - 
+  - gerenciamento
+  - controle de informação 
 repository-code: 
 license: CC-BY-4.0
 version: 1.0.0

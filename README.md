@@ -17,4 +17,7 @@ O software traz como solução o controle das ordens de compra e dos pedidos fat
 
 ## Instruções de utilização
 
-[Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.]
+link da aplicação: https://amplasystem.vercel.app/login 
+* usuario Admin: 
+    * email: vendedor1@gmail.com
+    * senha: senha
