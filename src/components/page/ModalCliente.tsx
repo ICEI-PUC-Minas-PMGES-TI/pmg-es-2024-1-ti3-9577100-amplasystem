@@ -6,7 +6,6 @@ import {
 } from "@mui/joy";
 import { InfoOutlined, LocationOn } from "@mui/icons-material";
 import { Cliente } from "@/types/model/Cliente";
-import axios from 'axios';
 
 interface ModalClienteProps {
   open: boolean;
@@ -16,39 +15,12 @@ interface ModalClienteProps {
   errors: { cnpj: string; nomeFantasia: string; idVendedor: string; telefone: string; endereco: { cep: string; estado: string; cidade: string; bairro: string; rua: string; numero: string } };
   handleSubmit: () => void;
   vendedores: { id: number; nome: string }[];
+  buscaCep: () => void;
 }
 
 const ModalCliente: React.FC<ModalClienteProps> = ({
-  open, onClose, clienteData, setClienteData, errors, handleSubmit, vendedores
+  open, onClose, clienteData, setClienteData, errors, handleSubmit, vendedores, buscaCep
 }) => {
-
-  const buscaCep = async () => {
-
-    const rawCepValue = clienteData.endereco?.cep ?? '';
-    const cepValue = rawCepValue.replace(/\D/g, ''); // Remove caracteres não numéricos
-
-    console.log(cepValue);
-
-    if (cepValue.length === 8) {
-      try {
-        const res = await axios.get(`https://viacep.com.br/ws/${cepValue}/json/`);
-        const data = res.data;
-        setClienteData({
-          ...clienteData,
-          endereco: {
-            ...clienteData.endereco,
-            estado: data.uf,
-            cidade: data.localidade,
-            bairro: data.bairro,
-            rua: data.logradouro,
-          },
-        });
-      } catch (error) {
-        console.error('Erro ao buscar o CEP', error);
-      }
-    }
-  };
-
   return (
     <Modal open={open} onClose={onClose}>
       <ModalOverflow>

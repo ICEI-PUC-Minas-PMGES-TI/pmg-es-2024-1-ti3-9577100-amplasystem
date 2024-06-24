@@ -12,8 +12,9 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import { Action } from "@/types/common/Action";
 import { Breadcrumb } from "@/types/common/Breadcrumb";
 
-import FormModal from "@/components/page/ModalCliente";
+import ModalCliente from "@/components/page/ModalCliente";
 import useFormCliente from "@/hooks/useFormCliente";
+import SnackbarComponent from "@/components/common/SnackbarComponent";
 
 const ClientesPage = () => {
   const breadcrumbs: Breadcrumb[] = [
@@ -28,7 +29,7 @@ const ClientesPage = () => {
   ];
 
   const {
-    modalCliente, setModalCliente, clienteData, setClienteData, errors, handleModalSubmit
+    modalCliente, setModalCliente, clienteData, setClienteData, errors, handleModalSubmit, buscaCep, snackbar, handleSnackbarClose
   } = useFormCliente();
 
   const actions: Action[] = [
@@ -64,7 +65,7 @@ const ClientesPage = () => {
       <PageHeader title="Clientes" actions={actions} />
       <OrderTable />
       <OrderList />
-      <FormModal
+      <ModalCliente
         open={modalCliente}
         onClose={() => setModalCliente(false)}
         clienteData={clienteData}
@@ -72,6 +73,14 @@ const ClientesPage = () => {
         errors={errors}
         handleSubmit={handleModalSubmit}
         vendedores={vendedores}
+        buscaCep={buscaCep}
+      />
+      <SnackbarComponent
+        open={snackbar.open}
+        onClose={handleSnackbarClose}
+        message={snackbar.message}
+        color={snackbar.color}
+        anchorOrigin={snackbar.anchorOrigin}
       />
     </React.Fragment>
   );
