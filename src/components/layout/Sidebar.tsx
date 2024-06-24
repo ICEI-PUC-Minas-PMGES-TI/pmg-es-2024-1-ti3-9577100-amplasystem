@@ -32,6 +32,7 @@ import DialogActions from "@mui/joy/DialogActions";
 import Button from "@mui/joy/Button";
 import Select from "@mui/joy/Select";
 import Option from "@mui/joy/Option";
+import { useTheme } from "@/context/ThemeContext";
 import {
   FormControl,
   FormHelperText,
@@ -80,6 +81,7 @@ const Sidebar = () => {
   };
 
   const usuarioInicial = usuario.nome.charAt(0).toUpperCase();
+  const { switchTheme } = useTheme();
 
   const [modalConfiguracoes, setModalConfiguracoes] = useState(false);
   const [modalConfirmExit, setModalConfirmExit] = useState(false);
@@ -342,11 +344,12 @@ const Sidebar = () => {
             <FormControl>
               <FormLabel>Estilo</FormLabel>
               <Select>
-                <Option value="chakraTheme">Chakra UI</Option>
-                <Option value="fluentTheme">Fluent UI</Option>
-                <Option value="joyTheme">Joy UI</Option>
-                <Option value="antTheme">Ant Design</Option>
-              </Select>
+                  <Option value="chakraTheme" onClick={() => { switchTheme('chakra') }}>Chakra UI</Option>
+                  <Option value="fluentTheme" onClick={() => { switchTheme('fluent') }}>Fluent UI</Option>
+                  <Option value="ibmTheme" onClick={() => { switchTheme('ibm') }}>IBM UI</Option>
+                  <Option value="customTheme" onClick={() => { switchTheme('custom') }}>Custom UI</Option>
+                  <Option value="githubTheme" onClick={() => { switchTheme('github') }}>Github UI</Option>
+                </Select>
               <FormHelperText>
                 Altera a estilização de cada componente.
               </FormHelperText>
