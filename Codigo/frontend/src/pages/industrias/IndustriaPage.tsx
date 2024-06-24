@@ -32,7 +32,6 @@ const IndustriaPage = () => {
     const { showNotification } = useNotification();
     useEffect(() => {
         getIndustrias();
-        setReload(false);
     }, [reload]);
     useEffect(() => {
         if (!open) {
@@ -61,13 +60,15 @@ const IndustriaPage = () => {
             })
             .catch((e) => {
                 console.log(e);
+            })
+            .finally(() => {
+                setReload(false);
             });
     };
     const deleteIndustria = (id: number) => {
         apiFetch
             .delete(`/industria/${id}`)
             .then((data) => {
-                setReload(true);
                 showNotification({
                     message: data.data.message,
                     title: data.data.titulo,
@@ -76,6 +77,9 @@ const IndustriaPage = () => {
             })
             .catch((e) => {
                 console.log(e);
+            })
+            .finally(() => {
+                setReload(true);
             });
     };
 
@@ -113,45 +117,57 @@ const IndustriaPage = () => {
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos?.map((contato) => {
-                        if (contato.tipoContato === TipoContato.Comercial) {
-                            return contato.nome;
-                        }
-                        return null;
-                    }).filter(Boolean).join(', ');
+                    return row.contatos
+                        ?.map((contato) => {
+                            if (contato.tipoContato === TipoContato.Comercial) {
+                                return contato.nome;
+                            }
+                            return null;
+                        })
+                        .filter(Boolean)
+                        .join(', ');
                 },
                 header: 'Contato Comercial',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos?.map((contato) => {
-                        if (contato.tipoContato === TipoContato.Comercial) {
-                            return contato.telefone;
-                        }
-                        return null;
-                    }).filter(Boolean).join(', ');
+                    return row.contatos
+                        ?.map((contato) => {
+                            if (contato.tipoContato === TipoContato.Comercial) {
+                                return contato.telefone;
+                            }
+                            return null;
+                        })
+                        .filter(Boolean)
+                        .join(', ');
                 },
                 header: 'Telefone Comercial',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos?.map((contato) => {
-                        if (contato.tipoContato === TipoContato.Financeiro) {
-                            return contato.nome;
-                        }
-                        return null;
-                    }).filter(Boolean).join(', ');
+                    return row.contatos
+                        ?.map((contato) => {
+                            if (contato.tipoContato === TipoContato.Financeiro) {
+                                return contato.nome;
+                            }
+                            return null;
+                        })
+                        .filter(Boolean)
+                        .join(', ');
                 },
                 header: 'Contato Financeiro',
             },
             {
                 accessorFn: (row) => {
-                    return row.contatos?.map((contato) => {
-                        if (contato.tipoContato === TipoContato.Financeiro) {
-                            return contato.telefone;
-                        }
-                        return null;
-                    }).filter(Boolean).join(', ');
+                    return row.contatos
+                        ?.map((contato) => {
+                            if (contato.tipoContato === TipoContato.Financeiro) {
+                                return contato.telefone;
+                            }
+                            return null;
+                        })
+                        .filter(Boolean)
+                        .join(', ');
                 },
                 header: 'Telefone Financeiro',
             },
