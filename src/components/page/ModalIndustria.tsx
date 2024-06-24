@@ -7,22 +7,18 @@ import {
   Modal,
   ModalDialog,
   DialogTitle,
-  DialogContent,
   Stack,
   ModalClose,
   FormHelperText,
-  Select,
-  Option,
-  ModalOverflow,
-  DialogActions,
   Tabs,
   TabList,
   Tab,
   TabPanel,
+  DialogActions,
 } from "@mui/joy";
-import { InfoOutlined, LocationOn } from "@mui/icons-material";
+import { InfoOutlined } from "@mui/icons-material";
 import { Industria } from "@/types/model/Industria";
-import { formatCEP, formatCPFOrCNPJ, formatPhone } from "@/utils/format";
+import { formatPhone } from "@/utils/format";
 import { TipoContato } from "@/enums/TipoContato";
 
 interface ModalIndustriaProps {
@@ -32,7 +28,7 @@ interface ModalIndustriaProps {
   setIndustriaData: (industria: Industria) => void;
   errors: {
     nome: string;
-    contatos: [];
+    contatos: Array<{ nome?: string; telefone?: string; email?: string }>;
   };
   handleSubmit: () => void;
 }
@@ -78,7 +74,7 @@ const ModalIndustria: React.FC<ModalIndustriaProps> = ({
                   <FormControl error={Boolean(errors.contatos[index]?.nome)}>
                     <FormLabel>Nome</FormLabel>
                     <Input
-                      value={industriaData.contatos[index]?.nome}
+                      value={industriaData.contatos[index]?.nome || ""}
                       onChange={(e) =>
                         setIndustriaData({
                           ...industriaData,
@@ -126,7 +122,7 @@ const ModalIndustria: React.FC<ModalIndustriaProps> = ({
                   <FormControl error={Boolean(errors.contatos[index]?.email)}>
                     <FormLabel>Email</FormLabel>
                     <Input
-                      value={industriaData.contatos[index]?.email}
+                      value={industriaData.contatos[index]?.email || ""}
                       onChange={(e) =>
                         setIndustriaData({
                           ...industriaData,
