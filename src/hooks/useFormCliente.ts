@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Cliente } from "@/types/model/Cliente";
 import axios from "axios";
+import { validateCPFOrCNPJ, validatePhone } from "@/utils/validate";
 
 const useFormCliente = () => {
   const [modalCliente, setModalCliente] = useState<boolean>(false);
@@ -63,9 +64,11 @@ const useFormCliente = () => {
     };
 
     if (!clienteData.cnpj) newErrors.cnpj = "CNPJ é obrigatório";
+    else if (!validateCPFOrCNPJ(clienteData.cnpj)) newErrors.cnpj = "CPF/CNPJ inválido";
     if (!clienteData.nomeFantasia) newErrors.nomeFantasia = "Nome Fantasia é obrigatório";
     if (!clienteData.idVendedor) newErrors.idVendedor = "Vendedor é obrigatório";
     if (!clienteData.telefone) newErrors.telefone = "Telefone é obrigatório";
+    else if (!validatePhone(clienteData.telefone)) newErrors.telefone = "Telefone inválido";
     if (!clienteData.endereco?.cep) newErrors.endereco.cep = "CEP é obrigatório";
     if (!clienteData.endereco?.estado) newErrors.endereco.estado = "Estado é obrigatório";
     if (!clienteData.endereco?.cidade) newErrors.endereco.cidade = "Cidade é obrigatório";

@@ -6,6 +6,7 @@ import {
 } from "@mui/joy";
 import { InfoOutlined, LocationOn } from "@mui/icons-material";
 import { Cliente } from "@/types/model/Cliente";
+import { formatCEP, formatCPFOrCNPJ, formatPhone } from "@/utils/format";
 
 interface ModalClienteProps {
   open: boolean;
@@ -17,6 +18,7 @@ interface ModalClienteProps {
   vendedores: { id: number; nome: string }[];
   buscaCep: () => void;
 }
+
 
 const ModalCliente: React.FC<ModalClienteProps> = ({
   open, onClose, clienteData, setClienteData, errors, handleSubmit, vendedores, buscaCep
@@ -32,9 +34,9 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
           </DialogContent>
           <Stack spacing={2}>
             <FormControl error={Boolean(errors.cnpj)}>
-              <FormLabel>CNPJ</FormLabel>
+              <FormLabel>CPF/CNPJ</FormLabel>
               <Input
-                value={clienteData.cnpj}
+                value={formatCPFOrCNPJ(clienteData.cnpj)}
                 onChange={(e) =>
                   setClienteData({ ...clienteData, cnpj: e.target.value })
                 }
@@ -91,7 +93,7 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
             <FormControl error={Boolean(errors.telefone)}>
               <FormLabel>Telefone</FormLabel>
               <Input
-                value={clienteData.telefone}
+                value={formatPhone(clienteData.telefone ?? '')}
                 onChange={(e) =>
                   setClienteData({ ...clienteData, telefone: e.target.value })
                 }
@@ -119,7 +121,7 @@ const ModalCliente: React.FC<ModalClienteProps> = ({
                     Buscar CEP
                   </Button>
                 }
-                value={clienteData.endereco?.cep}
+                value={formatCEP(clienteData.endereco?.cep ?? '')}
                 onChange={(e) =>
                   setClienteData({
                     ...clienteData,
