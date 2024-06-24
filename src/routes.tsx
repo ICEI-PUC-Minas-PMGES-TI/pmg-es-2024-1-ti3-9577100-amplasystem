@@ -14,7 +14,7 @@ import "@fontsource/ibm-plex-mono";
 import "@fontsource/ibm-plex-serif";
 import "@/styles/global.css";
 
-import customTheme from "@/styles/themes/customTheme";
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import LoadingComponent from "@/components/common/LoadingComponent";
 
 const ClientesPage = lazy(() => import("@/pages/ClientesPage"));
@@ -31,9 +31,10 @@ const PedidosFaturadosPage = lazy(
 const IndustriasPage = lazy(() => import("@/pages/IndustriasPage"));
 
 const App = () => {
+  const { theme } = useTheme();
   return (
     <StyledEngineProvider injectFirst>
-      <CssVarsProvider theme={customTheme}>
+      <CssVarsProvider theme={theme}>
         <CssBaseline />
         <Router>
           <Routes>
@@ -98,4 +99,12 @@ const App = () => {
   );
 };
 
-export default App;
+const RootApp = () => {
+  return (
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+}
+
+export default RootApp;
