@@ -29,6 +29,7 @@ const PedidosFaturadosPage = lazy(
   () => import("@/pages/financas/PedidosFaturadosPage")
 );
 const IndustriasPage = lazy(() => import("@/pages/IndustriasPage"));
+const isAuthenticated = true;
 
 const App = () => {
   return (
@@ -39,57 +40,59 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LoginPage />} />
 
-            <Route path="/" element={<DashboardLayout />}>
-              <Route
-                path="vendedores"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <VendedoresPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="clientes"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <ClientesPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="financas/dados-financeiros"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <DadosFinanceirosPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="financas/ordens-de-compra"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <OrdensDeCompraPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="financas/pedidos-faturados"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <PedidosFaturadosPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="industrias"
-                element={
-                  <Suspense fallback={<LoadingComponent />}>
-                    <IndustriasPage />
-                  </Suspense>
-                }
-              />
-            </Route>
-
+            {isAuthenticated ?
+              <Route path="/" element={<DashboardLayout />}>
+                <Route
+                  path="vendedores"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <VendedoresPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="clientes"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <ClientesPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="financas/dados-financeiros"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <DadosFinanceirosPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="financas/ordens-de-compra"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <OrdensDeCompraPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="financas/pedidos-faturados"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <PedidosFaturadosPage />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="industrias"
+                  element={
+                    <Suspense fallback={<LoadingComponent />}>
+                      <IndustriasPage />
+                    </Suspense>
+                  }
+                />
+              </Route>
+              : <Navigate to="/login" />
+            }
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Router>
